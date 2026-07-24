@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>🌿 精油抓周 · 抽卡高級質感</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang TC', 'Microsoft YaHei', sans-serif;
+            background: radial-gradient(circle at 20% 30%, #f3efe6, #d9d2c0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* 主卡片容器 — 高質感玻璃態 */
+        .app {
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(255, 250, 240, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 56px;
+            padding: 30px 30px 40px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 245, 225, 0.6) inset;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 235, 210, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 400;
+            letter-spacing: 3px;
+            color: #4d3e2e;
+            font-size: 2.0rem;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 4px rgba(255, 215, 175, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        h1 small {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .subhead {
+            text-align: center;
+            color: #5f4e3a;
+            font-weight: 300;
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(160, 130, 100, 0.2);
+            border-bottom: 1px solid rgba(160, 130, 100, 0.2);
+            padding: 12px 0;
+            margin: 10px 0 20px 0;
+            font-size: 0.95rem;
+            backdrop-filter: blur(4px);
+            background: rgba(245, 235, 215, 0.2);
+            border-radius: 60px;
+        }
+
+        /* 三張牌的展示區 */
+        .card-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch;
+            gap: 20px;
+            margin: 25px 0 20px;
+        }
+
+        .card-slot {
+            flex: 1 1 200px;
+            min-width: 160px;
+            max-width: 240px;
+            background: rgba(250, 242, 230, 0.35);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 40px;
+            padding: 16px 8px 18px;
+            box-shadow: 0 8px 24px rgba(80, 60, 40, 0.12);
+            border: 1px solid rgba(255, 225, 190, 0.6);
+            transition: 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-slot .label {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: #6b5a45;
+            background: rgba(215, 190, 165, 0.25);
+            padding: 4px 14px;
+            border-radius: 40px;
+            backdrop-filter: blur(2px);
+            margin-bottom: 10px;
+            font-weight: 400;
+            border: 1px solid rgba(190, 165, 140, 0.2);
+        }
+
+        .card-display {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: #fcf7ef;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px rgba(60, 40, 20, 0.15), 0 0 0 1px #ede3d3 inset;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background-image: radial-gradient(circle at 20% 30%, #faf3e8, #efe4d4);
+        }
+
+        .card-display .placeholder {
+            color: #b7a48b;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            opacity: 0.6;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .card-display .emoji-big {
+            font-size: 3.2rem;
+            line-height: 1.2;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.05));
+        }
+
+        .card-display .name {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #2e241b;
+            margin: 8px 0 2px;
+            letter-spacing: 1px;
+        }
+
+        .card-display .subname {
+            font-size: 0.7rem;
+            color: #7f6b56;
+            background: rgba(210, 185, 160, 0.25);
+            padding: 2px 12px;
+            border-radius: 30px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(190, 165, 140, 0.15);
+        }
+
+        .card-display .meaning {
+            font-size: 0.7rem;
+            color: #4b3d2e;
+            margin-top: 6px;
+            padding: 4px 6px;
+            background: rgba(235, 215, 190, 0.25);
+            border-radius: 20px;
+            max-width: 90%;
+            text-align: center;
+            line-height: 1.3;
+            backdrop-filter: blur(2px);
+        }
+
+        /* 抽卡按鈕 */
+        .action-area {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0 10px;
+        }
+
+        .draw-btn {
+            background: #dac9b4;
+            border: none;
+            padding: 14px 48px;
+            border-radius: 80px;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #2f241b;
+            letter-spacing: 4px;
+            backdrop-filter: blur(8px);
+            background: rgba(215, 190, 165, 0.5);
+            border: 1px solid rgba(255, 235, 210, 0.7);
+            box-shadow: 0 8px 18px rgba(80, 60, 40, 0.15);
+            transition: 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .draw-btn:hover {
+            background: rgba(200, 175, 150, 0.7);
+            transform: scale(1.02);
+            box-shadow: 0 12px 28px rgba(70, 50, 30, 0.2);
+            border-color: #d8bca0;
+        }
+
+        .draw-btn:active {
+            transform: scale(0.96);
+        }
+
+        .draw-btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.4);
+        }
+
+        .reset-area {
+            display: flex;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: 1px solid #b8a38b;
+            padding: 8px 24px;
+            border-radius: 60px;
+            color: #4d3e2e;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            backdrop-filter: blur(4px);
+            background: rgba(235, 220, 200, 0.2);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: rgba(180, 155, 130, 0.25);
+            border-color: #9b846b;
+        }
+
+        /* 解讀區 */
+        .reading {
+            margin: 20px 0 10px;
+            padding: 18px 16px;
+            background: rgba(250, 240, 225, 0.3);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 48px;
+            border: 1px solid rgba(220, 195, 170, 0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .reading-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(160, 130, 100, 0.15);
+        }
+        .reading-item:last-child {
+            border-bottom: none;
+        }
+
+        .reading-tag {
+            min-width: 70px;
+            font-weight: 300;
+            color: #5d4b36;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            background: rgba(190, 165, 140, 0.15);
+            padding: 2px 12px;
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        .reading-text {
+            color: #2e241b;
+            font-weight: 350;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .reading-text strong {
+            font-weight: 500;
+            color: #4f3824;
+        }
+
+        /* 特效閃光 overlay (抽卡瞬間) */
+        .card-display.flash {
+            animation: cardFlash 0.6s ease;
+        }
+
+        @keyframes cardFlash {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 150, 0.8), 0 0 0 0 rgba(255, 215, 150, 0.5); }
+            50% { box-shadow: 0 0 40px 10px rgba(255, 200, 130, 0.7), 0 0 80px 20px rgba(255, 200, 130, 0.3); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 150, 0); }
+        }
+
+        /* 響應式 */
+        @media (max-width: 700px) {
+            .app { padding: 20px 16px; }
+            h1 { font-size: 1.6rem; }
+            .card-slot { min-width: 130px; }
+            .card-display .emoji-big { font-size: 2.6rem; }
+            .card-display .name { font-size: 1rem; }
+            .draw-btn { padding: 12px 30px; font-size: 1.0rem; }
+        }
+        @media (max-width: 480px) {
+            .card-slot { min-width: 110px; }
+            .card-display .meaning { font-size: 0.6rem; }
+        }
+
+        /* 自定義 scroll */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #e5d8c6; border-radius: 12px; }
+        ::-webkit-scrollbar-thumb { background: #b8a087; border-radius: 12px; }
+    </style>
+</head>
+<body>
+<div class="app" id="app">
+    <h1>
+        🌿 精油抓周
+        <small> · 抽卡</small>
+    </h1>
+    <div class="subhead">
+        ✦ 抽三張 · 解讀性格與當下 ✦
+    </div>
+
+    <!-- 三卡槽 -->
+    <div class="card-row" id="cardRow">
+        <!-- 第一張：正向性格 -->
+        <div class="card-slot">
+            <div class="label">🌱 正向 · 自身</div>
+            <div class="card-display" id="card1">
+                <div class="placeholder">👆 抽卡</div>
+            </div>
+        </div>
+        <!-- 第二張：反向/難題 -->
+        <div class="card-slot">
+            <div class="label">🌀 反向 · 難題</div>
+            <div class="card-display" id="card2">
+                <div class="placeholder">👆 抽卡</div>
+            </div>
+        </div>
+        <!-- 第三張：方法/解答 -->
+        <div class="card-slot">
+            <div class="label">🌟 方法 · 解答</div>
+            <div class="card-display" id="card3">
+                <div class="placeholder">👆 抽卡</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 抽卡按鈕 & 重置 -->
+    <div class="action-area">
+        <button class="draw-btn" id="drawBtn">✨ 抽 卡</button>
+    </div>
+    <div class="reset-area">
+        <button class="reset-btn" id="resetBtn">⟳ 重 置</button>
+    </div>
+
+    <!-- 解讀區 -->
+    <div class="reading" id="readingArea">
+        <div class="reading-item">
+            <span class="reading-tag">🌱 正向</span>
+            <span class="reading-text" id="reading1">等待抽卡⋯</span>
+        </div>
+        <div class="reading-item">
+            <span class="reading-tag">🌀 難題</span>
+            <span class="reading-text" id="reading2">等待抽卡⋯</span>
+        </div>
+        <div class="reading-item">
+            <span class="reading-tag">🌟 方法</span>
+            <span class="reading-text" id="reading3">等待抽卡⋯</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- 45 筆精油資料 (依序) -----
+        const oils = [
+            // 果實類 (1~5)
+            { name: '甜橙', emoji: '🍊', meaning: '赤子之心', category: '果實' },
+            { name: '葡萄柚', emoji: '🍇', meaning: '無憂無慮', category: '果實' },
+            { name: '檸檬', emoji: '🍋', meaning: '外剛內柔', category: '果實' },
+            { name: '萊姆', emoji: '🍈', meaning: '回歸初心', category: '果實' },
+            { name: '山雞椒', emoji: '🌶️', meaning: '活在當下', category: '果實' },
+            // 花朵類 (6~10)
+            { name: '茉莉', emoji: '🌸', meaning: '悠然自在', category: '花朵' },
+            { name: '玫瑰', emoji: '🌹', meaning: '熱情自信', category: '花朵' },
+            { name: '橙花', emoji: '🍊🌸', meaning: '優雅大方', category: '花朵' },
+            { name: '依蘭', emoji: '🌺', meaning: '浪漫奔放', category: '花朵' },
+            { name: '永久花', emoji: '🏵️', meaning: '斷捨離', category: '花朵' },
+            // 藥草類 (11~15)
+            { name: '純正薰衣草', emoji: '💜', meaning: '溫柔體貼', category: '藥草' },
+            { name: '天竺葵', emoji: '🌿', meaning: '感性善良', category: '藥草' },
+            { name: '甜馬鬱蘭', emoji: '🌱', meaning: '理智沉著', category: '藥草' },
+            { name: '快樂鼠尾草', emoji: '🧠', meaning: '直覺思考', category: '藥草' },
+            { name: '廣藿香', emoji: '🍃', meaning: '自我覺醒', category: '藥草' },
+            // 樹脂類 (16~20)
+            { name: '乳香', emoji: '🪔', meaning: '療癒溫暖', category: '樹脂' },
+            { name: '沒藥', emoji: '🌲', meaning: '智慧沉穩', category: '樹脂' },
+            { name: '安息香', emoji: '🕯️', meaning: '溫暖安定', category: '樹脂' },
+            { name: '岩玫瑰', emoji: '🪨🌹', meaning: '平撫穩定', category: '樹脂' },
+            { name: '秘魯聖木', emoji: '🌳', meaning: '回歸自我', category: '樹脂' },
+            // 香料類 (21~25)
+            { name: '黑胡椒', emoji: '⚫', meaning: '創意活力', category: '香料' },
+            { name: '丁香', emoji: '🧄', meaning: '勇往直前', category: '香料' },
+            { name: '迷迭香', emoji: '🌿', meaning: '創新靈活', category: '香料' },
+            { name: '歐薄荷', emoji: '🌱', meaning: '適應力強', category: '香料' },
+            { name: '檸檬香茅', emoji: '🍋🌿', meaning: '打破框架', category: '香料' },
+            // 木質類 (26~30)
+            { name: '花梨木', emoji: '🪵', meaning: '穩定踏實', category: '木質' },
+            { name: '檜木', emoji: '🌲', meaning: '安全感', category: '木質' },
+            { name: '檀香', emoji: '🪷', meaning: '沉穩寧靜', category: '木質' },
+            { name: '肉桂', emoji: '🍂', meaning: '溫暖重生', category: '木質' },
+            { name: '大西洋雪松', emoji: '🌲', meaning: '穩紮穩打', category: '木質' },
+            // 根部類 (31~35)
+            { name: '薑', emoji: '🫚', meaning: '平衡溫暖', category: '根部' },
+            { name: '岩蘭草', emoji: '🌾', meaning: '放鬆平靜', category: '根部' },
+            { name: '歐白芷根', emoji: '🌿', meaning: '補充元氣', category: '根部' },
+            { name: '穗甘松', emoji: '🌱', meaning: '原諒放下', category: '根部' },
+            { name: '纈草', emoji: '🌿', meaning: '鎮定安心', category: '根部' },
+            // 種籽類 (36~40)
+            { name: '甜茴香', emoji: '🌱', meaning: '理性平衡', category: '種籽' },
+            { name: '胡蘿蔔籽', emoji: '🥕', meaning: '敏銳獨特', category: '種籽' },
+            { name: '芫荽籽', emoji: '🌿', meaning: '溫柔細膩', category: '種籽' },
+            { name: '芹菜籽', emoji: '🌱', meaning: '清新清爽', category: '種籽' },
+            { name: '小茴香', emoji: '🌾', meaning: '釋放復原', category: '種籽' },
+            // 葉片類 (41~45)
+            { name: '月桂', emoji: '🍃', meaning: '勇決果斷', category: '葉片' },
+            { name: '茶樹', emoji: '🍃', meaning: '隨機應變', category: '葉片' },
+            { name: '苦橙葉', emoji: '🍊🌿', meaning: '養精蓄銳', category: '葉片' },
+            { name: '綠花白千層', emoji: '🌿', meaning: '汰舊更新', category: '葉片' },
+            { name: '澳洲尤加利', emoji: '🌿', meaning: '自信獨立', category: '葉片' }
+        ];
+
+        // DOM 元素
+        const card1El = document.getElementById('card1');
+        const card2El = document.getElementById('card2');
+        const card3El = document.getElementById('card3');
+        const reading1 = document.getElementById('reading1');
+        const reading2 = document.getElementById('reading2');
+        const reading3 = document.getElementById('reading3');
+        const drawBtn = document.getElementById('drawBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // 儲存目前抽出的三張卡 (索引)
+        let currentCards = [null, null, null];
+
+        // 抽卡是否已完成 (三張)
+        let isComplete = false;
+
+        // ----- 輔助：隨機不重複 (抽三張) -----
+        function getThreeRandomIndices() {
+            const indices = Array.from({ length: oils.length }, (_, i) => i);
+            const shuffled = indices.sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, 3);
+        }
+
+        // ----- 渲染單張卡牌 (with 特效) -----
+        function renderCard(cardIndex, oilIdx, flash = true) {
+            const el = cardIndex === 1 ? card1El : (cardIndex === 2 ? card2El : card3El);
+            if (oilIdx === null || oilIdx === undefined) {
+                // 重置為空白
+                el.innerHTML = `<div class="placeholder">👆 抽卡</div>`;
+                el.classList.remove('flash');
+                return;
+            }
+            const oil = oils[oilIdx];
+            const meaningText = oil.meaning;
+            const category = oil.category;
+            // 將意義顯示在卡上
+            el.innerHTML = `
+                <div class="emoji-big">${oil.emoji}</div>
+                <div class="name">${oil.name}</div>
+                <div class="subname">${category}</div>
+                <div class="meaning">${meaningText}</div>
+            `;
+            // 閃光特效
+            if (flash) {
+                el.classList.remove('flash');
+                // 強制 reflow 讓動畫重啟
+                void el.offsetWidth;
+                el.classList.add('flash');
+            } else {
+                el.classList.remove('flash');
+            }
+        }
+
+        // ----- 更新解讀文字 (三張卡) -----
+        function updateReading(cards) {
+            const [idx1, idx2, idx3] = cards;
+            if (idx1 !== null && idx1 !== undefined) {
+                const oil1 = oils[idx1];
+                reading1.innerHTML = `<strong>${oil1.name}</strong> · ${oil1.meaning}（${oil1.category}）`;
+            } else {
+                reading1.innerText = '等待抽卡⋯';
+            }
+            if (idx2 !== null && idx2 !== undefined) {
+                const oil2 = oils[idx2];
+                reading2.innerHTML = `<strong>${oil2.name}</strong> · ${oil2.meaning}（${oil2.category}）`;
+            } else {
+                reading2.innerText = '等待抽卡⋯';
+            }
+            if (idx3 !== null && idx3 !== undefined) {
+                const oil3 = oils[idx3];
+                reading3.innerHTML = `<strong>${oil3.name}</strong> · ${oil3.meaning}（${oil3.category}）`;
+            } else {
+                reading3.innerText = '等待抽卡⋯';
+            }
+        }
+
+        // ----- 執行抽卡 (三張) -----
+        function performDraw() {
+            if (isComplete) {
+                // 若已抽完，先重置再抽 (自動重置)
+                resetAll();
+            }
+
+            // 取得三個不重複索引
+            const indices = getThreeRandomIndices();
+            // 存入 currentCards
+            currentCards = [indices[0], indices[1], indices[2]];
+
+            // 渲染卡牌 (開啟閃光)
+            renderCard(1, currentCards[0], true);
+            renderCard(2, currentCards[1], true);
+            renderCard(3, currentCards[2], true);
+
+            // 更新解讀
+            updateReading(currentCards);
+
+            isComplete = true;
+            drawBtn.textContent = '✨ 再抽一次';
+        }
+
+        // ----- 重置全部 -----
+        function resetAll() {
+            currentCards = [null, null, null];
+            // 重置卡面
+            renderCard(1, null, false);
+            renderCard(2, null, false);
+            renderCard(3, null, false);
+            // 重置文字
+            reading1.innerText = '等待抽卡⋯';
+            reading2.innerText = '等待抽卡⋯';
+            reading3.innerText = '等待抽卡⋯';
+            isComplete = false;
+            drawBtn.textContent = '✨ 抽 卡';
+            // 移除閃光class
+            document.querySelectorAll('.card-display').forEach(el => el.classList.remove('flash'));
+        }
+
+        // ----- 初始化 (預設空白) -----
+        resetAll();
+
+        // ----- 事件綁定 -----
+        drawBtn.addEventListener('click', performDraw);
+
+        resetBtn.addEventListener('click', function() {
+            resetAll();
+        });
+
+        // 額外: 若點擊抽卡但已抽完，重置再抽邏輯已寫在 performDraw 內
+        // 提供手動重置友善
+
+        // (可選) 卡牌點擊重抽? 不必，維持按鈕
+        console.log('🌿 精油抓周已啟動 (45張)');
+    })();
+</script>
+</body>
+</html>

@@ -33,6 +33,7 @@
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 245, 225, 0.6) inset;
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 235, 210, 0.5);
+            position: relative;
         }
 
         h1 {
@@ -106,6 +107,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            cursor: pointer;
+        }
+        .card-slot:hover {
+            background: rgba(250, 242, 230, 0.6);
+            border-color: #d8bca0;
         }
 
         .card-slot .label {
@@ -119,6 +125,7 @@
             margin-bottom: 10px;
             font-weight: 400;
             border: 1px solid rgba(190, 165, 140, 0.2);
+            pointer-events: none;
         }
 
         .card-display {
@@ -136,6 +143,7 @@
             position: relative;
             overflow: hidden;
             background-image: radial-gradient(circle at 20% 30%, #faf3e8, #efe4d4);
+            pointer-events: none;
         }
 
         .card-display .placeholder {
@@ -214,7 +222,6 @@
             50% { opacity: 1; transform: scale(1.1); }
         }
 
-        /* 特效 */
         .card-display.flash {
             animation: cardFlash 0.6s ease;
         }
@@ -375,6 +382,46 @@
             color: #5f4a33;
         }
 
+        /* 影片遮罩 */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            animation: fadeIn 0.3s ease;
+        }
+        .video-overlay.active {
+            display: flex;
+        }
+        .video-box {
+            background: #1e1a16;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            width: 90%;
+            max-width: 800px;
+            aspect-ratio: 16 / 9;
+            position: relative;
+        }
+        .video-box video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: #0a0806;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
         @media (max-width: 700px) {
             .app { padding: 20px 16px; }
             h1 { font-size: 1.6rem; }
@@ -405,15 +452,15 @@
     </div>
 
     <div class="card-row" id="cardRow">
-        <div class="card-slot">
+        <div class="card-slot" data-slot="1">
             <div class="label">🌱 正向 · 自身</div>
             <div class="card-display" id="card1"><div class="placeholder">👆 摸牌</div></div>
         </div>
-        <div class="card-slot">
+        <div class="card-slot" data-slot="2">
             <div class="label">🌀 反向 · 難題</div>
             <div class="card-display" id="card2"><div class="placeholder">👆 摸牌</div></div>
         </div>
-        <div class="card-slot">
+        <div class="card-slot" data-slot="3">
             <div class="label">🌟 方法 · 解答</div>
             <div class="card-display" id="card3"><div class="placeholder">👆 摸牌</div></div>
         </div>
@@ -435,11 +482,20 @@
     </div>
 </div>
 
+<!-- 影片遮罩 -->
+<div class="video-overlay" id="videoOverlay">
+    <div class="video-box">
+        <video id="drawVideo" playsinline>
+            <source src="img/draw.mp4" type="video/mp4">
+            您的瀏覽器不支援影片播放。
+        </video>
+    </div>
+</div>
+
 <script>
     (function() {
         // ============================================================
         // 45 筆精油資料
-        // 不需要指定 format，系統會自動嘗試 jpg 和 png
         // ============================================================
         const oils = [
             { id: '01', name: '甜橙', emoji: '🍊', meaning: '赤子之心', category: '果實',
@@ -641,6 +697,8 @@
         const drawOneBtn = document.getElementById('drawOneBtn');
         const resetBtn = document.getElementById('resetBtn');
         const modeDisplay = document.getElementById('modeDisplay');
+        const videoOverlay = document.getElementById('videoOverlay');
+        const drawVideo = document.getElementById('drawVideo');
 
         // ============================================================
         // 狀態管理
@@ -650,6 +708,7 @@
         let deck = [];
         let drawIndex = 0;
         let isShuffled = false;
+        let isVideoPlaying = false;
 
         // ============================================================
         // 核心函數
@@ -668,6 +727,35 @@
             });
         }
 
+        // 影片播放 + 自動關閉
+        function playDrawVideo(callback) {
+            if (isVideoPlaying) return;
+            isVideoPlaying = true;
+            videoOverlay.classList.add('active');
+            drawVideo.currentTime = 0;
+            drawVideo.play().catch(e => {
+                console.warn('影片播放失敗', e);
+            });
+
+            const onEnded = function() {
+                drawVideo.removeEventListener('ended', onEnded);
+                videoOverlay.classList.remove('active');
+                isVideoPlaying = false;
+                if (callback) callback();
+            };
+            drawVideo.addEventListener('ended', onEnded);
+
+            // 安全裝置：如果影片無法播放或卡住，10秒後強制關閉
+            setTimeout(() => {
+                if (isVideoPlaying) {
+                    drawVideo.removeEventListener('ended', onEnded);
+                    videoOverlay.classList.remove('active');
+                    isVideoPlaying = false;
+                    if (callback) callback();
+                }
+            }, 10000);
+        }
+
         // ============================================================
         // 圖片載入核心 - 自動嘗試 jpg 和 png
         // ============================================================
@@ -684,7 +772,6 @@
 
             function tryLoad() {
                 if (currentExtIndex >= maxAttempts) {
-                    // 所有格式都失敗，顯示備用
                     el.classList.remove('loading');
                     el.classList.add('has-error');
                     if (callback) callback(false);
@@ -704,12 +791,10 @@
                 img.onerror = function() {
                     currentExtIndex++;
                     attempts++;
-                    // 稍微延遲後嘗試下一種格式
                     setTimeout(tryLoad, 200);
                 };
             }
 
-            // 顯示載入中
             el.classList.add('loading');
             tryLoad();
         }
@@ -729,7 +814,6 @@
             
             const oil = oils[oilIdx];
             
-            // 建立卡牌內容
             el.innerHTML = `
                 <img class="card-image" src="" alt="${oil.name}" loading="lazy">
                 <div class="fallback-info">
@@ -741,11 +825,8 @@
             `;
             
             const img = el.querySelector('.card-image');
-            
-            // 自動嘗試 jpg / png
             loadImageWithAutoFormat(img, oil, el);
             
-            // 觸發特效
             el.classList.remove('flash', 'slide-in', 'shuffle-effect', 'shuffle-fly', 'shake', 'shuffle-flash');
             void el.offsetWidth;
             if (effect === 'flash') {
@@ -781,56 +862,9 @@
         }
 
         // ============================================================
-        // 遊戲操作
+        // 實際抽卡邏輯 
         // ============================================================
-        function shuffleDeck() {
-            clearEffects();
-            
-            const indices = Array.from({ length: oils.length }, (_, i) => i);
-            deck = shuffleArray([...indices]);
-            drawIndex = 0;
-            isShuffled = true;
-            
-            currentCards = [null, null, null];
-            drawnStatus = [false, false, false];
-            
-            [card1El, card2El, card3El].forEach(el => {
-                el.innerHTML = `<div class="placeholder">👆 摸牌</div>`;
-                el.classList.remove('has-error', 'loading', 'has-image');
-            });
-
-            // 洗牌特效
-            const cards = [card1El, card2El, card3El];
-            cards.forEach((el, index) => {
-                setTimeout(() => {
-                    el.classList.add('shuffle-fly');
-                    el.classList.add('shuffle-flash');
-                }, index * 150);
-            });
-
-            setTimeout(() => {
-                cards.forEach((el, index) => {
-                    setTimeout(() => {
-                        el.classList.remove('shuffle-fly', 'shuffle-flash');
-                        el.classList.add('shake');
-                    }, index * 100);
-                });
-            }, 600);
-
-            setTimeout(() => {
-                cards.forEach(el => {
-                    el.classList.remove('shake', 'shuffle-fly', 'shuffle-flash');
-                });
-                modeDisplay.textContent = '✦ 已洗牌 · 請摸牌';
-                drawAllBtn.disabled = false;
-                drawOneBtn.disabled = false;
-                reading1.innerText = '洗牌完成，請摸牌或翻牌';
-                reading2.innerText = '洗牌完成，請摸牌或翻牌';
-                reading3.innerText = '洗牌完成，請摸牌或翻牌';
-            }, 1100);
-        }
-
-        function drawOneCard() {
+        function performDrawOne() {
             if (!isShuffled) {
                 alert('請先洗牌！');
                 return;
@@ -867,7 +901,7 @@
             }
         }
 
-        function drawAll() {
+        function performDrawAll() {
             if (!isShuffled) {
                 alert('請先洗牌！');
                 return;
@@ -903,7 +937,67 @@
             drawOneBtn.disabled = true;
         }
 
+        // ============================================================
+        // 洗牌 (影片播放後執行)
+        // ============================================================
+        function performShuffle() {
+            clearEffects();
+            
+            const indices = Array.from({ length: oils.length }, (_, i) => i);
+            deck = shuffleArray([...indices]);
+            drawIndex = 0;
+            isShuffled = true;
+            
+            currentCards = [null, null, null];
+            drawnStatus = [false, false, false];
+            
+            [card1El, card2El, card3El].forEach(el => {
+                el.innerHTML = `<div class="placeholder">👆 摸牌</div>`;
+                el.classList.remove('has-error', 'loading', 'has-image');
+            });
+
+            const cards = [card1El, card2El, card3El];
+            cards.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('shuffle-fly');
+                    el.classList.add('shuffle-flash');
+                }, index * 150);
+            });
+
+            setTimeout(() => {
+                cards.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.remove('shuffle-fly', 'shuffle-flash');
+                        el.classList.add('shake');
+                    }, index * 100);
+                });
+            }, 600);
+
+            setTimeout(() => {
+                cards.forEach(el => {
+                    el.classList.remove('shake', 'shuffle-fly', 'shuffle-flash');
+                });
+                modeDisplay.textContent = '✦ 已洗牌 · 請摸牌';
+                drawAllBtn.disabled = false;
+                drawOneBtn.disabled = false;
+                reading1.innerText = '洗牌完成，請摸牌或翻牌';
+                reading2.innerText = '洗牌完成，請摸牌或翻牌';
+                reading3.innerText = '洗牌完成，請摸牌或翻牌';
+            }, 1100);
+        }
+
+        function shuffleWithVideo() {
+            if (isVideoPlaying) return;
+            playDrawVideo(() => {
+                performShuffle();
+            });
+        }
+
+        // ============================================================
+        // 重置
+        // ============================================================
         function resetAll() {
+            if (isVideoPlaying) return;
             currentCards = [null, null, null];
             drawnStatus = [false, false, false];
             drawIndex = 0;
@@ -923,20 +1017,61 @@
         }
 
         // ============================================================
+        // 點擊卡槽觸發摸牌
+        // ============================================================
+        function handleSlotClick(e) {
+            const slotEl = e.currentTarget;
+            const slot = parseInt(slotEl.dataset.slot, 10);
+            if (!isShuffled) {
+                alert('請先洗牌！');
+                return;
+            }
+            if (drawnStatus[slot-1]) {
+                alert('這張已經翻開了！');
+                return;
+            }
+            if (drawIndex >= 3) {
+                alert('已經摸完三張了，請重新洗牌。');
+                return;
+            }
+            if (drawIndex >= deck.length) {
+                alert('牌堆已空，請重新洗牌。');
+                return;
+            }
+            let nextSlot = -1;
+            for (let i = 0; i < 3; i++) {
+                if (!drawnStatus[i]) {
+                    nextSlot = i;
+                    break;
+                }
+            }
+            if (slot-1 !== nextSlot) {
+                alert(`請依序翻牌，目前請翻 ${nextSlot+1} 號位置。`);
+                return;
+            }
+            // 摸一張不需影片，直接執行
+            performDrawOne();
+        }
+
+        // ============================================================
         // 事件綁定
         // ============================================================
-        shuffleBtn.addEventListener('click', shuffleDeck);
-        drawAllBtn.addEventListener('click', drawAll);
-        drawOneBtn.addEventListener('click', drawOneCard);
+        shuffleBtn.addEventListener('click', shuffleWithVideo);
+        drawAllBtn.addEventListener('click', performDrawAll);
+        drawOneBtn.addEventListener('click', performDrawOne);
         resetBtn.addEventListener('click', resetAll);
+
+        document.querySelectorAll('.card-slot').forEach(el => {
+            el.addEventListener('click', handleSlotClick);
+        });
 
         // ============================================================
         // 初始化
         // ============================================================
         resetAll();
-        
+        // 自動洗牌（不播放影片）
         setTimeout(() => {
-            shuffleDeck();
+            performShuffle();
         }, 500);
     })();
 </script>

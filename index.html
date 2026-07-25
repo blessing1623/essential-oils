@@ -157,7 +157,6 @@
             background: rgba(255, 248, 240, 0.6);
         }
 
-        /* 備用內容 - 當圖片載入失敗時顯示 */
         .card-display .fallback-info {
             display: none;
             flex-direction: column;
@@ -193,7 +192,6 @@
             border-radius: 20px;
         }
 
-        /* 圖片載入失敗時切換到備用 */
         .card-display.has-error .card-image {
             display: none;
         }
@@ -201,20 +199,66 @@
             display: flex;
         }
 
-        /* 圖片載入中狀態 */
         .card-display.loading .card-image {
-            opacity: 0.5;
+            opacity: 0.3;
         }
         .card-display.loading::after {
             content: '⏳';
             position: absolute;
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #b7a48b;
             animation: pulse 0.8s ease-in-out infinite;
         }
         @keyframes pulse {
             0%, 100% { opacity: 0.4; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* 特效 */
+        .card-display.flash {
+            animation: cardFlash 0.6s ease;
+        }
+        @keyframes cardFlash {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 150, 0.8), 0 0 0 0 rgba(255, 215, 150, 0.5); }
+            50% { box-shadow: 0 0 40px 10px rgba(255, 200, 130, 0.7), 0 0 80px 20px rgba(255, 200, 130, 0.3); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 150, 0); }
+        }
+
+        .card-display.slide-in {
+            animation: slideIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
+        }
+        @keyframes slideIn {
+            0% { transform: translateY(-40px) scale(0.92); opacity: 0.3; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .card-display.shuffle-fly {
+            animation: shuffleFly 0.9s ease;
+        }
+        @keyframes shuffleFly {
+            0% { transform: translateY(0) rotate(0deg) scale(1); }
+            20% { transform: translateY(-60px) rotate(-15deg) scale(0.8); }
+            40% { transform: translateY(20px) rotate(10deg) scale(0.9); }
+            60% { transform: translateY(-40px) rotate(-8deg) scale(0.85); }
+            80% { transform: translateY(10px) rotate(5deg) scale(0.95); }
+            100% { transform: translateY(0) rotate(0deg) scale(1); }
+        }
+
+        .shuffle-flash {
+            animation: shuffleFlash 0.5s ease 3;
+        }
+        @keyframes shuffleFlash {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 150, 0); }
+            50% { box-shadow: 0 0 60px 20px rgba(255, 200, 130, 0.6), 0 0 120px 40px rgba(255, 200, 130, 0.3); }
+        }
+
+        .card-display.shake {
+            animation: shake 0.3s ease 4;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px) rotate(-2deg); }
+            75% { transform: translateX(8px) rotate(2deg); }
         }
 
         .action-area {
@@ -331,53 +375,6 @@
             color: #5f4a33;
         }
 
-        /* 特效區 */
-        .card-display.flash {
-            animation: cardFlash 0.6s ease;
-        }
-        @keyframes cardFlash {
-            0% { box-shadow: 0 0 0 0 rgba(255, 215, 150, 0.8), 0 0 0 0 rgba(255, 215, 150, 0.5); }
-            50% { box-shadow: 0 0 40px 10px rgba(255, 200, 130, 0.7), 0 0 80px 20px rgba(255, 200, 130, 0.3); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 215, 150, 0); }
-        }
-
-        .card-display.slide-in {
-            animation: slideIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
-        }
-        @keyframes slideIn {
-            0% { transform: translateY(-40px) scale(0.92); opacity: 0.3; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
-
-        .card-display.shuffle-fly {
-            animation: shuffleFly 0.9s ease;
-        }
-        @keyframes shuffleFly {
-            0% { transform: translateY(0) rotate(0deg) scale(1); }
-            20% { transform: translateY(-60px) rotate(-15deg) scale(0.8); }
-            40% { transform: translateY(20px) rotate(10deg) scale(0.9); }
-            60% { transform: translateY(-40px) rotate(-8deg) scale(0.85); }
-            80% { transform: translateY(10px) rotate(5deg) scale(0.95); }
-            100% { transform: translateY(0) rotate(0deg) scale(1); }
-        }
-
-        .shuffle-flash {
-            animation: shuffleFlash 0.5s ease 3;
-        }
-        @keyframes shuffleFlash {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 150, 0); }
-            50% { box-shadow: 0 0 60px 20px rgba(255, 200, 130, 0.6), 0 0 120px 40px rgba(255, 200, 130, 0.3); }
-        }
-
-        .card-display.shake {
-            animation: shake 0.3s ease 4;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px) rotate(-2deg); }
-            75% { transform: translateX(8px) rotate(2deg); }
-        }
-
         @media (max-width: 700px) {
             .app { padding: 20px 16px; }
             h1 { font-size: 1.6rem; }
@@ -440,194 +437,199 @@
 
 <script>
     (function() {
-        // ----- 45 筆精油資料 (含圖片格式) -----
+        // ============================================================
+        // 45 筆精油資料
+        // 不需要指定 format，系統會自動嘗試 jpg 和 png
+        // ============================================================
         const oils = [
-            { id: '01', name: '甜橙', emoji: '🍊', meaning: '赤子之心', category: '果實', format: 'png',
+            { id: '01', name: '甜橙', emoji: '🍊', meaning: '赤子之心', category: '果實',
               detail_pos: '你擁有純真樂觀的本質，像陽光一樣溫暖周圍的人，這是你的天賦。',
               detail_neg: '有時過度樂觀可能讓你忽略了潛在的風險，需要更務實地面對現實。',
               detail_sol: '試著在保持樂觀的同時，為自己建立穩固的計畫與界線。' },
-            { id: '02', name: '葡萄柚', emoji: '🍇', meaning: '無憂無慮', category: '果實', format: 'png',
+            { id: '02', name: '葡萄柚', emoji: '🍇', meaning: '無憂無慮', category: '果實',
               detail_pos: '你習慣以輕鬆的態度面對生活，不讓煩惱在心中停留太久。',
               detail_neg: '過於隨性的態度可能導致責任感的鬆懈，需要重新審視優先順序。',
               detail_sol: '練習在放鬆與專注之間找到平衡，設定具體的短期目標。' },
-            { id: '03', name: '檸檬', emoji: '🍋', meaning: '外剛內柔', category: '果實', format: 'jpg',
+            { id: '03', name: '檸檬', emoji: '🍋', meaning: '外剛內柔', category: '果實',
               detail_pos: '你外表堅強獨立，內心卻細膩敏感，懂得保護自己也關懷他人。',
               detail_neg: '過度保護自己可能讓他人覺得難以親近，內心孤獨感日漸加深。',
               detail_sol: '學習適時展現脆弱，讓信任的人看見你真實的一面。' },
-            { id: '04', name: '萊姆', emoji: '🍈', meaning: '回歸初心', category: '果實', format: 'png',
+            { id: '04', name: '萊姆', emoji: '🍈', meaning: '回歸初心', category: '果實',
               detail_pos: '你總能在複雜中找回簡單的快樂，忠於自己最初的想望。',
               detail_neg: '有時過度懷舊可能讓你害怕改變，限制了成長的可能性。',
               detail_sol: '珍惜過往的美好，同時勇敢擁抱新的機會與挑戰。' },
-            { id: '05', name: '山雞椒', emoji: '🌶️', meaning: '活在當下', category: '果實', format: 'jpg',
+            { id: '05', name: '山雞椒', emoji: '🌶️', meaning: '活在當下', category: '果實',
               detail_pos: '你專注於此刻的體驗，不戀棧過去也不擔憂未來，充滿生命力。',
               detail_neg: '過度專注當下可能忽略了長遠規劃，容易陷入短視的困境。',
               detail_sol: '在享受當下的同時，為未來預留一些思考與準備的空間。' },
-            { id: '06', name: '茉莉', emoji: '🌸', meaning: '悠然自在', category: '花朵', format: 'png',
+            { id: '06', name: '茉莉', emoji: '🌸', meaning: '悠然自在', category: '花朵',
               detail_pos: '你擁有優雅從容的氣質，能在喧囂中保持內心的寧靜與平衡。',
               detail_neg: '過於悠然可能被誤解為冷漠，需要更積極地參與人際互動。',
               detail_sol: '主動分享你的感受，讓身邊的人更了解你的內心世界。' },
-            { id: '07', name: '玫瑰', emoji: '🌹', meaning: '熱情自信', category: '花朵', format: 'jpg',
+            { id: '07', name: '玫瑰', emoji: '🌹', meaning: '熱情自信', category: '花朵',
               detail_pos: '你充滿魅力與自信，敢於展現真實的自己，並激勵身邊的人。',
               detail_neg: '自信過頭可能成為自負，忽略了他人感受或忠告。',
               detail_sol: '保持自信之餘，多聆聽他人的意見，讓領導力更圓融。' },
-            { id: '08', name: '橙花', emoji: '🍊🌸', meaning: '優雅大方', category: '花朵', format: 'png',
+            { id: '08', name: '橙花', emoji: '🍊🌸', meaning: '優雅大方', category: '花朵',
               detail_pos: '你待人真誠且舉止得體，總能讓身邊的人感到舒適與被尊重。',
               detail_neg: '過度追求完美可能給自己與他人帶來壓力，害怕犯錯。',
               detail_sol: '接受不完美，允許自己與他人有犯錯的空間。' },
-            { id: '09', name: '依蘭', emoji: '🌺', meaning: '浪漫奔放', category: '花朵', format: 'jpg',
+            { id: '09', name: '依蘭', emoji: '🌺', meaning: '浪漫奔放', category: '花朵',
               detail_pos: '你情感豐富且富有創造力，勇於追求愛與美的體驗。',
               detail_neg: '情緒起伏較大，可能影響理性判斷，讓關係變得複雜。',
               detail_sol: '練習情緒覺察，在感性與理性之間找到健康的平衡點。' },
-            { id: '10', name: '永久花', emoji: '🏵️', meaning: '斷捨離', category: '花朵', format: 'png',
+            { id: '10', name: '永久花', emoji: '🏵️', meaning: '斷捨離', category: '花朵',
               detail_pos: '你懂得放下不必要的包袱，讓生命保持流動與更新。',
               detail_neg: '有時過度追求「斷捨離」可能導致逃避深層的情感連結。',
               detail_sol: '區分「該放下」與「值得保留」的事物，溫柔地對待自己。' },
-            { id: '11', name: '純正薰衣草', emoji: '💜', meaning: '溫柔體貼', category: '藥草', format: 'jpg',
+            { id: '11', name: '純正薰衣草', emoji: '💜', meaning: '溫柔體貼', category: '藥草',
               detail_pos: '你擁有療癒的能量，總能敏銳察覺他人的需求並給予支持。',
               detail_neg: '過度付出可能耗盡自己的能量，忽略了自己的需求。',
               detail_sol: '學會設立健康的界線，先照顧好自己才能更好地幫助他人。' },
-            { id: '12', name: '天竺葵', emoji: '🌿', meaning: '感性善良', category: '藥草', format: 'png',
+            { id: '12', name: '天竺葵', emoji: '🌿', meaning: '感性善良', category: '藥草',
               detail_pos: '你充滿同理心，能理解他人的感受，並以善良的行動回應。',
               detail_neg: '過度善良可能讓你成為情緒的垃圾桶，容易被他人影響。',
               detail_sol: '保持善良的同時，保護自己的情緒能量，適時保持距離。' },
-            { id: '13', name: '甜馬鬱蘭', emoji: '🌱', meaning: '理智沉著', category: '藥草', format: 'jpg',
+            { id: '13', name: '甜馬鬱蘭', emoji: '🌱', meaning: '理智沉著', category: '藥草',
               detail_pos: '你善於用理性分析問題，在壓力下仍能保持清晰的思緒。',
               detail_neg: '過度理性可能忽略了情感層面，顯得冷漠或缺乏彈性。',
               detail_sol: '練習在決策中加入直覺與情感，讓理性與感性並存。' },
-            { id: '14', name: '快樂鼠尾草', emoji: '🧠', meaning: '直覺思考', category: '藥草', format: 'png',
+            { id: '14', name: '快樂鼠尾草', emoji: '🧠', meaning: '直覺思考', category: '藥草',
               detail_pos: '你相信內心的直覺，常能跳脫框架，找到獨特的解決方案。',
               detail_neg: '過度依賴直覺可能忽略客觀事實，導致決策失準。',
               detail_sol: '將直覺與邏輯分析結合，做出更周全的判斷。' },
-            { id: '15', name: '廣藿香', emoji: '🍃', meaning: '自我覺醒', category: '藥草', format: 'jpg',
+            { id: '15', name: '廣藿香', emoji: '🍃', meaning: '自我覺醒', category: '藥草',
               detail_pos: '你正處於深刻的內省期，渴望更了解自己真正的需求與方向。',
               detail_neg: '過度內省可能導致行動遲緩，陷入思考的循環中。',
               detail_sol: '將內省的收穫轉化為具體行動，一步步向前邁進。' },
-            { id: '16', name: '乳香', emoji: '🪔', meaning: '療癒溫暖', category: '樹脂', format: 'png',
+            { id: '16', name: '乳香', emoji: '🪔', meaning: '療癒溫暖', category: '樹脂',
               detail_pos: '你有撫慰人心的力量，能為自己和他人帶來深層的寧靜與修復。',
               detail_neg: '過度承接他人的情緒，可能讓自己的心靈不堪負荷。',
               detail_sol: '建立情緒界線，學習在助人與自我保護之間取得平衡。' },
-            { id: '17', name: '沒藥', emoji: '🌲', meaning: '智慧沉穩', category: '樹脂', format: 'jpg',
+            { id: '17', name: '沒藥', emoji: '🌲', meaning: '智慧沉穩', category: '樹脂',
               detail_pos: '你擁有超越年齡的智慧，沉著冷靜，能看透事物的本質。',
               detail_neg: '過度沉穩可能被視為保守，錯失創新與冒險的機會。',
               detail_sol: '在穩健的基礎上，嘗試小規模的突破與實驗。' },
-            { id: '18', name: '安息香', emoji: '🕯️', meaning: '溫暖安定', category: '樹脂', format: 'png',
+            { id: '18', name: '安息香', emoji: '🕯️', meaning: '溫暖安定', category: '樹脂',
               detail_pos: '你給人安穩可靠的感覺，是許多人心中的定心丸。',
               detail_neg: '過度承擔安定他人的責任，可能忽略了自己也需要被安撫。',
               detail_sol: '允許自己也有脆弱的時候，接受他人的關心與支持。' },
-            { id: '19', name: '岩玫瑰', emoji: '🪨🌹', meaning: '平撫穩定', category: '樹脂', format: 'jpg',
+            { id: '19', name: '岩玫瑰', emoji: '🪨🌹', meaning: '平撫穩定', category: '樹脂',
               detail_pos: '你善於處理危機，能在混亂中迅速恢復平靜與秩序。',
               detail_neg: '長期處於「解決問題」模式，可能讓身心處於緊繃狀態。',
               detail_sol: '練習在平時就建立放鬆與自我照顧的習慣。' },
-            { id: '20', name: '秘魯聖木', emoji: '🌳', meaning: '回歸自我', category: '樹脂', format: 'png',
+            { id: '20', name: '秘魯聖木', emoji: '🌳', meaning: '回歸自我', category: '樹脂',
               detail_pos: '你正在經歷一場回歸本心的旅程，找回屬於自己的核心價值。',
               detail_neg: '回歸自我的過程中，可能與周圍的期待產生衝突。',
               detail_sol: '溫柔地堅持自己的選擇，同時保持與他人的連結。' },
-            { id: '21', name: '黑胡椒', emoji: '⚫', meaning: '創意活力', category: '香料', format: 'jpg',
+            { id: '21', name: '黑胡椒', emoji: '⚫', meaning: '創意活力', category: '香料',
               detail_pos: '你充滿行動力與創意，總能將想法化為具體的冒險。',
               detail_neg: '過於衝動的行動可能缺乏規劃，容易造成資源的浪費。',
               detail_sol: '在行動前多一分思考，讓創意更有方向與效率。' },
-            { id: '22', name: '丁香', emoji: '🧄', meaning: '勇往直前', category: '香料', format: 'png',
+            { id: '22', name: '丁香', emoji: '🧄', meaning: '勇往直前', category: '香料',
               detail_pos: '你擁有堅韌的毅力，不畏困難，勇敢朝向目標前進。',
               detail_neg: '過於剛強可能忽視了周遭的意見，讓自己陷入孤軍奮戰。',
               detail_sol: '保持勇氣的同時，也接受他人的幫助與建議。' },
-            { id: '23', name: '迷迭香', emoji: '🌿', meaning: '創新靈活', category: '香料', format: 'jpg',
+            { id: '23', name: '迷迭香', emoji: '🌿', meaning: '創新靈活', category: '香料',
               detail_pos: '你思維靈活，善於在變化中找到新的機會與突破口。',
               detail_neg: '過度求新求變可能缺乏穩定性，讓身邊的人感到不安。',
               detail_sol: '在創新與延續之間找到節奏，讓變革更易於被接受。' },
-            { id: '24', name: '歐薄荷', emoji: '🌱', meaning: '適應力強', category: '香料', format: 'png',
+            { id: '24', name: '歐薄荷', emoji: '🌱', meaning: '適應力強', category: '香料',
               detail_pos: '你具備彈性與韌性，能在不同環境中快速找到自己的位置。',
               detail_neg: '過度適應可能讓你迷失自我，忘了自己真正的偏好與界線。',
               detail_sol: '在適應環境的同時，保持對自我需求的覺察。' },
-            { id: '25', name: '檸檬香茅', emoji: '🍋🌿', meaning: '打破框架', category: '香料', format: 'jpg',
+            { id: '25', name: '檸檬香茅', emoji: '🍋🌿', meaning: '打破框架', category: '香料',
               detail_pos: '你勇於挑戰傳統，總能提出顛覆性的新觀點與做法。',
               detail_neg: '過度挑戰框架可能導致人際摩擦，讓合作變得困難。',
               detail_sol: '在提出新觀點時，也多考量他人的接受度與溝通方式。' },
-            { id: '26', name: '花梨木', emoji: '🪵', meaning: '穩定踏實', category: '木質', format: 'png',
+            { id: '26', name: '花梨木', emoji: '🪵', meaning: '穩定踏實', category: '木質',
               detail_pos: '你一步一腳印，穩健踏實，值得信賴。',
               detail_neg: '過於保守可能讓你錯失成長的機會，陷入舒適圈。',
               detail_sol: '在穩定的基礎上，逐步嘗試新的挑戰與領域。' },
-            { id: '27', name: '檜木', emoji: '🌲', meaning: '安全感', category: '木質', format: 'jpg',
+            { id: '27', name: '檜木', emoji: '🌲', meaning: '安全感', category: '木質',
               detail_pos: '你給人穩固的安心感，是許多人樂於依靠的對象。',
               detail_neg: '過度給予安全感，可能讓自己承擔過多的壓力與責任。',
               detail_sol: '學習分擔責任，讓他人也有機會展現自己的能力。' },
-            { id: '28', name: '檀香', emoji: '🪷', meaning: '沉穩寧靜', category: '木質', format: 'png',
+            { id: '28', name: '檀香', emoji: '🪷', meaning: '沉穩寧靜', category: '木質',
               detail_pos: '你心性沉靜，擁有強大的內在力量，不易受外界干擾。',
               detail_neg: '過於寧靜可能讓你看起來疏離，與他人產生距離感。',
               detail_sol: '多與他人分享你的想法與感受，讓寧靜成為一種吸引力。' },
-            { id: '29', name: '肉桂', emoji: '🍂', meaning: '溫暖重生', category: '木質', format: 'jpg',
+            { id: '29', name: '肉桂', emoji: '🍂', meaning: '溫暖重生', category: '木質',
               detail_pos: '你正在經歷蛻變，將過去的經驗轉化為前進的能量。',
               detail_neg: '重生過程中的不確定性，可能讓你感到焦慮與不安。',
               detail_sol: '信任生命的節奏，給自己時間與空間去適應新的狀態。' },
-            { id: '30', name: '大西洋雪松', emoji: '🌲', meaning: '穩紮穩打', category: '木質', format: 'png',
+            { id: '30', name: '大西洋雪松', emoji: '🌲', meaning: '穩紮穩打', category: '木質',
               detail_pos: '你行事有條不紊，懂得按部就班地構築自己的理想。',
               detail_neg: '過於按部就班可能缺乏彈性，無法應對突發的變化。',
               detail_sol: '在計畫中預留彈性，培養應變與調整的能力。' },
-            { id: '31', name: '薑', emoji: '🫚', meaning: '平衡溫暖', category: '根部', format: 'jpg',
+            { id: '31', name: '薑', emoji: '🫚', meaning: '平衡溫暖', category: '根部',
               detail_pos: '你擁有溫暖內斂的特質，能平衡生活中的各種對立力量。',
               detail_neg: '過度追求平衡可能讓你猶豫不決，難以做出明確的選擇。',
               detail_sol: '接受偶爾的失衡，信任自己有能力重新找回重心。' },
-            { id: '32', name: '岩蘭草', emoji: '🌾', meaning: '放鬆平靜', category: '根部', format: 'png',
+            { id: '32', name: '岩蘭草', emoji: '🌾', meaning: '放鬆平靜', category: '根部',
               detail_pos: '你擅長讓身心沉澱，在安靜中找回內在的平衡。',
               detail_neg: '過於放鬆可能導致動力不足，失去前進的熱情。',
               detail_sol: '在平靜中保持對目標的清晰，讓放鬆成為重新出發的起點。' },
-            { id: '33', name: '歐白芷根', emoji: '🌿', meaning: '補充元氣', category: '根部', format: 'jpg',
+            { id: '33', name: '歐白芷根', emoji: '🌿', meaning: '補充元氣', category: '根部',
               detail_pos: '你正在重新累積能量，為下一階段的挑戰做準備。',
               detail_neg: '過度補充元氣可能忽略休息的重要性，反而消耗更多。',
               detail_sol: '學習在補充與休息之間找到節奏，讓能量可持續。' },
-            { id: '34', name: '穗甘松', emoji: '🌱', meaning: '原諒放下', category: '根部', format: 'png',
+            { id: '34', name: '穗甘松', emoji: '🌱', meaning: '原諒放下', category: '根部',
               detail_pos: '你正在學習釋放過去的傷痛，讓心靈獲得真正的自由。',
               detail_neg: '原諒的過程中，可能反覆被過去的情緒所困擾。',
               detail_sol: '溫柔地對待自己的感受，原諒不一定要一次到位。' },
-            { id: '35', name: '纈草', emoji: '🌿', meaning: '鎮定安心', category: '根部', format: 'jpg',
+            { id: '35', name: '纈草', emoji: '🌿', meaning: '鎮定安心', category: '根部',
               detail_pos: '你擁有安撫內在躁動的能力，能帶給自己穩定的力量。',
               detail_neg: '過度鎮定可能壓抑了真實的情緒，阻礙了表達與釋放。',
               detail_sol: '允許情緒流動，在鎮定中保留表達的出口。' },
-            { id: '36', name: '甜茴香', emoji: '🌱', meaning: '理性平衡', category: '種籽', format: 'png',
+            { id: '36', name: '甜茴香', emoji: '🌱', meaning: '理性平衡', category: '種籽',
               detail_pos: '你善用邏輯與理性，能在複雜中找出最均衡的選擇。',
               detail_neg: '過度追求平衡可能忽略了內心的直覺與渴望。',
               detail_sol: '在理性分析中加入直覺的指引，讓選擇更貼近本心。' },
-            { id: '37', name: '胡蘿蔔籽', emoji: '🥕', meaning: '敏銳獨特', category: '種籽', format: 'jpg',
+            { id: '37', name: '胡蘿蔔籽', emoji: '🥕', meaning: '敏銳獨特', category: '種籽',
               detail_pos: '你有獨特的眼光與洞察力，常發現他人忽略的細節。',
               detail_neg: '過度敏銳可能讓你過度解讀訊息，產生不必要的焦慮。',
               detail_sol: '練習區分「觀察」與「過度詮釋」，保持客觀。' },
-            { id: '38', name: '芫荽籽', emoji: '🌿', meaning: '溫柔細膩', category: '種籽', format: 'png',
+            { id: '38', name: '芫荽籽', emoji: '🌿', meaning: '溫柔細膩', category: '種籽',
               detail_pos: '你以溫柔細膩的方式處理事物，讓一切顯得自然而流暢。',
               detail_neg: '過於細膩可能讓你陷入完美主義，拖延了行動的進度。',
               detail_sol: '接受「夠好」即是完美，勇敢地向前推進。' },
-            { id: '39', name: '芹菜籽', emoji: '🌱', meaning: '清新清爽', category: '種籽', format: 'jpg',
+            { id: '39', name: '芹菜籽', emoji: '🌱', meaning: '清新清爽', category: '種籽',
               detail_pos: '你偏好簡單清爽的生活方式，追求心靈與環境的潔淨。',
               detail_neg: '過度追求清爽可能讓你逃避複雜的情感與關係。',
               detail_sol: '在清爽中保留一些溫暖，接納生活中的多元與豐富。' },
-            { id: '40', name: '小茴香', emoji: '🌾', meaning: '釋放復原', category: '種籽', format: 'png',
+            { id: '40', name: '小茴香', emoji: '🌾', meaning: '釋放復原', category: '種籽',
               detail_pos: '你正在釋放壓力與疲憊，讓身心逐漸恢復活力。',
               detail_neg: '釋放的過程中，可能感到空虛或不確定下一步該怎麼走。',
               detail_sol: '給自己一段過渡期，慢慢重新設定新的目標與節奏。' },
-            { id: '41', name: '月桂', emoji: '🍃', meaning: '勇決果斷', category: '葉片', format: 'jpg',
+            { id: '41', name: '月桂', emoji: '🍃', meaning: '勇決果斷', category: '葉片',
               detail_pos: '你具備領袖氣質，能在關鍵時刻做出果斷的決策。',
               detail_neg: '過於果斷可能忽略了團隊的聲音，讓他人感到不被尊重。',
               detail_sol: '在果斷中融入同理心，讓決策更有凝聚力。' },
-            { id: '42', name: '茶樹', emoji: '🍃', meaning: '隨機應變', category: '葉片', format: 'png',
+            { id: '42', name: '茶樹', emoji: '🍃', meaning: '隨機應變', category: '葉片',
               detail_pos: '你靈活且應變力強，能適應各種突發狀況。',
               detail_neg: '過於隨機應變可能缺乏一致性，讓人難以預測你的反應。',
               detail_sol: '在保持靈活的同時，建立一套核心原則作為指引。' },
-            { id: '43', name: '苦橙葉', emoji: '🍊🌿', meaning: '養精蓄銳', category: '葉片', format: 'jpg',
+            { id: '43', name: '苦橙葉', emoji: '🍊🌿', meaning: '養精蓄銳', category: '葉片',
               detail_pos: '你正處於儲備能量的階段，為未來的行動積累實力。',
               detail_neg: '過度儲備可能變成拖延，讓機會悄然溜走。',
               detail_sol: '設定明確的啟動時間，讓蓄力轉化為行動。' },
-            { id: '44', name: '綠花白千層', emoji: '🌿', meaning: '汰舊更新', category: '葉片', format: 'png',
+            { id: '44', name: '綠花白千層', emoji: '🌿', meaning: '汰舊更新', category: '葉片',
               detail_pos: '你正在進行一場內在的革新，汰換舊有的思維模式。',
               detail_neg: '革新的過程可能帶來混亂與不適，讓你感到迷失。',
               detail_sol: '在更新中保留一些舊有的優點，讓轉變更為平穩。' },
-            { id: '45', name: '澳洲尤加利', emoji: '🌿', meaning: '自信獨立', category: '葉片', format: 'jpg',
+            { id: '45', name: '澳洲尤加利', emoji: '🌿', meaning: '自信獨立', category: '葉片',
               detail_pos: '你充滿獨立精神，能自信地走自己的路，不受他人影響。',
               detail_neg: '過度獨立可能讓你孤立無援，忽略了合作的力量。',
               detail_sol: '在獨立中保持開放，樂於與他人協作與交流。' }
         ];
 
+        // ============================================================
         // 圖片路徑設定
+        // ============================================================
         const IMG_BASE_PATH = 'img/';
 
-        // DOM
+        // DOM 元素
         const card1El = document.getElementById('card1');
         const card2El = document.getElementById('card2');
         const card3El = document.getElementById('card3');
@@ -640,16 +642,18 @@
         const resetBtn = document.getElementById('resetBtn');
         const modeDisplay = document.getElementById('modeDisplay');
 
-        // 狀態
+        // ============================================================
+        // 狀態管理
+        // ============================================================
         let currentCards = [null, null, null];
         let drawnStatus = [false, false, false];
         let deck = [];
         let drawIndex = 0;
         let isShuffled = false;
 
-        // 圖片載入重試次數
-        const MAX_RETRIES = 2;
-
+        // ============================================================
+        // 核心函數
+        // ============================================================
         function shuffleArray(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -664,38 +668,55 @@
             });
         }
 
-        // 取得圖片路徑
-        function getImagePath(oil) {
-            const ext = oil.format || 'png';
+        // ============================================================
+        // 圖片載入核心 - 自動嘗試 jpg 和 png
+        // ============================================================
+        function getImagePath(oil, ext) {
             const fileName = oil.id + ' ' + oil.name + '.' + ext;
             return IMG_BASE_PATH + encodeURIComponent(fileName);
         }
 
-        // 嘗試載入圖片，失敗時重試
-        function loadImageWithRetry(img, oil, el, retryCount = 0) {
-            const imgPath = getImagePath(oil);
-            img.src = imgPath;
-            
-            img.onload = function() {
-                el.classList.remove('loading', 'has-error');
-                el.classList.add('has-image');
-            };
-            
-            img.onerror = function() {
-                if (retryCount < MAX_RETRIES) {
-                    // 重試：稍微延遲後重新載入
-                    setTimeout(() => {
-                        loadImageWithRetry(img, oil, el, retryCount + 1);
-                    }, 300);
-                } else {
-                    // 所有重試都失敗，顯示備用內容
+        function loadImageWithAutoFormat(img, oil, el, callback) {
+            const extensions = ['jpg', 'png'];
+            let currentExtIndex = 0;
+            let attempts = 0;
+            const maxAttempts = extensions.length;
+
+            function tryLoad() {
+                if (currentExtIndex >= maxAttempts) {
+                    // 所有格式都失敗，顯示備用
                     el.classList.remove('loading');
                     el.classList.add('has-error');
+                    if (callback) callback(false);
+                    return;
                 }
-            };
+
+                const ext = extensions[currentExtIndex];
+                const imgPath = getImagePath(oil, ext);
+                img.src = imgPath;
+
+                img.onload = function() {
+                    el.classList.remove('loading', 'has-error');
+                    el.classList.add('has-image');
+                    if (callback) callback(true);
+                };
+
+                img.onerror = function() {
+                    currentExtIndex++;
+                    attempts++;
+                    // 稍微延遲後嘗試下一種格式
+                    setTimeout(tryLoad, 200);
+                };
+            }
+
+            // 顯示載入中
+            el.classList.add('loading');
+            tryLoad();
         }
 
+        // ============================================================
         // 渲染卡牌
+        // ============================================================
         function renderCard(cardIndex, oilIdx, effect = 'flash') {
             const el = cardIndex === 1 ? card1El : (cardIndex === 2 ? card2El : card3El);
             
@@ -721,11 +742,8 @@
             
             const img = el.querySelector('.card-image');
             
-            // 顯示載入中狀態
-            el.classList.add('loading');
-            
-            // 嘗試載入圖片（含重試機制）
-            loadImageWithRetry(img, oil, el);
+            // 自動嘗試 jpg / png
+            loadImageWithAutoFormat(img, oil, el);
             
             // 觸發特效
             el.classList.remove('flash', 'slide-in', 'shuffle-effect', 'shuffle-fly', 'shake', 'shuffle-flash');
@@ -737,6 +755,9 @@
             }
         }
 
+        // ============================================================
+        // 更新解讀
+        // ============================================================
         function updateReading(cards) {
             const [idx1, idx2, idx3] = cards;
             if (idx1 !== null && idx1 !== undefined) {
@@ -759,6 +780,9 @@
             }
         }
 
+        // ============================================================
+        // 遊戲操作
+        // ============================================================
         function shuffleDeck() {
             clearEffects();
             
@@ -898,13 +922,17 @@
             drawOneBtn.disabled = true;
         }
 
+        // ============================================================
         // 事件綁定
+        // ============================================================
         shuffleBtn.addEventListener('click', shuffleDeck);
         drawAllBtn.addEventListener('click', drawAll);
         drawOneBtn.addEventListener('click', drawOneCard);
         resetBtn.addEventListener('click', resetAll);
 
-        // 初始狀態
+        // ============================================================
+        // 初始化
+        // ============================================================
         resetAll();
         
         setTimeout(() => {

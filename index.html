@@ -45,6 +45,35 @@
             align-items: center;
             padding: 20px 20px 30px;
             overflow-y: auto;
+            position: relative;
+        }
+
+        /* 🎵 背景音樂控制按鈕 */
+        .bgm-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            color: var(--accent-forest);
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bgm-toggle-btn:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-terracotta);
+            background: #ffffff;
         }
 
         /* 👑 頂部品牌 Header */
@@ -345,8 +374,14 @@
             to { opacity: 1; transform: translate(-50%, 0) scale(1); }
         }
 
-        /* 📱 手機版 RWD 最佳化 (解決精油瓶被助理擋住問題) */
+        /* 📱 手機版 RWD 最佳化 */
         @media (max-width: 600px) {
+            .bgm-toggle-btn {
+                top: 12px;
+                right: 12px;
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
             .assistant-container {
                 left: -15px;
                 bottom: -20px;
@@ -355,7 +390,6 @@
                 width: 200px;
                 height: 290px;
             }
-            /* 手機版：將精油瓶往右移動，避免與左側助理重疊 */
             .center-bottle-container {
                 left: 68%;
                 bottom: 15px;
@@ -378,6 +412,12 @@
 </head>
 <body>
 
+    <!-- 🎵 背景音樂控制按鈕 -->
+    <button class="bgm-toggle-btn" id="bgmToggleBtn">
+        <span id="bgmIcon">🎵</span>
+        <span id="bgmText">音樂：關</span>
+    </button>
+
     <div class="intro-top-logo">
         <div class="logo-sub">Pastoral Divination</div>
         <h1>精油莊園</h1>
@@ -385,14 +425,14 @@
 
     <!-- 舞台展示區塊 -->
     <div class="stage-container" id="stageContainer">
-        <!-- 左側固定助理立繪 (始終使用 01 精油助理) -->
+        <!-- 左側固定助理立繪 -->
         <div class="assistant-container" id="assistantContainer">
             <div class="assistant-avatar" id="assistantAvatar">
                 <img id="assistantImg" src="img/people/01%20%E7%B2%BE%E6%B2%B9%E5%8A%A9%E7%90%86.png" alt="精油助理" class="assistant-img">
             </div>
         </div>
 
-        <!-- 正中間選擇結果精油瓶區塊 (手機版自動靠右避免遮擋) -->
+        <!-- 正中間選擇結果精油瓶區塊 -->
         <div class="center-bottle-container" id="centerBottleContainer">
             <img id="selectedBottleImg" src="" alt="選擇的精油瓶">
             <div class="split-label" id="selectedBottleLabel">精油類別</div>
@@ -401,7 +441,7 @@
 
     <!-- 對話與選擇容器 -->
     <div class="dialog-container">
-        <!-- 🍼 9 大精油類別（3*3 排列，圖片檔名已調整為下劃線格式） -->
+        <!-- 🍼 9 大精油類別 -->
         <div class="category-selector" id="categorySelector">
             <div class="category-item" data-category="果實" data-img="img/bottle/01_%E6%9E%9C%E5%AF%A6%E9%A1%9E.png">
                 <div class="bottle-img-wrap">
@@ -491,19 +531,48 @@
 <script>
     (function() {
         // ============================================================
-        // 🎵 音效播放機制
+        // 🎵 音效與背景音樂機制
         // ============================================================
         const soundClick = new Audio('audio/01_click.mp3');
         const soundBottle = new Audio('audio/02_waterdroplets.mp3');
+        const bgm = new Audio('audio/03_bgmusic.mp3');
+        bgm.loop = true; // 設定背景音樂循環播放
+
+        const bgmToggleBtn = document.getElementById('bgmToggleBtn');
+        const bgmText = document.getElementById('bgmText');
+        let bgmStarted = false;
+
+        // 啟動 BGM 函數
+        function startBGM() {
+            if (!bgmStarted) {
+                bgm.play().then(() => {
+                    bgmStarted = true;
+                    bgmText.textContent = '音樂：開';
+                }).catch(e => console.log('BGM 自動播放受阻：', e));
+            }
+        }
+
+        // 開關按鈕手動控制
+        bgmToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // 避免觸發對話框點擊音效
+            if (bgm.paused) {
+                bgm.play();
+                bgmStarted = true;
+                bgmText.textContent = '音樂：開';
+            } else {
+                bgm.pause();
+                bgmText.textContent = '音樂：關';
+            }
+        });
 
         function playClickSound() {
             soundClick.currentTime = 0;
-            soundClick.play().catch(e => console.log('音效播放受瀏覽器限制阻擋：', e));
+            soundClick.play().catch(e => console.log('音效播放受限：', e));
         }
 
         function playBottleSound() {
             soundBottle.currentTime = 0;
-            soundBottle.play().catch(e => console.log('音效播放受瀏覽器限制阻擋：', e));
+            soundBottle.play().catch(e => console.log('音效播放受限：', e));
         }
 
         // ============================================================
@@ -588,6 +657,9 @@
         }
 
         function handleDialogAdvance() {
+            // 第一次點擊時啟動 BGM
+            startBGM();
+
             // 🎵 觸發點擊對話框音效
             playClickSound();
 
@@ -626,6 +698,9 @@
         // 精油瓶點擊事件綁定
         document.querySelectorAll('.category-item').forEach(item => {
             item.addEventListener('click', () => {
+                // 點擊瓶子時也確保 BGM 啟動
+                startBGM();
+
                 // 🎵 觸發點擊精油瓶音效
                 playBottleSound();
 
@@ -633,7 +708,7 @@
                 const imgPath = item.dataset.img;
                 const info = categoryDetails[category];
 
-                // 1. 隱藏選單，恢復舞台顯示 (助理依然使用 01 精油助理)
+                // 1. 隱藏選單，恢復舞台顯示
                 categorySelector.classList.remove('active');
                 stageContainer.classList.remove('hide-stage');
 

@@ -265,6 +265,42 @@
             margin-top: 4px;
         }
 
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ✨ 背景音樂按鈕樣式 */
+        .audio-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 253, 249, 0.85);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--accent-sage);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .audio-toggle-btn:hover {
+            background: #fff;
+            border-color: var(--accent-gold);
+            transform: translateY(-1px);
+        }
+
+        .audio-toggle-btn.muted {
+            color: var(--text-muted);
+            opacity: 0.8;
+            background: rgba(230, 225, 220, 0.6);
+        }
+
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -307,9 +343,6 @@
             position: relative;
         }
 
-        /* --------------------------------------------------
-           僅「精油圖片卡片」進行 3D 翻牌效果
-        -------------------------------------------------- */
         .card-display {
             width: 100%;
             max-width: 260px;
@@ -349,7 +382,6 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
-        /* 卡片背面 (未翻開) */
         .card-back {
             background: linear-gradient(145deg, #2b3a32, #1a2520);
             color: var(--accent-gold);
@@ -379,7 +411,6 @@
             color: var(--accent-gold-light);
         }
 
-        /* 卡片正面 (只放純精油圖片) */
         .card-front {
             background: #fdfbf7;
             transform: rotateY(180deg);
@@ -428,9 +459,6 @@
             100% { transform: scale(0.8) rotate(360deg); opacity: 0.5; }
         }
 
-        /* --------------------------------------------------
-           所有文字與 Emoji (固定於下方，不參與翻牌)
-        -------------------------------------------------- */
         .oil-info-static {
             max-width: 520px;
             margin: 0 auto 20px;
@@ -493,7 +521,6 @@
             letter-spacing: 1px;
         }
 
-        /* 每日提醒專區 */
         .daily-reminder {
             background: linear-gradient(135deg, rgba(74, 99, 82, 0.08) 0%, rgba(198, 156, 109, 0.08) 100%);
             border-radius: 24px;
@@ -523,7 +550,6 @@
 
         .daily-reminder .quote i { font-style: normal; }
 
-        /* 操作按鈕區 */
         .action-area {
             display: flex;
             justify-content: center;
@@ -577,27 +603,76 @@
             letter-spacing: 1px;
         }
 
+        /* --------------------------------------------------
+           Responsive RWD Media Queries (✨ 手機版側邊欄微型化優化)
+        -------------------------------------------------- */
         @media (max-width: 1024px) {
             .sidebar {
                 width: 100%;
                 height: auto;
                 position: relative;
-                padding: 16px 20px;
+                padding: 12px 16px;
                 border-right: none;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
-            .sidebar.collapsed { width: 100%; padding: 16px 20px; }
-            .sidebar.collapsed .brand-title,
-            .sidebar.collapsed .brand-subtitle,
-            .sidebar.collapsed .nav-text,
-            .sidebar.collapsed .nav-badge { display: inline; opacity: 1; }
-            .sidebar.collapsed .nav-menu { display: none; }
-            .layout-container { flex-direction: column; }
-            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { margin-left: 0; padding: 30px 20px; }
-            .nav-menu { flex-direction: row; overflow-x: auto; margin: 16px 0 0 0; padding-bottom: 8px; }
-            .nav-item { white-space: nowrap; padding: 10px 16px; }
+            .sidebar.collapsed { width: 100%; padding: 12px 16px; }
+
+            .sidebar-toggle-btn { display: none; }
+
+            .brand-header {
+                padding-bottom: 8px;
+                border-bottom: none;
+            }
+
+            .brand-logo { font-size: 1.5rem; margin-bottom: 2px; }
+            .brand-title { font-size: 1rem; }
+            .brand-subtitle { font-size: 0.55rem; }
+
+            /* 精緻露半邊滑動選單 (Peek Effect) */
+            .nav-menu { 
+                flex-direction: row; 
+                overflow-x: auto; 
+                margin: 8px -16px 0 -16px; 
+                padding: 4px 16px 8px 16px; 
+                gap: 8px;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .nav-item { 
+                white-space: nowrap; 
+                padding: 8px 14px; 
+                font-size: 0.85rem;
+                border-radius: 20px;
+                gap: 6px;
+                flex-shrink: 0;
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .nav-item .icon {
+                font-size: 1rem;
+                width: auto;
+            }
+
+            .nav-badge {
+                font-size: 0.55rem;
+                padding: 1px 6px;
+                margin-left: 2px;
+            }
+
             .sidebar-footer { display: none; }
-            .sidebar-toggle-btn { margin-bottom: 0; }
+
+            .layout-container { flex-direction: column; }
+            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { 
+                margin-left: 0; 
+                padding: 24px 16px; 
+            }
+
+            .nav-menu::-webkit-scrollbar { height: 4px; }
+            .nav-menu::-webkit-scrollbar-thumb {
+                background: rgba(198, 156, 109, 0.4);
+                border-radius: 4px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -613,6 +688,10 @@
 </head>
 <body>
 
+<!-- ✨ 音訊元件 (指定音訊路徑於 audio/ 資料夾下) -->
+<audio id="bgMusic" src="audio/05_bgmusic02.mp3" loop preload="auto"></audio>
+<audio id="flipSound" src="audio/04_flipcard.mp3" preload="auto"></audio>
+
 <div class="layout-container">
     <!-- 🌿 可收折側邊欄 Sidebar -->
     <aside class="sidebar" id="sidebar">
@@ -627,39 +706,30 @@
                 <div class="brand-subtitle">Aroma Intuition</div>
             </div>
 
-<nav class="nav-menu">
-    <!-- 三牌占卜 -->
-    <a class="nav-item" href="divination.html" title="三牌占卜">
-        <span class="icon">✨</span>
-        <span class="nav-text">三牌占卜</span>
-    </a>
-
-    <!-- 每日香氣詩籤（當前頁面） -->
-    <a class="nav-item active" href="daily.html" title="每日香氣詩籤">
-        <span class="icon">📜</span>
-        <span class="nav-text">每日香氣詩籤</span>
-    </a>
-
-    <!-- 芳香精油百科 -->
-    <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
-        <span class="icon">📖</span>
-        <span class="nav-text">芳香精油百科</span>
-    </a>
-
-    <!-- 心靈指引 -->
-    <a class="nav-item" href="guidance.html" title="心靈指引">
-        <span class="icon">🔮</span>
-        <span class="nav-text">心靈指引</span>
-        <span class="nav-badge">Soon</span>
-    </a>
-
-    <!-- 🕊️ 待開發（如果還沒有頁面，href 寫 "#" 即可；如果有頁面可改成對應檔名） -->
-    <a class="nav-item" href="#" onclick="alert('這個功能正在努力開發中，敬請期待！'); return false;" title="待開發">
-        <span class="icon">🕊️</span>
-        <span class="nav-text">待開發</span>
-        <span class="nav-badge">Soon</span>
-    </a>
-</nav>
+            <nav class="nav-menu">
+                <a class="nav-item" href="divination.html" title="三牌占卜">
+                    <span class="icon">✨</span>
+                    <span class="nav-text">三牌占卜</span>
+                </a>
+                <a class="nav-item active" href="daily.html" title="每日香氣詩籤">
+                    <span class="icon">📜</span>
+                    <span class="nav-text">每日香氣詩籤</span>
+                </a>
+                <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
+                    <span class="icon">📖</span>
+                    <span class="nav-text">芳香精油百科</span>
+                </a>
+                <a class="nav-item" href="guidance.html" title="心靈指引">
+                    <span class="icon">🔮</span>
+                    <span class="nav-text">心靈指引</span>
+                    <span class="nav-badge">Soon</span>
+                </a>
+                <a class="nav-item" href="#" onclick="alert('這個功能正在努力開發中，敬請期待！'); return false;" title="待開發">
+                    <span class="icon">🕊️</span>
+                    <span class="nav-text">待開發</span>
+                    <span class="nav-badge">Soon</span>
+                </a>
+            </nav>
         </div>
 
         <div class="sidebar-footer">
@@ -675,24 +745,26 @@
                 <h2>每日精油 · 靈感一抽</h2>
                 <p>今天，抽取屬於你的香氣訊息與心靈提醒</p>
             </div>
-            <div class="status-badge">
-                <span class="status-dot"></span>
-                <span id="modeDisplay">✦ 今日專屬指引</span>
+            <div class="top-controls">
+                <!-- ✨ 背景音樂開關按鈕 -->
+                <button class="audio-toggle-btn" id="musicToggleBtn" title="切換背景音樂">
+                    <span id="musicIcon">🎵</span>
+                    <span id="musicStatusText">音樂：開</span>
+                </button>
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    <span id="modeDisplay">✦ 今日專屬指引</span>
+                </div>
             </div>
         </div>
 
-        <!-- 卡片主要展示桌面 -->
         <section class="card-table">
-            
-            <!-- 【僅此純精油圖片卡片進行 3D 翻牌動畫】 -->
             <div class="card-display" id="cardDisplay">
                 <div class="card-inner">
-                    <!-- 卡牌背面 -->
                     <div class="card-back">
                         <div class="placeholder-icon">🌿</div>
                         <div class="placeholder-text">點擊摸牌</div>
                     </div>
-                    <!-- 卡牌正面 (純圖片) -->
                     <div class="card-front">
                         <div class="oil-image-wrapper" id="oilImageWrapper">
                             <img id="oilImage" src="" alt="精油圖片">
@@ -702,7 +774,6 @@
                 </div>
             </div>
 
-            <!-- 【文字資訊區（固定於下方，包含 Emoji 與名稱，不參與翻牌）】 -->
             <div class="oil-info-static">
                 <div class="oil-name">
                     <span class="oil-emoji" id="oilEmoji">🌸</span>
@@ -716,7 +787,6 @@
                 </div>
             </div>
 
-            <!-- 【每日提醒專區（固定於下方）】 -->
             <div class="daily-reminder">
                 <div class="label">✦ 每日提醒 ✦</div>
                 <div class="quote" id="reminderText">
@@ -724,7 +794,6 @@
                 </div>
             </div>
 
-            <!-- 【操作按鈕區】 -->
             <div class="action-area">
                 <button class="btn btn-gold" id="drawDailyBtn">✨ 抽今日精油</button>
             </div>
@@ -738,9 +807,6 @@
 
 <script>
     (function() {
-        // ============================================================
-        // 側邊欄收折控制邏輯
-        // ============================================================
         const sidebar = document.getElementById('sidebar');
         const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
         const toggleIcon = document.getElementById('toggleIcon');
@@ -749,6 +815,61 @@
             sidebar.classList.toggle('collapsed');
             toggleIcon.textContent = sidebar.classList.contains('collapsed') ? '☰' : '☰';
         });
+
+        // ============================================================
+        // 音訊與背景音樂控制 (Audio & BGM Controller)
+        // ============================================================
+        const bgMusic = document.getElementById('bgMusic');
+        const flipSound = document.getElementById('flipSound');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicStatusText = document.getElementById('musicStatusText');
+
+        let isMusicEnabled = true;
+
+        function playFlipSound() {
+            if (!flipSound) return;
+            flipSound.currentTime = 0;
+            flipSound.play().catch(e => console.log('翻牌音效受自動播放限制影響：', e));
+        }
+
+        function tryPlayBgMusic() {
+            if (isMusicEnabled && bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(e => console.log('等待點擊互動開啟音樂'));
+            }
+        }
+
+        function updateMusicUI(playing) {
+            if (playing) {
+                musicIcon.textContent = '🎵';
+                musicStatusText.textContent = '音樂：開';
+                musicToggleBtn.classList.remove('muted');
+            } else {
+                musicIcon.textContent = '🔇';
+                musicStatusText.textContent = '音樂：關';
+                musicToggleBtn.classList.add('muted');
+            }
+        }
+
+        musicToggleBtn.addEventListener('click', () => {
+            if (!bgMusic.paused) {
+                isMusicEnabled = false;
+                bgMusic.pause();
+                updateMusicUI(false);
+            } else {
+                isMusicEnabled = true;
+                bgMusic.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(e => console.warn(e));
+            }
+        });
+
+        document.addEventListener('click', function initAudioOnUserInteraction() {
+            tryPlayBgMusic();
+            document.removeEventListener('click', initAudioOnUserInteraction);
+        }, { once: true });
 
         // ============================================================
         // 45 筆完整精油資料庫
@@ -803,7 +924,6 @@
 
         const IMG_BASE_PATH = 'img/';
 
-        // DOM 元素
         const cardDisplay = document.getElementById('cardDisplay');
         const oilImage = document.getElementById('oilImage');
         const oilEmoji = document.getElementById('oilEmoji');
@@ -816,7 +936,6 @@
 
         let isFlipping = false;
 
-        // 圖片自動轉檔試載 (JPG / PNG)
         function getImagePath(oil, ext) {
             return IMG_BASE_PATH + encodeURIComponent(`${oil.id} ${oil.name}.${ext}`);
         }
@@ -852,17 +971,12 @@
             tryLoad();
         }
 
-        // 隨機獲取精油
         function getRandomOil() {
             return oils[Math.floor(Math.random() * oils.length)];
         }
 
-        // 填入精油資料
         function setCardContent(oil) {
-            // 翻牌卡片：只載入圖片
             loadOilImage(oil);
-
-            // 下方固定文字區：填入 Emoji、名稱、類別、象徵、說明與提醒
             oilEmoji.textContent = oil.emoji;
             oilName.textContent = oil.name;
             oilCategory.textContent = oil.category;
@@ -871,41 +985,36 @@
             reminderText.innerHTML = `<i>「${oil.reminder}」</i>`;
         }
 
-        // ============================================================
-        // 核心：僅「純精油圖片」進行 3D 翻轉動畫
-        // ============================================================
         function drawDailyCardOnly() {
+            tryPlayBgMusic();
             if (isFlipping) return;
             isFlipping = true;
 
             if (cardDisplay.classList.contains('flipped')) {
-                // 1. 卡片翻回背面 (蓋牌)
                 cardDisplay.classList.remove('flipped');
 
-                // 2. 在背面旋轉過半 (400ms) 時靜默更換內容
                 setTimeout(() => {
                     const oil = getRandomOil();
                     setCardContent(oil);
 
-                    // 3. 翻回正面
                     setTimeout(() => {
+                        playFlipSound(); // ✨ 觸發翻牌音效
                         cardDisplay.classList.add('flipped');
                         setTimeout(() => { isFlipping = false; }, 800);
                     }, 150);
                 }, 400);
 
             } else {
-                // 首次翻開
                 const oil = getRandomOil();
                 setCardContent(oil);
                 setTimeout(() => {
+                    playFlipSound(); // ✨ 觸發翻牌音效
                     cardDisplay.classList.add('flipped');
                     setTimeout(() => { isFlipping = false; }, 800);
                 }, 100);
             }
         }
 
-        // 事件綁定
         drawBtn.addEventListener('click', drawDailyCardOnly);
         cardDisplay.addEventListener('click', drawDailyCardOnly);
 
@@ -916,7 +1025,6 @@
             }
         });
 
-        // 頁面載入自動觸發
         window.addEventListener('load', () => {
             setTimeout(drawDailyCardOnly, 400);
         });

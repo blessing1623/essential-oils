@@ -266,6 +266,42 @@
             margin-top: 4px;
         }
 
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ✨ 背景音樂自由開關按鈕樣式 */
+        .audio-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 253, 249, 0.85);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--accent-sage);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .audio-toggle-btn:hover {
+            background: #fff;
+            border-color: var(--accent-gold);
+            transform: translateY(-1px);
+        }
+
+        .audio-toggle-btn.muted {
+            color: var(--text-muted);
+            opacity: 0.8;
+            background: rgba(230, 225, 220, 0.6);
+        }
+
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -674,46 +710,86 @@
         }
 
         /* --------------------------------------------------
-           Responsive RWD Media Queries
+           Responsive RWD Media Queries (✨ 手機版選單重點優化)
         -------------------------------------------------- */
         @media (max-width: 1024px) {
             .sidebar {
                 width: 100%;
                 height: auto;
                 position: relative;
-                padding: 16px 20px;
+                padding: 12px 16px;
                 border-right: none;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
+            
             .sidebar.collapsed {
                 width: 100%;
-                padding: 16px 20px;
+                padding: 12px 16px;
             }
-            .sidebar.collapsed .brand-title,
-            .sidebar.collapsed .brand-subtitle,
-            .sidebar.collapsed .nav-text,
-            .sidebar.collapsed .nav-badge {
-                display: inline;
-                opacity: 1;
-            }
-            .sidebar.collapsed .nav-menu {
+
+            /* 手機版不需展折按鈕，隱藏以節省空間 */
+            .sidebar-toggle-btn {
                 display: none;
             }
-            .layout-container { flex-direction: column; }
-            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { 
-                margin-left: 0; 
-                padding: 30px 20px; 
+
+            .brand-header {
+                padding-bottom: 10px;
+                border-bottom: none;
             }
+
+            .brand-logo { font-size: 1.5rem; margin-bottom: 2px; }
+            .brand-title { font-size: 1rem; }
+            .brand-subtitle { font-size: 0.55rem; }
+
+            /* ✨ 橫向滾動選單微型化優化 (Peek Effect) */
             .nav-menu { 
                 flex-direction: row; 
                 overflow-x: auto; 
-                margin: 16px 0 0 0; 
-                padding-bottom: 8px; 
+                margin: 10px -16px 0 -16px; 
+                padding: 4px 16px 10px 16px; 
+                gap: 8px;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
             }
-            .nav-item { white-space: nowrap; padding: 10px 16px; }
+
+            .nav-item { 
+                white-space: nowrap; 
+                padding: 8px 14px; 
+                font-size: 0.85rem;
+                border-radius: 20px;
+                gap: 6px;
+                flex-shrink: 0; /* 保持尺寸不被壓縮，讓右側自然露出半個 */
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .nav-item .icon {
+                font-size: 1rem;
+                width: auto;
+            }
+
+            .nav-badge {
+                font-size: 0.55rem;
+                padding: 1px 6px;
+                margin-left: 2px;
+            }
+
             .sidebar-footer { display: none; }
+
+            .layout-container { flex-direction: column; }
+            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { 
+                margin-left: 0; 
+                padding: 24px 16px; 
+            }
             .reading-grid { grid-template-columns: 1fr; }
-            .sidebar-toggle-btn { margin-bottom: 0; }
+
+            /* 手機版滾動條專屬精緻化 */
+            .nav-menu::-webkit-scrollbar {
+                height: 4px;
+            }
+            .nav-menu::-webkit-scrollbar-thumb {
+                background: rgba(198, 156, 109, 0.4);
+                border-radius: 4px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -730,6 +806,10 @@
 </head>
 <body>
 
+<!-- ✨ 音訊元件 (指定音訊路徑於 audio/ 資料夾下) -->
+<audio id="bgMusic" src="audio/05_bgmusic02.mp3" loop preload="auto"></audio>
+<audio id="flipSound" src="audio/04_flipcard.mp3" preload="auto"></audio>
+
 <div class="layout-container">
     <!-- 🌿 可收折側邊欄 Sidebar -->
     <aside class="sidebar" id="sidebar">
@@ -745,39 +825,39 @@
                 <div class="brand-subtitle">Aroma Intuition</div>
             </div>
 
-<nav class="nav-menu">
-    <!-- 1. 三牌占卜 (當前頁面或主頁) -->
-    <a class="nav-item active" href="divination.html" title="三牌占卜">
-        <span class="icon">✨</span>
-        <span class="nav-text">三牌占卜</span>
-    </a>
+            <nav class="nav-menu">
+                <!-- 1. 三牌占卜 (當前頁面或主頁) -->
+                <a class="nav-item active" href="divination.html" title="三牌占卜">
+                    <span class="icon">✨</span>
+                    <span class="nav-text">三牌占卜</span>
+                </a>
 
-    <!-- 2. 每日香氣詩籤 -->
-    <a class="nav-item" href="daily-oil.html" title="每日香氣詩籤">
-        <span class="icon">📜</span>
-        <span class="nav-text">每日香氣詩籤</span>
-    </a>
+                <!-- 2. 每日香氣詩籤 -->
+                <a class="nav-item" href="daily-oil.html" title="每日香氣詩籤">
+                    <span class="icon">📜</span>
+                    <span class="nav-text">每日香氣詩籤</span>
+                </a>
 
-    <!-- 3. 芳香精油百科 -->
-    <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
-        <span class="icon">📖</span>
-        <span class="nav-text">芳香精油百科</span>
-    </a>
+                <!-- 3. 芳香精油百科 -->
+                <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
+                    <span class="icon">📖</span>
+                    <span class="nav-text">芳香精油百科</span>
+                </a>
 
-    <!-- 4. 心靈指引 (開發中) -->
-    <a class="nav-item" href="javascript:void(0);" onclick="alert('「心靈指引」功能正在籌備中，敬請期待！');" title="心靈指引">
-        <span class="icon">🔮</span>
-        <span class="nav-text">心靈指引</span>
-        <span class="nav-badge">Soon</span>
-    </a>
+                <!-- 4. 心靈指引 (開發中) -->
+                <a class="nav-item" href="javascript:void(0);" onclick="alert('「心靈指引」功能正在籌備中，敬請期待！');" title="心靈指引">
+                    <span class="icon">🔮</span>
+                    <span class="nav-text">心靈指引</span>
+                    <span class="nav-badge">Soon</span>
+                </a>
 
-    <!-- 5. 待開發 (未來擴充) -->
-    <a class="nav-item" href="javascript:void(0);" onclick="alert('此功能目前仍在規劃中！');" title="待開發">
-        <span class="icon">🕊️</span>
-        <span class="nav-text">待開發</span>
-        <span class="nav-badge">Soon</span>
-    </a>
-</nav>
+                <!-- 5. 待開發 (未來擴充) -->
+                <a class="nav-item" href="javascript:void(0);" onclick="alert('此功能目前仍在規劃中！');" title="待開發">
+                    <span class="icon">🕊️</span>
+                    <span class="nav-text">待開發</span>
+                    <span class="nav-badge">Soon</span>
+                </a>
+            </nav>
         </div>
 
         <div class="sidebar-footer">
@@ -793,9 +873,16 @@
                 <h2>精油抓周 · 洗牌摸牌</h2>
                 <p>靜下心來，傾聽植物精油帶給你的直覺指引</p>
             </div>
-            <div class="status-badge">
-                <span class="status-dot"></span>
-                <span id="modeDisplay">✦ 請先洗牌</span>
+            <div class="top-controls">
+                <!-- ✨ 背景音樂開關按鈕 (支援手動自由切換) -->
+                <button class="audio-toggle-btn" id="musicToggleBtn" title="切換背景音樂">
+                    <span id="musicIcon">🎵</span>
+                    <span id="musicStatusText">音樂：開</span>
+                </button>
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    <span id="modeDisplay">✦ 請先洗牌</span>
+                </div>
             </div>
         </div>
 
@@ -912,6 +999,70 @@
                 toggleIcon.textContent = '☰';
             }
         });
+
+        // ============================================================
+        // 音訊與背景音樂控制 (Audio & BGM Controller)
+        // ============================================================
+        const bgMusic = document.getElementById('bgMusic');
+        const flipSound = document.getElementById('flipSound');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicStatusText = document.getElementById('musicStatusText');
+
+        let isMusicEnabled = true; // 預設開啟
+
+        // 播放翻牌音效 (audio/04_flipcard.mp3)
+        function playFlipSound() {
+            if (!flipSound) return;
+            flipSound.currentTime = 0;
+            flipSound.play().catch(e => console.log('翻牌音效受自動播放限制影響：', e));
+        }
+
+        // 嘗試播放背景音樂 (audio/05_bgmusic02.mp3)
+        function tryPlayBgMusic() {
+            if (isMusicEnabled && bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(e => {
+                    console.log('等待使用者於頁面上進行互動後開啟背景音樂');
+                });
+            }
+        }
+
+        // 更新音樂開關按鈕 UI 狀態
+        function updateMusicUI(playing) {
+            if (playing) {
+                musicIcon.textContent = '🎵';
+                musicStatusText.textContent = '音樂：開';
+                musicToggleBtn.classList.remove('muted');
+            } else {
+                musicIcon.textContent = '🔇';
+                musicStatusText.textContent = '音樂：關';
+                musicToggleBtn.classList.add('muted');
+            }
+        }
+
+        // 手動點擊音樂開關
+        musicToggleBtn.addEventListener('click', () => {
+            if (!bgMusic.paused) {
+                // 目前正在播放 -> 關閉音樂
+                isMusicEnabled = false;
+                bgMusic.pause();
+                updateMusicUI(false);
+            } else {
+                // 目前暫停中 -> 開啟音樂
+                isMusicEnabled = true;
+                bgMusic.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(e => console.warn('背景音樂播放失敗：', e));
+            }
+        });
+
+        // 當使用者首次點擊頁面任意處時自動嘗試啟用背景音樂
+        document.addEventListener('click', function initAudioOnUserInteraction() {
+            tryPlayBgMusic();
+            document.removeEventListener('click', initAudioOnUserInteraction);
+        }, { once: true });
 
         // ============================================================
         // 45 筆完整精油資料庫
@@ -1051,7 +1202,7 @@
             tryLoad();
         }
 
-        // 渲染牌面與 3D 翻牌效果
+        // 渲染牌面與 3D 翻牌效果（含翻牌音效）
         function renderCard(cardIndex, oilIdx) {
             const el = cardIndex === 1 ? card1El : (cardIndex === 2 ? card2El : card3El);
             const frontEl = el.querySelector('.card-front');
@@ -1078,6 +1229,7 @@
             loadImageWithAutoFormat(img, oil, el);
 
             setTimeout(() => {
+                playFlipSound(); // ✨ 翻牌時觸發 audio/04_flipcard.mp3 音效
                 el.classList.add('flipped');
             }, cardIndex * 120);
         }
@@ -1107,6 +1259,7 @@
 
         // 摸一張卡牌
         function performDrawOne() {
+            tryPlayBgMusic();
             if (!isShuffled) { alert('請先點擊「開始洗牌」！'); return; }
             if (drawIndex >= 3) { alert('三張牌已摸完！如需重新占卜請再洗牌。'); return; }
 
@@ -1131,6 +1284,7 @@
 
         // 一次翻三張
         function performDrawAll() {
+            tryPlayBgMusic();
             if (!isShuffled) { alert('請先點擊「開始洗牌」！'); return; }
 
             currentCards = [deck[0], deck[1], deck[2]];
@@ -1173,6 +1327,7 @@
         }
 
         function shuffleWithVideo() {
+            tryPlayBgMusic();
             if (isVideoPlaying) return;
             playDrawVideo(performShuffle);
         }

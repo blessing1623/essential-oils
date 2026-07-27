@@ -160,6 +160,42 @@
 
         .sidebar.collapsed ~ .main-wrapper { margin-left: var(--sidebar-collapsed-width); }
 
+        .top-bar-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+
+        /* ✨ 背景音樂開關按鈕樣式 */
+        .audio-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 253, 249, 0.85);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--accent-sage);
+            border: 1px solid var(--border-warm);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .audio-toggle-btn:hover {
+            background: #fff;
+            border-color: var(--accent-gold);
+            transform: translateY(-1px);
+        }
+
+        .audio-toggle-btn.muted {
+            color: var(--text-muted);
+            opacity: 0.8;
+            background: rgba(230, 225, 220, 0.6);
+        }
+
         .page-header-box {
             text-align: center; margin-bottom: 36px;
             background: rgba(255, 253, 249, 0.6);
@@ -251,7 +287,6 @@
             margin-bottom: 12px;
         }
 
-        /* ✨ Emoji 圖示縮圖改為圖片樣式 */
         .oil-emoji {
             width: 64px; height: 64px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
@@ -414,23 +449,77 @@
             padding: 18px 24px; border-radius: 20px;
         }
 
-        /* Responsive RWD */
+        /* --------------------------------------------------
+           Responsive RWD Media Queries (✨ 手機版側邊欄微型化優化)
+        -------------------------------------------------- */
         @media (max-width: 1024px) {
             .sidebar {
-                width: 100%; height: auto; position: relative; padding: 16px 20px;
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 12px 16px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
-            .sidebar.collapsed { width: 100%; padding: 16px 20px; }
-            .sidebar.collapsed .brand-title,
-            .sidebar.collapsed .brand-subtitle,
-            .sidebar.collapsed .nav-text,
-            .sidebar.collapsed .nav-badge { display: inline; opacity: 1; }
-            .sidebar.collapsed .nav-menu { display: none; }
-            .layout-container { flex-direction: column; }
-            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { margin-left: 0; padding: 24px 20px; }
-            .nav-menu { flex-direction: row; overflow-x: auto; margin: 16px 0 0 0; padding-bottom: 8px; }
-            .nav-item { white-space: nowrap; padding: 10px 16px; }
+
+            .sidebar.collapsed { width: 100%; padding: 12px 16px; }
+
+            .sidebar-toggle-btn { display: none; }
+
+            .brand-header {
+                padding-bottom: 8px;
+                border-bottom: none;
+            }
+
+            .brand-logo { font-size: 1.5rem; margin-bottom: 2px; }
+            .brand-title { font-size: 1rem; }
+            .brand-subtitle { font-size: 0.55rem; }
+
+            /* ✨ 微型化橫向滑動選單 (Peek Effect) */
+            .nav-menu { 
+                flex-direction: row; 
+                overflow-x: auto; 
+                margin: 8px -16px 0 -16px; 
+                padding: 4px 16px 8px 16px; 
+                gap: 8px;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .nav-item { 
+                white-space: nowrap; 
+                padding: 8px 14px; 
+                font-size: 0.85rem;
+                border-radius: 20px;
+                gap: 6px;
+                flex-shrink: 0;
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .nav-item .icon {
+                font-size: 1rem;
+                width: auto;
+            }
+
+            .nav-badge {
+                font-size: 0.55rem;
+                padding: 1px 6px;
+                margin-left: 2px;
+            }
+
             .sidebar-footer { display: none; }
-            .sidebar-toggle-btn { margin-bottom: 0; }
+
+            .layout-container { flex-direction: column; }
+            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { 
+                margin-left: 0; 
+                padding: 24px 16px; 
+            }
+
+            .nav-menu::-webkit-scrollbar { height: 4px; }
+            .nav-menu::-webkit-scrollbar-thumb {
+                background: rgba(198, 156, 109, 0.4);
+                border-radius: 4px;
+            }
         }
 
         @media (max-width: 600px) {
@@ -438,9 +527,18 @@
             .modal-header { flex-direction: column; text-align: center; gap: 16px; }
             .modal-card-display { width: 130px; }
         }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); }
+        ::-webkit-scrollbar-thumb { background: rgba(198, 156, 109, 0.4); border-radius: 10px; }
     </style>
 </head>
 <body>
+
+<!-- ✨ 音訊元件 (背景音樂、開啟彈窗音效、關閉彈窗音效) -->
+<audio id="bgMusic" src="audio/05_bgmusic02.mp3" loop preload="auto"></audio>
+<audio id="modalNotificationSound" src="audio/06_notification.mp3" preload="auto"></audio>
+<audio id="modalCloseSound" src="audio/07_paperslide.mp3" preload="auto"></audio>
 
 <div class="layout-container">
     <!-- 🌿 側邊欄 Sidebar -->
@@ -490,6 +588,14 @@
 
     <!-- 📖 主要內容區 Main Content -->
     <main class="main-wrapper">
+        <!-- ✨ 頂部控制按鈕區 -->
+        <div class="top-bar-controls">
+            <button class="audio-toggle-btn" id="musicToggleBtn" title="切換背景音樂">
+                <span id="musicIcon">🎵</span>
+                <span id="musicStatusText">音樂：開</span>
+            </button>
+        </div>
+
         <div class="page-header-box">
             <h2>🌿 植物精油手繪圖鑑</h2>
             <p>探索 45 種植物精油的自然療癒力量，尋找對應身心的靈魂養分</p>
@@ -571,7 +677,72 @@
         sidebar.classList.toggle('collapsed');
     });
 
-    // 完整 45 筆精油預設資料 (已加入 imgUrl 欄位)
+    // ============================================================
+    // 音訊與背景音樂控制 (Audio & BGM Controller)
+    // ============================================================
+    const bgMusic = document.getElementById('bgMusic');
+    const modalNotificationSound = document.getElementById('modalNotificationSound');
+    const modalCloseSound = document.getElementById('modalCloseSound');
+    const musicToggleBtn = document.getElementById('musicToggleBtn');
+    const musicIcon = document.getElementById('musicIcon');
+    const musicStatusText = document.getElementById('musicStatusText');
+
+    let isMusicEnabled = true;
+
+    // 播放開啟彈窗音效 (audio/06_notification.mp3)
+    function playModalSound() {
+        if (!modalNotificationSound) return;
+        modalNotificationSound.currentTime = 0;
+        modalNotificationSound.play().catch(e => console.log('開啟彈窗音效受限制：', e));
+    }
+
+    // ✨ 播放關閉彈窗音效 (audio/07_paperslide.mp3)
+    function playCloseSound() {
+        if (!modalCloseSound) return;
+        modalCloseSound.currentTime = 0;
+        modalCloseSound.play().catch(e => console.log('關閉彈窗音效受限制：', e));
+    }
+
+    // 嘗試播放背景音樂 (audio/05_bgmusic02.mp3)
+    function tryPlayBgMusic() {
+        if (isMusicEnabled && bgMusic.paused) {
+            bgMusic.play().then(() => {
+                updateMusicUI(true);
+            }).catch(e => console.log('等待使用者互動後開啟背景音樂'));
+        }
+    }
+
+    function updateMusicUI(playing) {
+        if (playing) {
+            musicIcon.textContent = '🎵';
+            musicStatusText.textContent = '音樂：開';
+            musicToggleBtn.classList.remove('muted');
+        } else {
+            musicIcon.textContent = '🔇';
+            musicStatusText.textContent = '音樂：關';
+            musicToggleBtn.classList.add('muted');
+        }
+    }
+
+    musicToggleBtn.addEventListener('click', () => {
+        if (!bgMusic.paused) {
+            isMusicEnabled = false;
+            bgMusic.pause();
+            updateMusicUI(false);
+        } else {
+            isMusicEnabled = true;
+            bgMusic.play().then(() => {
+                updateMusicUI(true);
+            }).catch(e => console.warn(e));
+        }
+    });
+
+    document.addEventListener('click', function initAudioOnUserInteraction() {
+        tryPlayBgMusic();
+        document.removeEventListener('click', initAudioOnUserInteraction);
+    }, { once: true });
+
+    // 完整 45 筆精油預設資料
     const fallbackOilsData = [
         { id: "01", name: "甜橙", emoji: "🍊", imgUrl: "img/fruit/02 橘子.png", meaning: "赤子之心", category: "果實", benefits: "促進消化系統蠕動，舒緩脹氣，增強免疫力。", mind: "帶來陽光樂觀的能量，撫平焦慮與沮喪。", cautions: "具光敏性，塗抹皮膚後12小時內應避免陽光直射。" },
         { id: "02", name: "葡萄柚", emoji: "🍇", imgUrl: "img/fruit/01 柚子.png", meaning: "無憂無慮", category: "果實", benefits: "促進淋巴循環，協助水腫排除，促進脂肪分解。", mind: "舒緩壓力引起的暴飲暴食，帶來清爽愉悅感受。", cautions: "具柑橘類光敏性，敏弱肌使用請提高稀釋比例。" },
@@ -626,7 +797,6 @@
     const categoryTags = document.getElementById('categoryTags');
     const IMG_BASE_PATH = 'img/';
 
-    // 嘗試從外部 oils.json 讀取資料
     fetch('oils.json')
         .then(res => {
             if (!res.ok) throw new Error('無法讀取外部 oils.json，切換至內建資料庫');
@@ -643,7 +813,6 @@
             renderOils(oilsData);
         });
 
-    // 渲染百科主卡片網格
     function renderOils(list) {
         gridEl.innerHTML = '';
         if (list.length === 0) {
@@ -655,9 +824,8 @@
             const card = document.createElement('div');
             card.className = 'oil-card';
             
-            // 優先讀取 imgUrl，載入失敗時降級呈現 Emoji
             const emojiContent = oil.imgUrl 
-                ? `<img src="${oil.imgUrl}" alt="${oil.name}" onerror="this.onerror=null; this.parentElement.innerHTML='${oil.emoji}';">` 
+                ? `<img src="${oil.imgUrl}" alt="${oil.name}" onerror="this.onerror=null; this.src=''; this.alt='${oil.emoji}';">` 
                 : oil.emoji;
 
             card.innerHTML = `
@@ -679,7 +847,6 @@
         });
     }
 
-    // 圖片載入 logic (支援 jpg/png 自動切換與 error fallback)
     function loadModalImageWithAutoFormat(imgEl, oil, containerEl) {
         const extensions = ['jpg', 'png'];
         let currentExtIndex = 0;
@@ -705,25 +872,25 @@
         tryLoad();
     }
 
-    // Modal 控制邏輯 (含大圖載入)
     const modal = document.getElementById('oilModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
     function openModal(oil) {
+        tryPlayBgMusic();
+        playModalSound(); // ✨ 點擊開啟 Modal 時觸發 06_notification 音效
+
         const displayEl = document.getElementById('modalCardDisplay');
         const imgEl = document.getElementById('modalCardImg');
         const fallbackContainer = document.getElementById('modalFallbackInfo');
 
-        // 設定圖片與 Fallback 內容（若大圖載入失敗，優先顯示圖片，失敗則顯示 Emoji）
         if (oil.imgUrl) {
-            fallbackContainer.innerHTML = `<img src="${oil.imgUrl}" alt="${oil.name}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'fb-emoji\\'>${oil.emoji}</div>';">`;
+            fallbackContainer.innerHTML = `<img src="${oil.imgUrl}" alt="${oil.name}">`;
         } else {
             fallbackContainer.innerHTML = `<div class="fb-emoji">${oil.emoji}</div>`;
         }
 
         loadModalImageWithAutoFormat(imgEl, oil, displayEl);
 
-        // 設定文字資訊
         document.getElementById('modalName').textContent = oil.name;
         document.getElementById('modalMeaning').textContent = `✦ ${oil.meaning} · ${oil.category}類`;
         document.getElementById('modalBenefits').textContent = oil.benefits;
@@ -733,12 +900,19 @@
         modal.classList.add('active');
     }
 
-    closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+    // ✨ 關閉 Modal 的統一函數（觸發 07_paperslide 音效）
+    function closeModal() {
+        if (modal.classList.contains('active')) {
+            playCloseSound(); // 觸發關閉音效
+            modal.classList.remove('active');
+        }
+    }
+
+    closeModalBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.remove('active');
+        if (e.target === modal) closeModal();
     });
 
-    // 搜尋與類別篩選邏輯
     let currentCategory = 'all';
 
     function filterOils() {
@@ -773,7 +947,6 @@
         }
     });
 
-    // 初始渲染
     renderOils(oilsData);
 })();
 </script>

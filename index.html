@@ -184,7 +184,7 @@
             white-space: nowrap;
         }
 
-        /* ✨ 嚮導右側展示圖容器 */
+        /* ✨ 嚮導右側展示圖容器 (電腦版) */
         .feature-preview-container {
             position: absolute;
             left: 290px;
@@ -454,7 +454,7 @@
             to { opacity: 1; transform: translate(-50%, 0) scale(1); }
         }
 
-        /* 📱 手機版 RWD 最佳化 (✨ 人物與展示圖顯著放大升級) */
+        /* 📱 手機版 RWD 最佳化 (✨ 圖片高度再向上拉高，完全不撞頭) */
         @media (max-width: 600px) {
             .bgm-toggle-btn {
                 top: 12px;
@@ -463,33 +463,40 @@
                 font-size: 0.75rem;
             }
 
-            /* ✨ 放大手機版助理人物立繪 */
+            /* 手機版助理人物立繪 */
             .assistant-container {
                 left: -10px;
                 bottom: -25px;
             }
 
             .assistant-avatar {
-                width: 220px; /* 原 150px -> 220px 顯著放大 */
-                height: 300px; /* 原 220px -> 300px */
+                width: 200px;
+                height: 280px;
             }
 
-            /* ✨ 放大中央精油瓶 */
+            /* 中央精油瓶 */
             .center-bottle-container {
                 left: 72%;
                 bottom: 10px;
             }
 
             .center-bottle-container img {
-                max-height: 180px; /* 原 140px -> 180px */
+                max-height: 180px;
             }
 
-            /* ✨ 大幅提升手機版展示圖尺寸與對齊 */
+            /* ✨【再次提升】手機版展示圖：調高至 bottom: 240px，確保高過人物頭部 */
             .feature-preview-container {
-                left: 145px; /* 原 135px */
-                bottom: 85px; /* 向上微調，避開對話框邊緣 */
-                width: calc(100% - 140px);
-                height: 240px; /* 原 150px -> 240px 大幅提升比例 */
+                left: 50%;
+                bottom: 240px; /* 從 180px 再往上調高到 240px，完美避開人物頭部 */
+                transform: translateX(-50%) translateY(15px) scale(0.95);
+                width: 90%;
+                max-width: 400px;
+                height: 260px;
+                justify-content: center;
+            }
+
+            .feature-preview-container.active {
+                transform: translateX(-50%) translateY(0) scale(1);
             }
 
             .bottle-img-wrap {
@@ -541,7 +548,7 @@
             <div class="split-label" id="selectedBottleLabel">精油類別</div>
         </div>
 
-        <!-- ✨ 嚮導右側：無框大展示圖 -->
+        <!-- ✨ 嚮導右側（手機版為上方高處正中間）：無框大展示圖 -->
         <div class="feature-preview-container" id="featurePreviewContainer">
             <img id="featureImg" class="feature-preview-img" src="" alt="功能展示圖">
         </div>

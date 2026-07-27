@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             /* 👑 奢華晨光大地莊園色調 */
@@ -99,7 +99,7 @@
         }
 
         /* --------------------------------------------------
-           舞台展示區域
+           舞台展示區域 (電腦版完全不變)
         -------------------------------------------------- */
         .stage-container {
             position: relative;
@@ -184,11 +184,11 @@
             white-space: nowrap;
         }
 
-        /* ✨ 嚮導右側展示圖容器 (向上提升至助理胸部以上位置) */
+        /* ✨ 嚮導右側展示圖容器 */
         .feature-preview-container {
             position: absolute;
             left: 290px;
-            bottom: 110px; /* 向上提，確保圖片底部在助理胸部以上 */
+            bottom: 110px;
             z-index: 4;
             display: flex;
             align-items: flex-end;
@@ -207,8 +207,8 @@
         }
 
         .feature-preview-img {
-
-            max-width: 520px;width: 100%;
+            max-width: 520px;
+            width: 100%;
             max-height: 100%;
             object-fit: contain;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.12));
@@ -407,29 +407,41 @@
             display: flex;
         }
 
-        /* 👑 奢華金屬感漸層按鈕 */
+        /* ✨ 小型奢華質感進入按鈕 */
         .btn-enter-app {
-            background: linear-gradient(135deg, #c86a4b 0%, #a84f33 100%);
+            background: linear-gradient(135deg, #d4af37 0%, #c86a4b 50%, #a84f33 100%);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 12px 36px;
-            border-radius: 30px;
-            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            padding: 10px 28px;
+            border-radius: 25px;
+            font-size: 0.92rem;
             font-family: var(--font-serif);
             font-weight: 500;
-            letter-spacing: 3px;
+            letter-spacing: 2.5px;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(200, 106, 75, 0.3);
-            transition: all 0.35s ease;
+            box-shadow: 0 6px 20px rgba(200, 106, 75, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            animation: pulseGlow 2.5s infinite ease-in-out;
         }
 
         .btn-enter-app:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 14px 32px rgba(200, 106, 75, 0.45);
+            transform: translateY(-2px) scale(1.04);
+            background: linear-gradient(135deg, #e5be48 0%, #d87655 50%, #b85739 100%);
+            box-shadow: 0 10px 28px rgba(200, 106, 75, 0.45), 0 0 15px rgba(212, 175, 55, 0.4);
+            color: #ffffff;
+        }
+
+        .btn-enter-app:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 6px 20px rgba(200, 106, 75, 0.3); }
+            50% { box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5); }
         }
 
         @keyframes fadeIn {
@@ -442,7 +454,7 @@
             to { opacity: 1; transform: translate(-50%, 0) scale(1); }
         }
 
-        /* 📱 手機版 RWD 最佳化 */
+        /* 📱 手機版 RWD 最佳化 (✨ 人物與展示圖顯著放大升級) */
         @media (max-width: 600px) {
             .bgm-toggle-btn {
                 top: 12px;
@@ -450,36 +462,53 @@
                 padding: 6px 12px;
                 font-size: 0.75rem;
             }
+
+            /* ✨ 放大手機版助理人物立繪 */
             .assistant-container {
-                left: -15px;
-                bottom: -20px;
+                left: -10px;
+                bottom: -25px;
             }
+
             .assistant-avatar {
-                width: 150px;
-                height: 220px;
+                width: 220px; /* 原 150px -> 220px 顯著放大 */
+                height: 300px; /* 原 220px -> 300px */
             }
+
+            /* ✨ 放大中央精油瓶 */
             .center-bottle-container {
-                left: 68%;
-                bottom: 15px;
+                left: 72%;
+                bottom: 10px;
             }
+
             .center-bottle-container img {
-                max-height: 140px;
+                max-height: 180px; /* 原 140px -> 180px */
             }
+
+            /* ✨ 大幅提升手機版展示圖尺寸與對齊 */
             .feature-preview-container {
-                left: 135px;
-                bottom: 60px;
-                width: calc(100% - 145px);
-                height: 150px;
+                left: 145px; /* 原 135px */
+                bottom: 85px; /* 向上微調，避開對話框邊緣 */
+                width: calc(100% - 140px);
+                height: 240px; /* 原 150px -> 240px 大幅提升比例 */
             }
+
             .bottle-img-wrap {
                 width: 75px;
                 height: 95px;
             }
+
             .dialog-box {
                 padding: 20px 18px;
             }
+
             .btn-skip-intro {
                 right: 16px;
+            }
+
+            .btn-enter-app {
+                padding: 8px 22px;
+                font-size: 0.85rem;
+                letter-spacing: 2px;
             }
         }
     </style>
@@ -512,7 +541,7 @@
             <div class="split-label" id="selectedBottleLabel">精油類別</div>
         </div>
 
-        <!-- ✨ 嚮導右側：無框大展示圖 (位置向上提升至助理胸部以上) -->
+        <!-- ✨ 嚮導右側：無框大展示圖 -->
         <div class="feature-preview-container" id="featurePreviewContainer">
             <img id="featureImg" class="feature-preview-img" src="" alt="功能展示圖">
         </div>
@@ -674,15 +703,15 @@
             "請問您平時或現在，最被哪一種植物類型的精油吸引呢？"
         ];
 
-        // 🌟 網站逐個功能介紹流程資料 (第一步不含 img，後續步驟才帶圖片)
+        // 🌟 網站逐個功能介紹流程資料 (含選單介紹)
         const siteIntroSteps = [
             {
                 text: "『精油莊園』是一座專為熱愛香氣與心靈平靜的你所打造的療癒森林。在這裡，你可以暫時放下外界的喧囂與疲憊。",
-                img: null // 第一句不需要圖片
+                img: null
             },
             {
                 text: "接下來，讓我為你介紹莊園裡的功能吧！",
-                img: null // 第二句不需要圖片
+                img: null
             },
             {
                 text: "首先是 <b>【三牌靈魂占卜】</b> 🔮<br>透過正向能量、盲點難題與植物解答的三牌陣，為你當前的困惑提供深度的沉澱與解答。",
@@ -699,6 +728,10 @@
             {
                 text: "最後是 <b>【芳香精油百科】</b> 📚<br>收錄了 45 種常見植物精油的詳細功效與情緒象徵，讓你可以隨時查閱香氣知識。",
                 img: "img/material/04 芳香精油百科.png"
+            },
+            {
+                text: "這些豐富的功能，你隨時都能在<b>選單功能列</b>中找到喔！如果是使用電腦瀏覽，選單位於<b>左側邊欄</b>；如果是使用手機，選單則會貼心地呈現在<b>螢幕上方</b>，方便你隨心切換探索。",
+                img: "img/material/05 選單功能列.png"
             }
         ];
 
@@ -753,24 +786,20 @@
             }, 25);
         }
 
-        // 切換展示圖 (若傳入 null 則淡出隱藏)
         function showFeatureImage(src) {
             if (!src) {
                 hideFeatureImage();
                 return;
             }
 
-            featurePreviewContainer.classList.remove('active'); // 先淡出
+            featurePreviewContainer.classList.remove('active');
 
             setTimeout(() => {
                 featureImg.src = src;
-                
-                // 本地圖檔尚未準備時的透明占位降級保護
                 featureImg.onerror = function() {
                     this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='180' viewBox='0 0 280 180'><rect width='100%' height='100%' fill='none'/><circle cx='140' cy='90' r='60' fill='%23e8ece0' opacity='0.5'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23c86a4b' font-size='36'>🌿</text></svg>";
                 };
-                
-                featurePreviewContainer.classList.add('active'); // 再淡入
+                featurePreviewContainer.classList.add('active');
             }, 200);
         }
 
@@ -778,14 +807,12 @@
             featurePreviewContainer.classList.remove('active');
         }
 
-        // 選擇精油階段
         function showCategorySelection() {
             stageContainer.classList.add('hide-stage');
             categorySelector.classList.add('active');
             dialogPrompt.style.display = 'none';
         }
 
-        // 跳轉至最終結語
         function goToFinalStep() {
             currentIntroIndex = 999;
             skipIntroBtn.classList.remove('active');
@@ -797,7 +824,6 @@
             });
         }
 
-        // 處理對話推進
         function handleDialogAdvance() {
             startBGM();
             playClickSound();
@@ -816,7 +842,6 @@
                 currentIntroIndex = 2;
                 skipIntroBtn.classList.add('active');
                 
-                // 隱藏中央精油瓶
                 centerBottleContainer.style.opacity = '0';
                 setTimeout(() => { centerBottleContainer.classList.remove('active'); }, 400);
 
@@ -835,7 +860,7 @@
 
         function showNextSiteIntroStep(index) {
             const step = siteIntroSteps[index];
-            showFeatureImage(step.img); // 傳入圖片路徑或 null
+            showFeatureImage(step.img);
             typeWriter(step.text, () => {
                 dialogPrompt.style.display = 'block';
             });

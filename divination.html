@@ -745,32 +745,39 @@
                 <div class="brand-subtitle">Aroma Intuition</div>
             </div>
 
-            <nav class="nav-menu">
-                <a class="nav-item active" title="三牌占卜">
-                    <span class="icon">✨</span>
-                    <span class="nav-text">三牌占卜</span>
-                </a>
-                <a class="nav-item" onclick="window.open('daily-oil.html', '_blank')" title="每日精油">
-                    <span class="icon">📖</span>
-                    <span class="nav-text">每日精油</span>
-                </a>
-                <!-- 預留未來擴充功能按鈕 -->
-                <a class="nav-item" title="牌陣選擇">
-                    <span class="icon">🔮</span>
-                    <span class="nav-text">牌陣選擇</span>
-                    <span class="nav-badge">Coming</span>
-                </a>
-                <a class="nav-item" title="占卜紀錄">
-                    <span class="icon">📜</span>
-                    <span class="nav-text">占卜紀錄</span>
-                    <span class="nav-badge">Soon</span>
-                </a>
-                <a class="nav-item" title="心靈指引">
-                    <span class="icon">🕊️</span>
-                    <span class="nav-text">心靈指引</span>
-                    <span class="nav-badge">Soon</span>
-                </a>
-            </nav>
+<nav class="nav-menu">
+    <!-- 1. 三牌占卜 (當前頁面或主頁) -->
+    <a class="nav-item active" href="divination.html" title="三牌占卜">
+        <span class="icon">✨</span>
+        <span class="nav-text">三牌占卜</span>
+    </a>
+
+    <!-- 2. 每日香氣詩籤 -->
+    <a class="nav-item" href="daily-oil.html" title="每日香氣詩籤">
+        <span class="icon">📜</span>
+        <span class="nav-text">每日香氣詩籤</span>
+    </a>
+
+    <!-- 3. 芳香精油百科 -->
+    <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
+        <span class="icon">📖</span>
+        <span class="nav-text">芳香精油百科</span>
+    </a>
+
+    <!-- 4. 心靈指引 (開發中) -->
+    <a class="nav-item" href="javascript:void(0);" onclick="alert('「心靈指引」功能正在籌備中，敬請期待！');" title="心靈指引">
+        <span class="icon">🔮</span>
+        <span class="nav-text">心靈指引</span>
+        <span class="nav-badge">Soon</span>
+    </a>
+
+    <!-- 5. 待開發 (未來擴充) -->
+    <a class="nav-item" href="javascript:void(0);" onclick="alert('此功能目前仍在規劃中！');" title="待開發">
+        <span class="icon">🕊️</span>
+        <span class="nav-text">待開發</span>
+        <span class="nav-badge">Soon</span>
+    </a>
+</nav>
         </div>
 
         <div class="sidebar-footer">

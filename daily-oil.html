@@ -627,31 +627,39 @@
                 <div class="brand-subtitle">Aroma Intuition</div>
             </div>
 
-            <nav class="nav-menu">
-                <a class="nav-item" onclick="window.location.href='divination.html'" title="三牌占卜">
-                    <span class="icon">✨</span>
-                    <span class="nav-text">三牌占卜</span>
-                </a>
-                <a class="nav-item active" title="每日精油">
-                    <span class="icon">📖</span>
-                    <span class="nav-text">每日精油</span>
-                </a>
-                <a class="nav-item" title="牌陣選擇">
-                    <span class="icon">🔮</span>
-                    <span class="nav-text">牌陣選擇</span>
-                    <span class="nav-badge">Coming</span>
-                </a>
-                <a class="nav-item" title="占卜紀錄">
-                    <span class="icon">📜</span>
-                    <span class="nav-text">占卜紀錄</span>
-                    <span class="nav-badge">Soon</span>
-                </a>
-                <a class="nav-item" title="心靈指引">
-                    <span class="icon">🕊️</span>
-                    <span class="nav-text">心靈指引</span>
-                    <span class="nav-badge">Soon</span>
-                </a>
-            </nav>
+<nav class="nav-menu">
+    <!-- 三牌占卜 -->
+    <a class="nav-item" href="divination.html" title="三牌占卜">
+        <span class="icon">✨</span>
+        <span class="nav-text">三牌占卜</span>
+    </a>
+
+    <!-- 每日香氣詩籤（當前頁面） -->
+    <a class="nav-item active" href="daily.html" title="每日香氣詩籤">
+        <span class="icon">📜</span>
+        <span class="nav-text">每日香氣詩籤</span>
+    </a>
+
+    <!-- 芳香精油百科 -->
+    <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
+        <span class="icon">📖</span>
+        <span class="nav-text">芳香精油百科</span>
+    </a>
+
+    <!-- 心靈指引 -->
+    <a class="nav-item" href="guidance.html" title="心靈指引">
+        <span class="icon">🔮</span>
+        <span class="nav-text">心靈指引</span>
+        <span class="nav-badge">Soon</span>
+    </a>
+
+    <!-- 🕊️ 待開發（如果還沒有頁面，href 寫 "#" 即可；如果有頁面可改成對應檔名） -->
+    <a class="nav-item" href="#" onclick="alert('這個功能正在努力開發中，敬請期待！'); return false;" title="待開發">
+        <span class="icon">🕊️</span>
+        <span class="nav-text">待開發</span>
+        <span class="nav-badge">Soon</span>
+    </a>
+</nav>
         </div>
 
         <div class="sidebar-footer">
@@ -753,7 +761,7 @@
             { id: '05', name: '山雞椒', emoji: '🌶️', meaning: '活在當下', category: '果實', detail: '你專注於此刻的體驗，不戀棧過去也不擔憂未來，充滿生命力。', reminder: '今天，把注意力放在此時此刻，感受當下的豐盛。' },
             { id: '06', name: '茉莉', emoji: '🌸', meaning: '悠然自在', category: '花朵', detail: '你擁有優雅從容的氣質，能在喧囂中保持內心的寧靜與平衡。', reminder: '今天，讓溫柔成為你最大的力量。' },
             { id: '07', name: '玫瑰', emoji: '🌹', meaning: '熱情自信', category: '花朵', detail: '你充滿魅力與自信，敢於展現真實的自己，並激勵身邊的人。', reminder: '今天，勇敢地展現你的光芒，世界需要真實的你。' },
-            { id: '08', name: '橙花', emoji: '🍊🌸', meaning: '優雅大方', category: '花朵', detail: '你待人真誠且舉止得體，總能讓身邊的人感到舒適與被尊重。', reminder: '今天，用你的優雅與真誠，為世界帶來一份從容。' },
+            { id: '08', name: '橙花', emoji: '🍊', meaning: '優雅大方', category: '花朵', detail: '你待人真誠且舉止得體，總能讓身邊的人感到舒適與被尊重。', reminder: '今天，用你的優雅與真誠，為世界帶來一份從容。' },
             { id: '09', name: '依蘭', emoji: '🌺', meaning: '浪漫奔放', category: '花朵', detail: '你情感豐富且富有創造力，勇於追求愛與美的體驗。', reminder: '今天，允許自己盡情感受，讓情感成為創作的燃料。' },
             { id: '10', name: '永久花', emoji: '🏵️', meaning: '斷捨離', category: '花朵', detail: '你懂得放下不必要的包袱，讓生命保持流動與更新。', reminder: '今天，放下不再服務於你的東西，為新的可能騰出空間。' },
             { id: '11', name: '純正薰衣草', emoji: '💜', meaning: '溫柔體貼', category: '藥草', detail: '你擁有療癒的能量，總能敏銳察覺他人的需求並給予支持。', reminder: '今天，在照顧他人之前，先溫柔地照顧好自己。' },
@@ -764,13 +772,13 @@
             { id: '16', name: '乳香', emoji: '🪔', meaning: '療癒溫暖', category: '樹脂', detail: '你有撫慰人心的力量，能為自己和他人帶來深層的寧靜與修復。', reminder: '今天，用你的溫暖擁抱自己，也擁抱這個世界。' },
             { id: '17', name: '沒藥', emoji: '🌲', meaning: '智慧沉穩', category: '樹脂', detail: '你擁有超越年齡的智慧，沉著冷靜，能看透事物的本質。', reminder: '今天，用沉穩的智慧面對挑戰，一切都在軌道上。' },
             { id: '18', name: '安息香', emoji: '🕯️', meaning: '溫暖安定', category: '樹脂', detail: '你給人安穩可靠的感覺，是許多人心中的定心丸。', reminder: '今天，成為自己的定心丸，也成為他人的依靠。' },
-            { id: '19', name: '岩玫瑰', emoji: '🪨🌹', meaning: '平撫穩定', category: '樹脂', detail: '你善於處理危機，能在混亂中迅速恢復平靜與秩序。', reminder: '今天，相信你有能力在任何混亂中找回平靜。' },
+            { id: '19', name: '岩玫瑰', emoji: '🌹', meaning: '平撫穩定', category: '樹脂', detail: '你善於處理危機，能在混亂中迅速恢復平靜與秩序。', reminder: '今天，相信你有能力在任何混亂中找回平靜。' },
             { id: '20', name: '秘魯聖木', emoji: '🌳', meaning: '回歸自我', category: '樹脂', detail: '你正在經歷一場回歸本心的旅程，找回屬於自己的核心價值。', reminder: '今天，回到自己的中心，那裡有你所有的答案。' },
             { id: '21', name: '黑胡椒', emoji: '⚫', meaning: '創意活力', category: '香料', detail: '你充滿行動力與創意，總能將想法化為具體的冒險。', reminder: '今天，把想法化為行動，讓創意點燃你的世界。' },
             { id: '22', name: '丁香', emoji: '🧄', meaning: '勇往直前', category: '香料', detail: '你擁有堅韌的毅力，不畏困難，勇敢朝向目標前進。', reminder: '今天，帶著勇氣向前走，你比想像中更堅強。' },
             { id: '23', name: '迷迭香', emoji: '🌿', meaning: '創新靈活', category: '香料', detail: '你思維靈活，善於在變化中找到新的機會與突破口。', reminder: '今天，擁抱變化，它會帶給你意想不到的驚喜。' },
             { id: '24', name: '歐薄荷', emoji: '🌱', meaning: '適應力強', category: '香料', detail: '你具備彈性與韌性，能在不同環境中快速找到自己的位置。', reminder: '今天，像水一樣，保持流動與適應，沒有過不去的坎。' },
-            { id: '25', name: '檸檬香茅', emoji: '🍋🌿', meaning: '打破框架', category: '香料', detail: '你勇於挑戰傳統，總能提出顛覆性的新觀點與做法。', reminder: '今天，打破思考的框架，你會看到全新的可能性。' },
+            { id: '25', name: '檸檬香茅', emoji: '🍋', meaning: '打破框架', category: '香料', detail: '你勇於挑戰傳統，總能提出顛覆性的新觀點與做法。', reminder: '今天，打破思考的框架，你會看到全新的可能性。' },
             { id: '26', name: '花梨木', emoji: '🪵', meaning: '穩定踏實', category: '木質', detail: '你一步一腳印，穩健踏實，值得信賴。', reminder: '今天，穩穩地走好每一步，你的節奏就是最好的節奏。' },
             { id: '27', name: '檜木', emoji: '🌲', meaning: '安全感', category: '木質', detail: '你給人穩固的安心感，是許多人樂於依靠的對象。', reminder: '今天，讓自己成為安全感的來源，也允許自己被他人支持。' },
             { id: '28', name: '檀香', emoji: '🪷', meaning: '沉穩寧靜', category: '木質', detail: '你心性沉靜，擁有強大的內在力量，不易受外界干擾。', reminder: '今天，在寧靜中感受自己，那是你最強大的狀態。' },
@@ -788,7 +796,7 @@
             { id: '40', name: '小茴香', emoji: '🌾', meaning: '釋放復原', category: '種籽', detail: '你正在釋放壓力與疲憊，讓身心逐漸恢復活力。', reminder: '今天，允許自己釋放，復原需要時間與耐心。' },
             { id: '41', name: '月桂', emoji: '🍃', meaning: '勇決果斷', category: '葉片', detail: '你具備領袖氣質，能在關鍵時刻做出果斷的決策。', reminder: '今天，相信你的判斷，果斷地向前邁進。' },
             { id: '42', name: '茶樹', emoji: '🍃', meaning: '隨機應變', category: '葉片', detail: '你靈活且應變力強，能適應各種突發狀況。', reminder: '今天，保持彈性，適應變化，你會找到最好的路。' },
-            { id: '43', name: '苦橙葉', emoji: '🍊🌿', meaning: '養精蓄銳', category: '葉片', detail: '你正處於儲備能量的階段，為未來的行動積累實力。', reminder: '今天，好好儲備能量，未來的你會感謝現在的自己。' },
+            { id: '43', name: '苦橙葉', emoji: '🌿', meaning: '養精蓄銳', category: '葉片', detail: '你正處於儲備能量的階段，為未來的行動積累實力。', reminder: '今天，好好儲備能量，未來的你會感謝現在的自己。' },
             { id: '44', name: '綠花白千層', emoji: '🌿', meaning: '汰舊更新', category: '葉片', detail: '你正在進行一場內在的革新，汰換舊有的思維模式。', reminder: '今天，擁抱革新，舊的離開才能讓新的進來。' },
             { id: '45', name: '澳洲尤加利', emoji: '🌿', meaning: '自信獨立', category: '葉片', detail: '你充滿獨立精神，能自信地走自己的路，不受他人影響。', reminder: '今天，自信地走自己的路，那是屬於你的獨特風景。' }
         ];

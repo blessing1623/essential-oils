@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>📖 芳香心靈 · 溫馨手繪精油百科</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+TC:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f7f3ed;
+            --bg-card: rgba(255, 253, 249, 0.85);
+            --sidebar-bg: rgba(28, 43, 36, 0.94);
+            --text-main: #3a322c;
+            --text-muted: #7d7268;
+            --accent-gold: #c69c6d;
+            --accent-gold-light: #e8d0b5;
+            --accent-sage: #5b7562;
+            --accent-sage-light: #eaf1ec;
+            --accent-terracotta: #d98a6c;
+            --accent-terracotta-light: #fbece6;
+            --border-warm: rgba(198, 156, 109, 0.3);
+            --shadow-handdrawn: 0 10px 25px rgba(91, 117, 98, 0.08), 0 2px 6px rgba(0,0,0,0.03);
+            --font-serif: 'Noto Serif TC', serif;
+            --font-sans: 'Plus Jakarta Sans', 'PingFang TC', sans-serif;
+            --font-title: 'Cinzel', serif;
+            --sidebar-width: 280px;
+            --sidebar-collapsed-width: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(234, 241, 236, 0.8) 0px, transparent 40%),
+                radial-gradient(at 90% 90%, rgba(251, 236, 230, 0.6) 0px, transparent 40%),
+                radial-gradient(at 50% 50%, #f7f3ed 0px, transparent 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* --------------------------------------------------
+           Layout Structure (Collapsible Sidebar + Main)
+        -------------------------------------------------- */
+        .layout-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #f5f0eb;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            z-index: 100;
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+            padding: 30px 12px;
+        }
+
+        .sidebar-toggle-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--accent-gold-light);
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1.2rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+
+        .sidebar.collapsed .sidebar-toggle-btn { align-self: center; }
+
+        .brand-header {
+            text-align: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .sidebar.collapsed .brand-title,
+        .sidebar.collapsed .brand-subtitle,
+        .sidebar.collapsed .sidebar-footer,
+        .sidebar.collapsed .nav-text,
+        .sidebar.collapsed .nav-badge {
+            display: none; opacity: 0;
+        }
+
+        .brand-logo { font-size: 2rem; margin-bottom: 6px; display: block; }
+        .brand-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; color: #fff; }
+        .brand-subtitle { font-family: var(--font-title); font-size: 0.65rem; color: var(--accent-gold); margin-top: 4px; letter-spacing: 2px; }
+
+        .nav-menu { display: flex; flex-direction: column; gap: 12px; margin: 24px 0; flex: 1; }
+        .nav-item {
+            display: flex; align-items: center; gap: 16px;
+            padding: 14px 16px; border-radius: 16px;
+            color: rgba(255, 255, 255, 0.75); text-decoration: none;
+            font-size: 0.95rem; cursor: pointer; transition: all 0.25s ease;
+            border: 1px solid transparent;
+        }
+        .sidebar.collapsed .nav-item { justify-content: center; padding: 14px; }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(198, 156, 109, 0.3) 0%, rgba(198, 156, 109, 0.1) 100%);
+            border-color: rgba(198, 156, 109, 0.4); color: var(--accent-gold-light); font-weight: 500;
+        }
+        .nav-item .icon { font-size: 1.3rem; width: 24px; text-align: center; flex-shrink: 0; }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: rgba(198, 156, 109, 0.3);
+            color: var(--accent-gold-light);
+            border: 1px solid rgba(198, 156, 109, 0.4);
+            font-family: var(--font-sans);
+        }
+
+        .sidebar-footer {
+            padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem; color: rgba(255, 255, 255, 0.4); text-align: center;
+        }
+
+        /* --------------------------------------------------
+           Main Content Workspace
+        -------------------------------------------------- */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1; padding: 40px 48px;
+            max-width: 1400px;
+            transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar.collapsed ~ .main-wrapper { margin-left: var(--sidebar-collapsed-width); }
+
+        .page-header-box {
+            text-align: center; margin-bottom: 36px;
+            background: rgba(255, 253, 249, 0.6);
+            padding: 30px; border-radius: 30px;
+            border: 1.5px dashed var(--border-warm);
+        }
+
+        .page-header-box h2 {
+            font-family: var(--font-serif); font-size: 2.2rem;
+            color: var(--accent-sage); font-weight: 700;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+
+        .page-header-box p {
+            font-size: 0.95rem; color: var(--text-muted); margin-top: 8px;
+        }
+
+        /* 控制列：搜尋與分類 */
+        .controls-bar {
+            display: flex; flex-direction: column; gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .search-box {
+            position: relative; max-width: 500px; margin: 0 auto; width: 100%;
+        }
+
+        .search-input {
+            width: 100%; padding: 14px 20px 14px 48px;
+            border-radius: 30px; border: 1.5px solid var(--border-warm);
+            background: #fff; font-size: 0.95rem; color: var(--text-main);
+            outline: none; transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-sage);
+            box-shadow: 0 6px 18px rgba(91, 117, 98, 0.15);
+        }
+
+        .search-icon {
+            position: absolute; left: 18px; top: 50%;
+            transform: translateY(-50%); opacity: 0.5; font-size: 1.1rem;
+        }
+
+        .category-tags {
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
+        }
+
+        .cat-btn {
+            padding: 8px 18px; border-radius: 25px; border: 1px solid var(--border-warm);
+            background: rgba(255, 255, 255, 0.8); color: var(--text-muted);
+            font-size: 0.88rem; cursor: pointer; transition: all 0.25s ease;
+            font-family: var(--font-sans);
+        }
+
+        .cat-btn:hover, .cat-btn.active {
+            background: var(--accent-sage); color: #fff;
+            border-color: var(--accent-sage); transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(91, 117, 98, 0.2);
+        }
+
+        /* 精油網格系統 Handdrawn Cards Grid */
+        .oils-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .oil-card {
+            background: var(--bg-card);
+            border-radius: 28px; padding: 24px;
+            border: 1.5px solid rgba(198, 156, 109, 0.25);
+            box-shadow: var(--shadow-handdrawn);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer; position: relative;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .oil-card:hover {
+            transform: translateY(-6px) rotate(-0.5deg);
+            border-color: var(--accent-gold);
+            box-shadow: 0 16px 32px rgba(91, 117, 98, 0.12);
+            background: #ffffff;
+        }
+
+        .card-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        /* ✨ Emoji 圖示縮圖改為圖片樣式 */
+        .oil-emoji {
+            width: 64px; height: 64px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px dashed var(--accent-sage);
+            background: var(--accent-sage-light);
+            overflow: hidden;
+            font-size: 2.2rem;
+        }
+
+        .oil-emoji img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .oil-cat-badge {
+            font-size: 0.75rem; color: var(--accent-sage);
+            background: var(--accent-sage-light);
+            padding: 4px 12px; border-radius: 20px; font-weight: 600;
+        }
+
+        .oil-name {
+            font-family: var(--font-serif); font-size: 1.35rem;
+            font-weight: 700; color: var(--text-main); margin-bottom: 4px;
+        }
+
+        .oil-keyword {
+            font-size: 0.85rem; color: var(--accent-gold);
+            font-weight: 600; letter-spacing: 1px; margin-bottom: 14px;
+        }
+
+        .oil-benefit-preview {
+            font-size: 0.88rem; color: var(--text-muted);
+            line-height: 1.5; margin-bottom: 16px;
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+
+        .card-footer-link {
+            font-size: 0.82rem; color: var(--accent-sage);
+            font-weight: 600; text-align: right; display: flex;
+            align-items: center; justify-content: flex-end; gap: 4px;
+        }
+
+        /* --------------------------------------------------
+           Modal (完整卡片不被擋住 優化版)
+        -------------------------------------------------- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 37, 32, 0.6);
+            backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease; padding: 24px;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .modal-card {
+            background: #fffdf9;
+            width: 100%; max-width: 880px;
+            border-radius: 36px; padding: 44px;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+            position: relative; transform: translateY(20px);
+            transition: transform 0.3s ease; max-height: 92vh; overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+
+        .close-btn {
+            position: absolute; top: 24px; right: 24px;
+            width: 42px; height: 42px; border-radius: 50%;
+            background: var(--bg-primary); border: none;
+            font-size: 1.4rem; cursor: pointer; color: var(--text-muted);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .close-btn:hover { background: var(--accent-terracotta-light); color: var(--accent-terracotta); }
+
+        .modal-header {
+            display: flex; align-items: center; gap: 28px;
+            border-bottom: 1.5px dashed var(--border-warm);
+            padding-bottom: 24px; margin-bottom: 28px;
+        }
+
+        .modal-card-display {
+            width: 150px;
+            aspect-ratio: 3 / 4.4;
+            border-radius: 18px;
+            border: 1.5px solid var(--accent-gold);
+            background: #fdfbf7;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            padding: 6px;
+        }
+
+        .modal-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .modal-fallback-info {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-sage-light);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .modal-fallback-info img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-fallback-info .fb-emoji {
+            font-size: 3.8rem;
+        }
+
+        .modal-card-display.has-error .modal-card-image { display: none; }
+        .modal-card-display.has-error .modal-fallback-info { display: flex; }
+
+        .modal-title-area h3 {
+            font-family: var(--font-serif); font-size: 2.2rem; color: var(--text-main); font-weight: 700;
+        }
+
+        .modal-subtitle {
+            font-size: 1.05rem; color: var(--accent-gold); font-weight: 600; margin-top: 8px; letter-spacing: 0.5px;
+        }
+
+        .modal-section { margin-bottom: 24px; }
+
+        .modal-section-title {
+            font-family: var(--font-serif); font-size: 1.15rem;
+            color: var(--accent-sage); font-weight: 700;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+        }
+
+        .modal-section-title.caution { color: var(--accent-terracotta); }
+
+        .modal-section-content {
+            font-size: 1rem; color: var(--text-main);
+            line-height: 1.7; background: rgba(247, 243, 237, 0.6);
+            padding: 18px 24px; border-radius: 20px;
+        }
+
+        /* Responsive RWD */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 100%; height: auto; position: relative; padding: 16px 20px;
+            }
+            .sidebar.collapsed { width: 100%; padding: 16px 20px; }
+            .sidebar.collapsed .brand-title,
+            .sidebar.collapsed .brand-subtitle,
+            .sidebar.collapsed .nav-text,
+            .sidebar.collapsed .nav-badge { display: inline; opacity: 1; }
+            .sidebar.collapsed .nav-menu { display: none; }
+            .layout-container { flex-direction: column; }
+            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { margin-left: 0; padding: 24px 20px; }
+            .nav-menu { flex-direction: row; overflow-x: auto; margin: 16px 0 0 0; padding-bottom: 8px; }
+            .nav-item { white-space: nowrap; padding: 10px 16px; }
+            .sidebar-footer { display: none; }
+            .sidebar-toggle-btn { margin-bottom: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .modal-card { padding: 24px; }
+            .modal-header { flex-direction: column; text-align: center; gap: 16px; }
+            .modal-card-display { width: 130px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout-container">
+    <!-- 🌿 側邊欄 Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div>
+            <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="收折/展開選單">
+                <span id="toggleIcon">☰</span>
+            </button>
+
+            <div class="brand-header">
+                <span class="brand-logo">🌿</span>
+                <h1 class="brand-title">芳香心靈</h1>
+                <div class="brand-subtitle">Aroma Intuition</div>
+            </div>
+
+            <nav class="nav-menu">
+                <a class="nav-item" href="divination.html" title="三牌占卜">
+                    <span class="icon">✨</span>
+                    <span class="nav-text">三牌占卜</span>
+                </a>
+                <a class="nav-item" href="daily-oil.html" title="每日香氣詩籤">
+                    <span class="icon">📜</span>
+                    <span class="nav-text">每日香氣詩籤</span>
+                </a>
+                <a class="nav-item active" href="encyclopedia.html" title="芳香精油百科">
+                    <span class="icon">📖</span>
+                    <span class="nav-text">芳香精油百科</span>
+                </a>
+                <a class="nav-item" href="javascript:void(0);" onclick="alert('🔮「心靈指引」功能正在努力籌備中，敬請期待！');" title="心靈指引">
+                    <span class="icon">🔮</span>
+                    <span class="nav-text">心靈指引</span>
+                    <span class="nav-badge">Soon</span>
+                </a>
+                <a class="nav-item" href="javascript:void(0);" onclick="alert('🕊️ 此神秘功能目前仍在規劃中！');" title="待開發">
+                    <span class="icon">🕊️</span>
+                    <span class="nav-text">待開發</span>
+                    <span class="nav-badge">Soon</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-footer">
+            <p>🌿 Aroma Encyclopedia v1.0</p>
+            <p>© 2026 靜心隨想 · 芳香占卜</p>
+        </div>
+    </aside>
+
+    <!-- 📖 主要內容區 Main Content -->
+    <main class="main-wrapper">
+        <div class="page-header-box">
+            <h2>🌿 植物精油手繪圖鑑</h2>
+            <p>探索 45 種植物精油的自然療癒力量，尋找對應身心的靈魂養分</p>
+        </div>
+
+        <!-- 搜尋與類別篩選 -->
+        <div class="controls-bar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜尋精油名稱、功效或部位⋯">
+            </div>
+            <div class="category-tags" id="categoryTags">
+                <button class="cat-btn active" data-cat="all">全部 (45)</button>
+                <button class="cat-btn" data-cat="果實">果實類</button>
+                <button class="cat-btn" data-cat="花朵">花朵類</button>
+                <button class="cat-btn" data-cat="藥草">藥草類</button>
+                <button class="cat-btn" data-cat="樹脂">樹脂類</button>
+                <button class="cat-btn" data-cat="香料">香料類</button>
+                <button class="cat-btn" data-cat="木質">木質類</button>
+                <button class="cat-btn" data-cat="根部/種籽/葉片">根部/種籽/葉片</button>
+            </div>
+        </div>
+
+        <!-- 精油卡片網格區域 -->
+        <div class="oils-grid" id="oilsGrid">
+            <!-- 動態渲染區域 -->
+        </div>
+    </main>
+</div>
+
+<!-- 🌸 加大版手繪風 詳細資料 Modal -->
+<div class="modal-overlay" id="oilModal">
+    <div class="modal-card">
+        <button class="close-btn" id="closeModalBtn">✕</button>
+        <div class="modal-header">
+            <!-- 牌卡顯示區塊 -->
+            <div class="modal-card-display" id="modalCardDisplay">
+                <img class="modal-card-image" id="modalCardImg" src="" alt="" loading="lazy">
+                <div class="modal-fallback-info" id="modalFallbackInfo">
+                    <div class="fb-emoji" id="modalFbEmoji">🌿</div>
+                </div>
+            </div>
+
+            <div class="modal-title-area">
+                <h3 id="modalName">綠花白千層</h3>
+                <div class="modal-subtitle" id="modalMeaning">✦ 汰舊更新 · 葉片類</div>
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <div class="modal-section-title">🌱 身體與生理益處 (Pros)</div>
+            <div class="modal-section-content" id="modalBenefits">
+                強效呼吸道防護，預防靜脈曲張，淨化肌膚。
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <div class="modal-section-title">🧠 心理與心靈療癒</div>
+            <div class="modal-section-content" id="modalMind">
+                幫助清空混沌的大腦，迎向新階段。
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <div class="modal-section-title caution">⚠️ 注意事項與禁忌 (Cons)</div>
+            <div class="modal-section-content" id="modalCautions">
+                高濃度可能刺激黏膜。
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    // 側邊欄開關
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+    sidebarToggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+    });
+
+    // 完整 45 筆精油預設資料 (已加入 imgUrl 欄位)
+    const fallbackOilsData = [
+        { id: "01", name: "甜橙", emoji: "🍊", imgUrl: "img/fruit/02 橘子.png", meaning: "赤子之心", category: "果實", benefits: "促進消化系統蠕動，舒緩脹氣，增強免疫力。", mind: "帶來陽光樂觀的能量，撫平焦慮與沮喪。", cautions: "具光敏性，塗抹皮膚後12小時內應避免陽光直射。" },
+        { id: "02", name: "葡萄柚", emoji: "🍇", imgUrl: "img/fruit/01 柚子.png", meaning: "無憂無慮", category: "果實", benefits: "促進淋巴循環，協助水腫排除，促進脂肪分解。", mind: "舒緩壓力引起的暴飲暴食，帶來清爽愉悅感受。", cautions: "具柑橘類光敏性，敏弱肌使用請提高稀釋比例。" },
+        { id: "03", name: "檸檬", emoji: "🍋", imgUrl: "img/fruit/13 檸檬.png", meaning: "外剛內柔", category: "果實", benefits: "淨化身體，促進血液循環，提亮肌膚膚色。", mind: "提升專注力與思緒清晰度，消除精神疲勞。", cautions: "具光敏性，未稀釋可能刺激皮膚。" },
+        { id: "04", name: "萊姆", emoji: "🍈", imgUrl: "img/fruit/13 檸檬.png", meaning: "回歸初心", category: "果實", benefits: "開胃助消化，清熱解毒，增強抗氧化能力。", mind: "清爽氣味能喚醒疲憊心靈，帶出內在活力。", cautions: "高濃度具皮膚刺激性與光敏反應。" },
+        { id: "05", name: "山雞椒", emoji: "🌶️", imgUrl: "img/fruit/09 黑胡椒.png", meaning: "活在當下", category: "果實", benefits: "舒緩呼吸道不適，平衡油脂分泌，收斂肌膚。", mind: "強效抗憂鬱，強化心靈平靜與存在感。", cautions: "可能對皮膚產生刺激，建議低濃度使用。" },
+        { id: "06", name: "茉莉", emoji: "🌸", imgUrl: "img/fruit/14 茉莉花.png", meaning: "悠然自在", category: "花朵", benefits: "平衡女性荷爾蒙，舒緩經痛，滋養乾性肌膚。", mind: "提升自信與吸引力，深層放衝壓抑情緒。", cautions: "孕婦初期不宜高劑量使用。" },
+        { id: "07", name: "玫瑰", emoji: "🌹", imgUrl: "img/fruit/04 玫瑰.png", meaning: "熱情自信", category: "花朵", benefits: "調節女性生殖系統，延緩肌膚老化，撫平細紋。", mind: "開闊心胸，修復心靈創傷，安撫悲傷情緒。", cautions: "懷孕早期應避免使用。" },
+        { id: "08", name: "橙花", emoji: "🍊", imgUrl: "img/fruit/15 橙花.png", meaning: "優雅大方", category: "花朵", benefits: "鎮定自主神經，舒緩心悸與胃痙攣，修復妊娠紋。", mind: "極佳的抗焦慮與減壓效果，安撫驚嚇情緒。", cautions: "無特殊禁忌，為極度溫和之精油。" },
+        { id: "09", name: "依蘭", emoji: "🌺", imgUrl: "img/fruit/05 花朵.png", meaning: "浪漫奔放", category: "花朵", benefits: "降低血壓，平衡皮脂分泌，強健髮根。", mind: "激發感性情緒，緩解焦慮與憤怒。", cautions: "過量使用可能引發頭痛或噁心感。" },
+        { id: "10", name: "永久花", emoji: "🏵️", imgUrl: "img/fruit/05 花朵.png", meaning: "斷捨離", category: "花朵", benefits: "強效化瘀止血，促進組織再生，修復疤痕。", mind: "化解心靈深層淤積的創傷與陰影。", cautions: "含有酮類成分，孕婦及嬰幼兒慎用。" },
+        { id: "11", name: "純正薰衣草", emoji: "💜", imgUrl: "img/fruit/03 薰衣草.png", meaning: "溫柔體貼", category: "藥草", benefits: "促進傷口癒合，舒緩燙傷與蚊蟲叮咬，助眠。", mind: "平靜中樞神經，舒緩極度緊張與失眠。", cautions: "血壓極低者過量使用可能感覺沉重。" },
+        { id: "12", name: "天竺葵", emoji: "🌿", imgUrl: "img/fruit/05 花朵.png", meaning: "感性善良", category: "藥草", benefits: "調節皮脂分泌，促進淋巴排毒，改善水腫。", mind: "平衡情緒起伏，特別適合經前症候群舒緩。", cautions: "敏感肌膚建議稀釋後使用。" },
+        { id: "13", name: "甜馬鬱蘭", emoji: "🌱", imgUrl: "img/fruit/05 花朵.png", meaning: "理智沉著", category: "藥草", benefits: "擴張血管，舒緩肌肉痠痛與偏頭痛，助消化。", mind: "溫暖孤獨的心，鎮靜過度興奮的精神狀態。", cautions: "長期大量使用可能使人反應較為遲鈍。" },
+        { id: "14", name: "快樂鼠尾草", emoji: "🧠", imgUrl: "img/fruit/03 薰衣草.png", meaning: "直覺思考", category: "藥草", benefits: "通經舒緩經痛，減少頭皮屑，調節汗腺。", mind: "引發放鬆感，提升直覺與創造力。", cautions: "使用後切勿飲酒；孕婦應避免使用。" },
+        { id: "15", name: "廣藿香", emoji: "🍃", imgUrl: "img/fruit/06 葉片.png", meaning: "自我覺醒", category: "藥草", benefits: "促進細胞再生，改善濕疹與蜂窩組織炎。", mind: "安定沉降，幫助過度思考者連結身體感受。", cautions: "低濃度使用，氣味持久力極強。" },
+        { id: "16", name: "乳香", emoji: "🪔", imgUrl: "img/fruit/16 乳香.png", meaning: "療癒溫暖", category: "樹脂", benefits: "加深呼吸，舒緩支氣管炎，緊緻熟齡肌膚。", mind: "平靜心神，撫平雜念，適合冥想與靜心。", cautions: "孕婦初期宜慎用。" },
+        { id: "17", name: "沒藥", emoji: "🌲", imgUrl: "img/fruit/16 乳香.png", meaning: "智慧沉穩", category: "樹脂", benefits: "抗發炎，改善口腔潰瘍與皮膚龜裂發炎。", mind: "帶來強大的內在安全感與穩固能量。", cautions: "孕婦禁忌使用。" },
+        { id: "18", name: "安息香", emoji: "🕯️", imgUrl: "img/fruit/16 乳香.png", meaning: "溫暖安定", category: "樹脂", benefits: "改善乾裂肌膚，促進傷口癒合，溫暖呼吸道。", mind: "給予如被毯子包裹般的安全感與安慰。", cautions: "質地較黏稠，擴香宜注意清掃。" },
+        { id: "19", name: "岩玫瑰", emoji: "🌹", imgUrl: "img/fruit/04 玫瑰.png", meaning: "平撫穩定", category: "樹脂", benefits: "強效止血，抗衰老撫紋，增強免疫系統。", mind: "撫平重大創傷後的驚恐與失落感。", cautions: "孕婦及嬰幼兒避免使用。" },
+        { id: "20", name: "秘魯聖木", emoji: "🌳", imgUrl: "img/fruit/08 木頭.png", meaning: "回歸自我", category: "樹脂", benefits: "舒緩關節疼痛，緩解感冒呼吸道症狀。", mind: "淨化空間與磁場，清除負面情緒能量。", cautions: "請選用合法永續來源。" },
+        { id: "21", name: "黑胡椒", emoji: "⚫", imgUrl: "img/fruit/09 黑胡椒.png", meaning: "創意活力", category: "香料", benefits: "促進血液循環，溫暖僵硬肌肉，促進腸胃蠕動。", mind: "激發動力與行動力，打破停滯不前的狀態。", cautions: "過高濃度對皮膚有強烈刺激性。" },
+        { id: "22", name: "丁香", emoji: "🧄", imgUrl: "img/fruit/17 丁香.png", meaning: "勇往直前", category: "香料", benefits: "強效抗菌，舒緩牙痛與腸胃感染。", mind: "建立個人邊界，給予突破困境的勇氣。", cautions: "含高酚類成分，對皮膚具強刺激性，極低濃度使用。" },
+        { id: "23", name: "迷迭香", emoji: "🌿", imgUrl: "img/fruit/18 迷迭香.png", meaning: "創新靈活", category: "香料", benefits: "促進腦部循環，強健髮根，改善肌肉僵硬。", mind: "提升記憶力與學習效率，振奮委靡精神。", cautions: "高血壓與癲癇患者避免使用。" },
+        { id: "24", name: "歐薄荷", emoji: "🌱", imgUrl: "img/fruit/12 薄荷.png", meaning: "適應力強", category: "香料", benefits: "清涼止癢，緩解頭痛與噁心感，通暢呼吸道。", mind: "迅速清醒思緒，掃除混濁與燥熱感。", cautions: "未滿兩歲嬰幼兒及孕婦禁用。" },
+        { id: "25", name: "檸檬香茅", emoji: "🍋", imgUrl: "img/fruit/13 檸檬.png", meaning: "打破框架", category: "香料", benefits: "驅蟲，舒緩乳酸堆積引起的肌肉痠痛，收斂毛孔。", mind: "振奮疲憊精神，清除思緒中的死角。", cautions: "皮膚敏感者需稀釋使用。" },
+        { id: "26", name: "花梨木", emoji: "🪵", imgUrl: "img/fruit/08 木頭.png", meaning: "穩定踏實", category: "木質", benefits: "溫和促進細胞再生，平衡乾性與油性肌膚，增強免疫。", mind: "穩定情緒，提升抵抗壓力的堅韌度。", cautions: "溫和無特別禁忌。" },
+        { id: "27", name: "檜木", emoji: "🌲", imgUrl: "img/fruit/08 木頭.png", meaning: "安全感", category: "木質", benefits: "強效呼吸道淨化，舒緩關節痛，防蟲抑菌。", mind: "帶來宛如置身森林大自然的安心穩定感。", cautions: "敏感肌膚需稀釋。" },
+        { id: "28", name: "檀香", emoji: "🪷", imgUrl: "img/fruit/08 木頭.png", meaning: "沉穩寧靜", category: "木質", benefits: "深度滋養乾燥肌膚，改善泌尿系統感染。", mind: "沉降雜念，切斷外界干擾，進入深層安寧。", cautions: "腎臟發炎急症期應慎用。" },
+        { id: "29", name: "肉桂", emoji: "🍂", imgUrl: "img/fruit/19 肉桂.png", meaning: "溫暖重生", category: "木質", benefits: "極佳的溫熱效應，改善手腳冰冷，促進代謝。", mind: "點燃內在熱情，驅散冷漠與孤立感。", cautions: "極高皮膚刺激性，嚴格低劑量使用。" },
+        { id: "30", name: "大西洋雪松", emoji: "🌲", imgUrl: "img/fruit/08 木頭.png", meaning: "穩紮穩打", category: "木質", benefits: "促進淋巴流動，改善頭皮屑與掉髮，收斂皮膚。", mind: "給予如大樹般的支持力，建立堅毅信念。", cautions: "孕婦避免使用。" },
+        { id: "31", name: "薑", emoji: "🫚", imgUrl: "img/fruit/07 薑.png", meaning: "平衡溫暖", category: "根部", benefits: "祛濕排寒，舒緩暈車噁心，溫暖消化道。", mind: "驅走情緒上的冷漠，重新賦予生命熱能。", cautions: "敏感肌膚使用可能產生發熱感。" },
+        { id: "32", name: "岩蘭草", emoji: "🌾", imgUrl: "img/fruit/21 根部.png", meaning: "放鬆平靜", category: "根部", benefits: "促進紅血球生成，深層放鬆肌肉與神經系統。", mind: "極強的接地感 (Grounding)，擺脫浮躁不安。", cautions: "質地極度黏稠，擴香需注意。" },
+        { id: "33", name: "歐白芷根", emoji: "🌿", imgUrl: "img/fruit/20 歐白芷根.png", meaning: "補充元氣", category: "根部", benefits: "大補元氣，促進淋巴排毒，舒緩呼吸道痙攣。", mind: "給予虛弱的身心強大的安全守護屏障。", cautions: "具光敏性，使用後避免陽光曝曬。" },
+        { id: "34", name: "穗甘松", emoji: "🌱", imgUrl: "img/fruit/21 根部.png", meaning: "原諒放下", category: "根部", benefits: "調節心律，改善深層失眠，平衡心血管系統。", mind: "幫助釋放深沉的怨恨與悲傷，獲得心靈自由。", cautions: "無特殊禁忌，適合夜間使用。" },
+        { id: "35", name: "纈草", emoji: "🌿", imgUrl: "img/fruit/21 根部.png", meaning: "鎮定安心", category: "根部", benefits: "極強的神經鎮靜作用，緩解嚴重失眠與痙攣。", mind: "強效平息焦躁不安，進入深層睡眠。", cautions: "味道較特殊；日間不宜使用以防昏睡。" },
+        { id: "36", name: "甜茴香", emoji: "🌱", imgUrl: "img/fruit/20 歐白芷根.png", meaning: "理性平衡", category: "種籽", benefits: "幫助消化，緩解脹氣，促進母乳分泌。", mind: "幫助清理壓抑的言語，勇敢表達內在想法。", cautions: "雌激素依賴型疾病患者與孕婦禁用。" },
+        { id: "37", name: "胡蘿蔔籽", emoji: "🥕", imgUrl: "img/fruit/10 胡蘿蔔.png", meaning: "敏銳獨特", category: "種籽", benefits: "強效肝膽排毒，促進皮膚細胞再生，淡化斑點。", mind: "清除身心積累的毒素，恢復清晰視野。", cautions: "孕婦不宜使用。" },
+        { id: "38", name: "芫荽籽", emoji: "🌿", imgUrl: "img/fruit/22 種籽.png", meaning: "溫柔細膩", category: "種籽", benefits: "促進食慾，舒緩關節疼痛與消化不良。", mind: "給予溫柔的包容力，緩和緊張的心情。", cautions: "過量使用可能產生輕微麻木感。" },
+        { id: "39", name: "芹菜籽", emoji: "🌱", imgUrl: "img/fruit/22 種籽.png", meaning: "清新清爽", category: "種籽", benefits: "幫助尿酸代謝，舒緩痛風，改善色素沈澱。", mind: "協助清理心靈雜質，帶來輕鬆透亮感。", cautions: "具光敏性，孕婦避免使用。" },
+        { id: "40", name: "小茴香", emoji: "🌾", imgUrl: "img/fruit/22 種籽.png", meaning: "釋放復原", category: "種籽", benefits: "暖胃祛寒，解痙攣，促進腸道排氣。", mind: "釋放積壓已久的心靈壓力。", cautions: "皮膚敏感者宜低濃度稀釋。" },
+        { id: "41", name: "月桂", emoji: "🍃", imgUrl: "img/fruit/23 月桂.png", meaning: "勇決果斷", category: "葉片", benefits: "促進淋巴循環，舒緩感冒發燒，保護牙齦。", mind: "提升自信與勝利能量，克服怯場與恐懼。", cautions: "可能引發皮膚過敏，請稀釋使用。" },
+        { id: "42", name: "茶樹", emoji: "🍃", imgUrl: "img/fruit/06 葉片.png", meaning: "隨機應變", category: "葉片", benefits: "強效廣效抗菌，淨化痘痘肌，提昇免疫力。", mind: "清除環境與心靈的病原體，保持清爽能量。", cautions: "氧化後易引起皮膚過敏，宜新鮮保存。" },
+        { id: "43", name: "苦橙葉", emoji: "🌿", imgUrl: "img/fruit/06 葉片.png", meaning: "養精蓄銳", category: "葉片", benefits: "舒緩心悸，調節皮脂，緩解肌肉痙攣。", mind: "平撫焦慮與壓抑情緒，性價比極高之放鬆精油。", cautions: "極度溫和無特殊禁忌。" },
+        { id: "44", name: "綠花白千層", emoji: "🌿", imgUrl: "img/fruit/06 葉片.png", meaning: "汰舊更新", category: "葉片", benefits: "強效呼吸道防護，預防靜脈曲張，淨化肌膚。", mind: "幫助清空混沌的大腦，迎向新階段。", cautions: "高濃度可能刺激黏膜。" },
+        { id: "45", name: "澳洲尤加利", emoji: "🌿", imgUrl: "img/fruit/06 葉片.png", meaning: "自信獨立", category: "葉片", benefits: "強力通暢呼吸道，抗病毒，緩解肌肉痠痛。", mind: "帶來清新專注的呼吸空間，釋放壓迫感。", cautions: "癲癇患者及幼童請慎用。" }
+    ];
+
+    let oilsData = [...fallbackOilsData];
+    const gridEl = document.getElementById('oilsGrid');
+    const searchInput = document.getElementById('searchInput');
+    const categoryTags = document.getElementById('categoryTags');
+    const IMG_BASE_PATH = 'img/';
+
+    // 嘗試從外部 oils.json 讀取資料
+    fetch('oils.json')
+        .then(res => {
+            if (!res.ok) throw new Error('無法讀取外部 oils.json，切換至內建資料庫');
+            return res.json();
+        })
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+                oilsData = data;
+                renderOils(oilsData);
+            }
+        })
+        .catch(err => {
+            console.log(err.message);
+            renderOils(oilsData);
+        });
+
+    // 渲染百科主卡片網格
+    function renderOils(list) {
+        gridEl.innerHTML = '';
+        if (list.length === 0) {
+            gridEl.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">🍃 沒有找到符合條件的植物精油</div>';
+            return;
+        }
+
+        list.forEach(oil => {
+            const card = document.createElement('div');
+            card.className = 'oil-card';
+            
+            // 優先讀取 imgUrl，載入失敗時降級呈現 Emoji
+            const emojiContent = oil.imgUrl 
+                ? `<img src="${oil.imgUrl}" alt="${oil.name}" onerror="this.onerror=null; this.parentElement.innerHTML='${oil.emoji}';">` 
+                : oil.emoji;
+
+            card.innerHTML = `
+                <div>
+                    <div class="card-header">
+                        <div class="oil-emoji">${emojiContent}</div>
+                        <span class="oil-cat-badge">${oil.category}</span>
+                    </div>
+                    <div class="oil-name">${oil.name}</div>
+                    <div class="oil-keyword">✦ ${oil.meaning}</div>
+                    <div class="oil-benefit-preview">${oil.benefits}</div>
+                </div>
+                <div class="card-footer-link">
+                    查看完整解析與禁忌 ➔
+                </div>
+            `;
+            card.addEventListener('click', () => openModal(oil));
+            gridEl.appendChild(card);
+        });
+    }
+
+    // 圖片載入 logic (支援 jpg/png 自動切換與 error fallback)
+    function loadModalImageWithAutoFormat(imgEl, oil, containerEl) {
+        const extensions = ['jpg', 'png'];
+        let currentExtIndex = 0;
+
+        containerEl.classList.remove('has-error');
+
+        function tryLoad() {
+            if (currentExtIndex >= extensions.length) {
+                containerEl.classList.add('has-error');
+                return;
+            }
+            const imgPath = IMG_BASE_PATH + encodeURIComponent(`${oil.id} ${oil.name}.${extensions[currentExtIndex]}`);
+            imgEl.src = imgPath;
+
+            imgEl.onload = function() {
+                containerEl.classList.remove('has-error');
+            };
+            imgEl.onerror = function() {
+                currentExtIndex++;
+                setTimeout(tryLoad, 100);
+            };
+        }
+        tryLoad();
+    }
+
+    // Modal 控制邏輯 (含大圖載入)
+    const modal = document.getElementById('oilModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    function openModal(oil) {
+        const displayEl = document.getElementById('modalCardDisplay');
+        const imgEl = document.getElementById('modalCardImg');
+        const fallbackContainer = document.getElementById('modalFallbackInfo');
+
+        // 設定圖片與 Fallback 內容（若大圖載入失敗，優先顯示圖片，失敗則顯示 Emoji）
+        if (oil.imgUrl) {
+            fallbackContainer.innerHTML = `<img src="${oil.imgUrl}" alt="${oil.name}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'fb-emoji\\'>${oil.emoji}</div>';">`;
+        } else {
+            fallbackContainer.innerHTML = `<div class="fb-emoji">${oil.emoji}</div>`;
+        }
+
+        loadModalImageWithAutoFormat(imgEl, oil, displayEl);
+
+        // 設定文字資訊
+        document.getElementById('modalName').textContent = oil.name;
+        document.getElementById('modalMeaning').textContent = `✦ ${oil.meaning} · ${oil.category}類`;
+        document.getElementById('modalBenefits').textContent = oil.benefits;
+        document.getElementById('modalMind').textContent = oil.mind || '帶來心靈和諧與放鬆。';
+        document.getElementById('modalCautions').textContent = oil.cautions;
+
+        modal.classList.add('active');
+    }
+
+    closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+
+    // 搜尋與類別篩選邏輯
+    let currentCategory = 'all';
+
+    function filterOils() {
+        const query = searchInput.value.trim().toLowerCase();
+        const filtered = oilsData.filter(oil => {
+            const matchesSearch = oil.name.toLowerCase().includes(query) ||
+                                  oil.meaning.toLowerCase().includes(query) ||
+                                  oil.benefits.toLowerCase().includes(query) ||
+                                  oil.category.toLowerCase().includes(query);
+            
+            let matchesCat = true;
+            if (currentCategory !== 'all') {
+                if (currentCategory === '根部/種籽/葉片') {
+                    matchesCat = ['根部', '種籽', '葉片'].includes(oil.category);
+                } else {
+                    matchesCat = oil.category === currentCategory;
+                }
+            }
+            return matchesSearch && matchesCat;
+        });
+        renderOils(filtered);
+    }
+
+    searchInput.addEventListener('input', filterOils);
+
+    categoryTags.addEventListener('click', (e) => {
+        if (e.target.classList.contains('cat-btn')) {
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            currentCategory = e.target.dataset.cat;
+            filterOils();
+        }
+    });
+
+    // 初始渲染
+    renderOils(oilsData);
+})();
+</script>
+</body>
+</html>

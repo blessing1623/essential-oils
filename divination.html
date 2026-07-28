@@ -17,11 +17,12 @@
             --text-muted: #7A6F68;
             --accent-gold: #c69c6d;
             --accent-gold-light: #e8d0b5;
+            --accent-gold-glow: rgba(198, 156, 109, 0.6);
             --accent-sage: #4a6352;
             --accent-sage-light: #e3ece6;
             --border-light: rgba(198, 156, 109, 0.25);
             --shadow-soft: 0 20px 40px rgba(44, 37, 32, 0.08);
-            --shadow-card: 0 12px 32px rgba(28, 43, 36, 0.12);
+            --shadow-card: 0 16px 36px rgba(28, 43, 36, 0.16);
             --font-serif: 'Noto Serif TC', serif;
             --font-sans: 'Plus Jakarta Sans', 'PingFang TC', sans-serif;
             --font-title: 'Cinzel', serif;
@@ -80,13 +81,11 @@
             overflow: hidden;
         }
 
-        /* 收折狀態下的 Sidebar */
         .sidebar.collapsed {
             width: var(--sidebar-collapsed-width);
             padding: 30px 12px;
         }
 
-        /* 切換按鈕 (Toggle Button) */
         .sidebar-toggle-btn {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -155,7 +154,6 @@
             text-transform: uppercase;
         }
 
-        /* 導覽選單 */
         .nav-menu {
             display: flex;
             flex-direction: column;
@@ -229,7 +227,6 @@
             line-height: 1.5;
         }
 
-        /* 主內容區 Adapt Space */
         .main-wrapper {
             margin-left: var(--sidebar-width);
             flex: 1;
@@ -242,7 +239,7 @@
             margin-left: var(--sidebar-collapsed-width);
         }
 
-        /* 頂部 Header & Mode bar */
+        /* 頂部 Header & Controls */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -272,7 +269,6 @@
             gap: 12px;
         }
 
-        /* ✨ 背景音樂自由開關按鈕樣式 */
         .audio-toggle-btn {
             display: inline-flex;
             align-items: center;
@@ -330,7 +326,41 @@
         }
 
         /* --------------------------------------------------
-           Card Table & Slot Area
+           ✨ ✨ ✨ 洗牌提示浮框 (Toast Message) 樣式
+        -------------------------------------------------- */
+        .toast-hint {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: linear-gradient(135deg, rgba(28, 43, 36, 0.95) 0%, rgba(44, 63, 51, 0.95) 100%);
+            color: var(--accent-gold-light);
+            border: 1px solid var(--accent-gold);
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-family: var(--font-serif);
+            letter-spacing: 1.5px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast-hint.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* --------------------------------------------------
+           Card Table & High-Interactive Slot Area
         -------------------------------------------------- */
         .card-table {
             background: var(--bg-card);
@@ -350,23 +380,69 @@
             margin-bottom: 32px;
         }
 
+        /* 卡槽區塊優化 */
         .card-slot {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.4);
             border-radius: 28px;
             padding: 20px 16px;
             border: 1.5px dashed rgba(198, 156, 109, 0.35);
-            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
             position: relative;
+            user-select: none;
+        }
+
+        /* ✨ ✨ 點擊摸牌動態浮浮提示標籤 */
+        .slot-click-badge {
+            position: absolute;
+            top: -14px;
+            background: linear-gradient(135deg, #d4af37 0%, #b89028 100%);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 3px 12px;
+            border-radius: 12px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+            opacity: 0;
+            transform: translateY(6px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .card-slot.ready-to-draw .slot-click-badge {
+            opacity: 1;
+            transform: translateY(0);
+            animation: bounceBadge 1.8s infinite ease-in-out;
+        }
+
+        @keyframes bounceBadge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* 可摸牌時的脈衝光 */
+        .card-slot.ready-to-draw {
+            border-style: solid;
+            border-color: var(--accent-gold);
+            background: rgba(255, 253, 249, 0.7);
+            box-shadow: 0 0 20px var(--border-light);
+            animation: slotPulse 2.5s infinite ease-in-out;
+        }
+
+        @keyframes slotPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(198, 156, 109, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(198, 156, 109, 0.5); }
         }
 
         .card-slot:hover {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             border-color: var(--accent-gold);
-            transform: translateY(-6px);
+            transform: translateY(-8px) scale(1.01);
             box-shadow: var(--shadow-card);
         }
 
@@ -390,7 +466,7 @@
             aspect-ratio: 3/4.4;
             border-radius: 20px;
             position: relative;
-            perspective: 1000px;
+            perspective: 1200px;
             pointer-events: none;
         }
 
@@ -399,9 +475,10 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            will-change: transform;
         }
 
         .card-display.flipped .card-inner {
@@ -423,40 +500,48 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
+        /* 🖼️ 卡背自訂圖等比例滿版 */
         .card-back {
-            background: linear-gradient(145deg, #2b3a32, #1a2520);
-            color: var(--accent-gold);
-            padding: 16px;
+            background-color: #fdfbf7;
+            background-image: url('img/custom_card_back_1.jpg'); 
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 8px;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
         .card-back::before {
+            display: none; 
+        }
+
+        .card-back .placeholder-icon,
+        .card-back .placeholder-text {
+            display: none; 
+        }
+
+        .card-back::after {
             content: '';
             position: absolute;
-            inset: 8px;
-            border: 1px solid rgba(198, 156, 109, 0.3);
-            border-radius: 14px;
-            pointer-events: none;
+            width: 150%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+            top: 0;
+            left: -150%;
+            transform: skewX(-20deg);
+            transition: left 0.75s ease;
         }
 
-        .card-back .placeholder-icon {
-            font-size: 2.2rem;
-            margin-bottom: 8px;
-            opacity: 0.8;
-        }
-
-        .card-back .placeholder-text {
-            font-family: var(--font-serif);
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            opacity: 0.8;
-            color: var(--accent-gold-light);
+        .card-slot:hover .card-back::after {
+            left: 150%;
         }
 
         .card-front {
             background: #fdfbf7;
             transform: rotateY(180deg);
             padding: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.03);
         }
 
         .card-image {
@@ -503,17 +588,64 @@
             100% { transform: translate(-50%, -50%) scale(0.8) rotate(360deg); opacity: 0.5; }
         }
 
-        .shuffle-fly { animation: shuffleFly 0.8s ease forwards; }
-        @keyframes shuffleFly {
-            0% { transform: translateY(0) rotate(0deg) scale(1); }
-            30% { transform: translateY(-40px) rotate(-12deg) scale(0.9); }
-            60% { transform: translateY(20px) rotate(8deg) scale(0.95); }
-            100% { transform: translateY(0) rotate(0deg) scale(1); }
+        /* 洗牌與摸牌特效 */
+        .shuffle-fly-1 { animation: shuffleFly1 0.85s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
+        .shuffle-fly-2 { animation: shuffleFly2 0.85s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
+        .shuffle-fly-3 { animation: shuffleFly3 0.85s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
+
+        @keyframes shuffleFly1 {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+            35% { transform: translate3d(120px, -35px, 50px) rotate(15deg) scale(0.88); }
+            65% { transform: translate3d(-60px, 20px, -20px) rotate(-10deg) scale(0.95); }
+            100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
         }
 
-        /* --------------------------------------------------
-           Action Control Buttons Area
-        -------------------------------------------------- */
+        @keyframes shuffleFly2 {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+            35% { transform: translate3d(-130px, -45px, 60px) rotate(-18deg) scale(0.85); }
+            65% { transform: translate3d(70px, 15px, -10px) rotate(12deg) scale(0.96); }
+            100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+        }
+
+        @keyframes shuffleFly3 {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+            35% { transform: translate3d(0, -60px, 80px) rotate(8deg) scale(0.92); }
+            65% { transform: translate3d(0, 30px, -30px) rotate(-6deg) scale(0.98); }
+            100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+        }
+
+        .draw-pop-anim {
+            animation: drawPopAction 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes drawPopAction {
+            0% { transform: translateY(0) scale(1); }
+            40% { transform: translateY(-35px) scale(1.08); box-shadow: 0 25px 50px rgba(0,0,0,0.25); }
+            70% { transform: translateY(-10px) scale(1.02); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .card-slot .ripple-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 10px; height: 10px;
+            background: radial-gradient(circle, var(--accent-gold-light) 0%, rgba(198, 156, 109, 0) 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .card-slot.ripple-active .ripple-glow {
+            animation: rippleExpand 0.75s ease-out forwards;
+        }
+
+        @keyframes rippleExpand {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+            100% { transform: translate(-50%, -50%) scale(35); opacity: 0; }
+        }
+
+        /* Action Control Buttons Area */
         .action-bar {
             display: flex;
             justify-content: center;
@@ -540,6 +672,7 @@
             background: rgba(255, 255, 255, 0.8);
             color: var(--text-main);
             box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            user-select: none;
         }
 
         .btn:hover {
@@ -595,9 +728,7 @@
             border-color: var(--accent-gold);
         }
 
-        /* --------------------------------------------------
-           Reading Result Cards (牌意解讀區)
-        -------------------------------------------------- */
+        /* Reading Result Cards (牌意解讀區) */
         .reading-section {
             margin-top: 10px;
         }
@@ -625,7 +756,7 @@
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
             backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
+            transition: all 0.35s ease;
             display: flex;
             flex-direction: column;
         }
@@ -709,9 +840,7 @@
             object-fit: cover;
         }
 
-        /* --------------------------------------------------
-           Responsive RWD Media Queries (✨ 手機版選單重點優化)
-        -------------------------------------------------- */
+        /* Responsive RWD Media Queries */
         @media (max-width: 1024px) {
             .sidebar {
                 width: 100%;
@@ -727,7 +856,6 @@
                 padding: 12px 16px;
             }
 
-            /* 手機版不需展折按鈕，隱藏以節省空間 */
             .sidebar-toggle-btn {
                 display: none;
             }
@@ -741,7 +869,6 @@
             .brand-title { font-size: 1rem; }
             .brand-subtitle { font-size: 0.55rem; }
 
-            /* ✨ 橫向滾動選單微型化優化 (Peek Effect) */
             .nav-menu { 
                 flex-direction: row; 
                 overflow-x: auto; 
@@ -758,7 +885,7 @@
                 font-size: 0.85rem;
                 border-radius: 20px;
                 gap: 6px;
-                flex-shrink: 0; /* 保持尺寸不被壓縮，讓右側自然露出半個 */
+                flex-shrink: 0;
                 background: rgba(255, 255, 255, 0.05);
             }
 
@@ -782,7 +909,6 @@
             }
             .reading-grid { grid-template-columns: 1fr; }
 
-            /* 手機版滾動條專屬精緻化 */
             .nav-menu::-webkit-scrollbar {
                 height: 4px;
             }
@@ -806,6 +932,12 @@
 </head>
 <body>
 
+<!-- ✨ 提示浮框元件 -->
+<div class="toast-hint" id="toastHint">
+    <span>🌿</span>
+    <span id="toastText">靜心思考你的問題，點擊卡槽開始摸牌</span>
+</div>
+
 <!-- ✨ 音訊元件 (指定音訊路徑於 audio/ 資料夾下) -->
 <audio id="bgMusic" src="audio/05_bgmusic02.mp3" loop preload="auto"></audio>
 <audio id="flipSound" src="audio/04_flipcard.mp3" preload="auto"></audio>
@@ -814,7 +946,6 @@
     <!-- 🌿 可收折側邊欄 Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div>
-            <!-- 收折切換按鈕 -->
             <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="收折/展開選單">
                 <span id="toggleIcon">☰</span>
             </button>
@@ -826,32 +957,27 @@
             </div>
 
             <nav class="nav-menu">
-                <!-- 1. 三牌占卜 (當前頁面或主頁) -->
                 <a class="nav-item active" href="divination.html" title="三牌占卜">
                     <span class="icon">✨</span>
                     <span class="nav-text">三牌占卜</span>
                 </a>
 
-                <!-- 2. 每日香氣詩籤 -->
                 <a class="nav-item" href="daily-oil.html" title="每日香氣詩籤">
                     <span class="icon">📜</span>
                     <span class="nav-text">每日香氣詩籤</span>
                 </a>
 
-                <!-- 3. 芳香精油百科 -->
                 <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
                     <span class="icon">📖</span>
                     <span class="nav-text">芳香精油百科</span>
                 </a>
 
-                <!-- 4. 心靈指引 (開發中) -->
                 <a class="nav-item" href="javascript:void(0);" onclick="alert('「心靈指引」功能正在籌備中，敬請期待！');" title="心靈指引">
                     <span class="icon">🔮</span>
                     <span class="nav-text">心靈指引</span>
                     <span class="nav-badge">Soon</span>
                 </a>
 
-                <!-- 5. 待開發 (未來擴充) -->
                 <a class="nav-item" href="javascript:void(0);" onclick="alert('此功能目前仍在規劃中！');" title="待開發">
                     <span class="icon">🕊️</span>
                     <span class="nav-text">待開發</span>
@@ -874,7 +1000,6 @@
                 <p>靜下心來，傾聽植物精油帶給你的直覺指引</p>
             </div>
             <div class="top-controls">
-                <!-- ✨ 背景音樂開關按鈕 (支援手動自由切換) -->
                 <button class="audio-toggle-btn" id="musicToggleBtn" title="切換背景音樂">
                     <span id="musicIcon">🎵</span>
                     <span id="musicStatusText">音樂：開</span>
@@ -891,13 +1016,12 @@
             <div class="card-row" id="cardRow">
                 <!-- Slot 1 -->
                 <div class="card-slot" data-slot="1">
+                    <div class="slot-click-badge">👆 點擊此處摸牌</div>
+                    <div class="ripple-glow"></div>
                     <div class="label">🌱 正向 · 自身狀態</div>
                     <div class="card-display" id="card1">
                         <div class="card-inner">
-                            <div class="card-back">
-                                <div class="placeholder-icon">🌿</div>
-                                <div class="placeholder-text">點擊摸牌</div>
-                            </div>
+                            <div class="card-back"></div>
                             <div class="card-front"></div>
                         </div>
                     </div>
@@ -905,13 +1029,12 @@
 
                 <!-- Slot 2 -->
                 <div class="card-slot" data-slot="2">
+                    <div class="slot-click-badge">👆 點擊此處摸牌</div>
+                    <div class="ripple-glow"></div>
                     <div class="label">🌀 反向 · 當前難題</div>
                     <div class="card-display" id="card2">
                         <div class="card-inner">
-                            <div class="card-back">
-                                <div class="placeholder-icon">🌿</div>
-                                <div class="placeholder-text">點擊摸牌</div>
-                            </div>
+                            <div class="card-back"></div>
                             <div class="card-front"></div>
                         </div>
                     </div>
@@ -919,13 +1042,12 @@
 
                 <!-- Slot 3 -->
                 <div class="card-slot" data-slot="3">
+                    <div class="slot-click-badge">👆 點擊此處摸牌</div>
+                    <div class="ripple-glow"></div>
                     <div class="label">🌟 方法 · 療癒解答</div>
                     <div class="card-display" id="card3">
                         <div class="card-inner">
-                            <div class="card-back">
-                                <div class="placeholder-icon">🌿</div>
-                                <div class="placeholder-text">點擊摸牌</div>
-                            </div>
+                            <div class="card-back"></div>
                             <div class="card-front"></div>
                         </div>
                     </div>
@@ -985,7 +1107,7 @@
 <script>
     (function() {
         // ============================================================
-        // 側邊欄收折控制邏輯 (Collapsible Sidebar)
+        // 側邊欄收折控制邏輯
         // ============================================================
         const sidebar = document.getElementById('sidebar');
         const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
@@ -993,12 +1115,26 @@
 
         sidebarToggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
-            if (sidebar.classList.contains('collapsed')) {
-                toggleIcon.textContent = '☰';
-            } else {
-                toggleIcon.textContent = '☰';
-            }
+            toggleIcon.textContent = '☰';
         });
+
+        // ============================================================
+        // 提示浮框 (Toast Message Controller)
+        // ============================================================
+        const toastHint = document.getElementById('toastHint');
+        const toastText = document.getElementById('toastText');
+        let toastTimer = null;
+
+        function showToast(text) {
+            if (!toastHint) return;
+            toastText.textContent = text;
+            toastHint.classList.add('show');
+
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toastHint.classList.remove('show');
+            }, 4000);
+        }
 
         // ============================================================
         // 音訊與背景音樂控制 (Audio & BGM Controller)
@@ -1009,27 +1145,24 @@
         const musicIcon = document.getElementById('musicIcon');
         const musicStatusText = document.getElementById('musicStatusText');
 
-        let isMusicEnabled = true; // 預設開啟
+        let isMusicEnabled = true;
 
-        // 播放翻牌音效 (audio/04_flipcard.mp3)
         function playFlipSound() {
             if (!flipSound) return;
             flipSound.currentTime = 0;
             flipSound.play().catch(e => console.log('翻牌音效受自動播放限制影響：', e));
         }
 
-        // 嘗試播放背景音樂 (audio/05_bgmusic02.mp3)
         function tryPlayBgMusic() {
             if (isMusicEnabled && bgMusic.paused) {
                 bgMusic.play().then(() => {
                     updateMusicUI(true);
                 }).catch(e => {
-                    console.log('等待使用者於頁面上進行互動後開啟背景音樂');
+                    console.log('等待使用者互動後播放音樂');
                 });
             }
         }
 
-        // 更新音樂開關按鈕 UI 狀態
         function updateMusicUI(playing) {
             if (playing) {
                 musicIcon.textContent = '🎵';
@@ -1042,15 +1175,12 @@
             }
         }
 
-        // 手動點擊音樂開關
         musicToggleBtn.addEventListener('click', () => {
             if (!bgMusic.paused) {
-                // 目前正在播放 -> 關閉音樂
                 isMusicEnabled = false;
                 bgMusic.pause();
                 updateMusicUI(false);
             } else {
-                // 目前暫停中 -> 開啟音樂
                 isMusicEnabled = true;
                 bgMusic.play().then(() => {
                     updateMusicUI(true);
@@ -1058,7 +1188,6 @@
             }
         });
 
-        // 當使用者首次點擊頁面任意處時自動嘗試啟用背景音樂
         document.addEventListener('click', function initAudioOnUserInteraction() {
             tryPlayBgMusic();
             document.removeEventListener('click', initAudioOnUserInteraction);
@@ -1172,7 +1301,7 @@
             }, 10000);
         }
 
-        // 圖片自動轉檔試載 (JPG / PNG)
+        // 圖片自動轉檔試載
         function getImagePath(oil, ext) {
             return IMG_BASE_PATH + encodeURIComponent(`${oil.id} ${oil.name}.${ext}`);
         }
@@ -1202,12 +1331,14 @@
             tryLoad();
         }
 
-        // 渲染牌面與 3D 翻牌效果（含翻牌音效）
+        // 渲染牌面與 3D 翻牌效果
         function renderCard(cardIndex, oilIdx) {
             const el = cardIndex === 1 ? card1El : (cardIndex === 2 ? card2El : card3El);
+            const slotEl = el.closest('.card-slot');
             const frontEl = el.querySelector('.card-front');
             
             el.classList.remove('has-error', 'loading', 'flipped');
+            slotEl.classList.remove('draw-pop-anim');
             
             if (oilIdx === null || oilIdx === undefined) {
                 frontEl.innerHTML = '';
@@ -1228,10 +1359,15 @@
             const img = frontEl.querySelector('.card-image');
             loadImageWithAutoFormat(img, oil, el);
 
+            slotEl.classList.add('ripple-active');
+            setTimeout(() => slotEl.classList.remove('ripple-active'), 800);
+
+            slotEl.classList.add('draw-pop-anim');
+
             setTimeout(() => {
-                playFlipSound(); // ✨ 翻牌時觸發 audio/04_flipcard.mp3 音效
+                playFlipSound();
                 el.classList.add('flipped');
-            }, cardIndex * 120);
+            }, 180);
         }
 
         // 更新牌意解讀區塊
@@ -1257,11 +1393,30 @@
             });
         }
 
+        // 更新卡槽摸牌提示狀態
+        function updateSlotPromptState() {
+            document.querySelectorAll('.card-slot').forEach((slot, idx) => {
+                slot.classList.remove('ready-to-draw');
+                if (isShuffled && !drawnStatus[idx]) {
+                    const nextSlot = drawnStatus.findIndex(v => !v);
+                    if (idx === nextSlot) {
+                        slot.classList.add('ready-to-draw');
+                    }
+                }
+            });
+        }
+
         // 摸一張卡牌
         function performDrawOne() {
             tryPlayBgMusic();
-            if (!isShuffled) { alert('請先點擊「開始洗牌」！'); return; }
-            if (drawIndex >= 3) { alert('三張牌已摸完！如需重新占卜請再洗牌。'); return; }
+            if (!isShuffled) { 
+                showToast('請先點擊「開始洗牌」再摸牌喔！');
+                return; 
+            }
+            if (drawIndex >= 3) { 
+                showToast('三張牌已摸完！如需再次占卜請重新洗牌。');
+                return; 
+            }
 
             let slot = drawnStatus.findIndex(v => !v);
             if (slot === -1) return;
@@ -1273,19 +1428,26 @@
 
             renderCard(slot + 1, oilIdx);
             updateReading(currentCards);
+            updateSlotPromptState();
             modeDisplay.textContent = `✦ 已摸牌 (${drawIndex}/3)`;
 
-            if (drawIndex === 3) {
+            if (drawIndex < 3) {
+                showToast(`已翻開第 ${drawIndex} 張，請點擊下一個卡槽摸牌 🌿`);
+            } else {
                 modeDisplay.textContent = '✦ 三張已全翻';
                 drawAllBtn.disabled = true;
                 drawOneBtn.disabled = true;
+                showToast('三張靈感卡牌已完全翻開 📖 請閱讀下方深度解讀');
             }
         }
 
         // 一次翻三張
         function performDrawAll() {
             tryPlayBgMusic();
-            if (!isShuffled) { alert('請先點擊「開始洗牌」！'); return; }
+            if (!isShuffled) { 
+                showToast('請先點擊「開始洗牌」再摸牌喔！'); 
+                return; 
+            }
 
             currentCards = [deck[0], deck[1], deck[2]];
             drawnStatus = [true, true, true];
@@ -1295,10 +1457,12 @@
             renderCard(2, currentCards[1]);
             renderCard(3, currentCards[2]);
             updateReading(currentCards);
+            updateSlotPromptState();
 
             modeDisplay.textContent = '✦ 三張已全翻';
             drawAllBtn.disabled = true;
             drawOneBtn.disabled = true;
+            showToast('三張靈感卡牌已完全翻開 📖 請閱讀下方深度解讀');
         }
 
         // 洗牌邏輯
@@ -1310,20 +1474,25 @@
             currentCards = [null, null, null];
             drawnStatus = [false, false, false];
 
-            [card1El, card2El, card3El].forEach(el => el.classList.remove('flipped', 'has-error', 'loading'));
+            const displays = [card1El, card2El, card3El];
+            displays.forEach(el => el.classList.remove('flipped', 'has-error', 'loading'));
             updateReading(currentCards);
 
-            // 飄動動畫特效
-            [card1El, card2El, card3El].forEach((el, index) => {
-                setTimeout(() => el.classList.add('shuffle-fly'), index * 100);
-                setTimeout(() => el.classList.remove('shuffle-fly'), 800 + index * 100);
+            displays.forEach((el, index) => {
+                const flyClass = `shuffle-fly-${index + 1}`;
+                el.classList.add(flyClass);
+                setTimeout(() => el.classList.remove(flyClass), 900);
             });
 
             setTimeout(() => {
                 modeDisplay.textContent = '✦ 洗牌完成 · 請摸牌';
                 drawAllBtn.disabled = false;
                 drawOneBtn.disabled = false;
-            }, 1000);
+                updateSlotPromptState();
+
+                // ✨ 洗牌完畢，彈出質感提示浮框引導點擊卡槽
+                showToast('✨ 洗牌完成！靜心思考你的問題，點擊卡槽開始摸牌');
+            }, 950);
         }
 
         function shuffleWithVideo() {
@@ -1341,6 +1510,7 @@
             deck = [];
             [card1El, card2El, card3El].forEach(el => el.classList.remove('flipped', 'has-error', 'loading'));
             updateReading(currentCards);
+            updateSlotPromptState();
             modeDisplay.textContent = '✦ 請先洗牌';
             drawAllBtn.disabled = true;
             drawOneBtn.disabled = true;
@@ -1351,12 +1521,18 @@
             const slotEl = e.currentTarget;
             const slot = parseInt(slotEl.dataset.slot, 10) - 1;
 
-            if (!isShuffled) { alert('請先洗牌！'); return; }
-            if (drawnStatus[slot]) { alert('這張牌已經翻開了！'); return; }
+            if (!isShuffled) { 
+                showToast('請先點擊「開始洗牌」才可以摸牌喔！');
+                return; 
+            }
+            if (drawnStatus[slot]) { 
+                showToast('這張牌已經翻開囉！');
+                return; 
+            }
 
             let nextSlot = drawnStatus.findIndex(v => !v);
             if (slot !== nextSlot) {
-                alert(`請依序摸牌，目前請點擊第 ${nextSlot + 1} 個位置。`);
+                showToast(`請依序摸牌，目前請點擊第 ${nextSlot + 1} 個位置 ✨`);
                 return;
             }
 

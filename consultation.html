@@ -165,16 +165,12 @@
         }
         .bgm-toggle-btn:hover { transform: scale(1.05); border-color: var(--accent-terracotta); background: #ffffff; }
 
-        /* --------------------------------------------------
-            舞台區塊（助理立繪靠左對齊設定）
-        -------------------------------------------------- */
         .stage-container {
             position: relative;
             flex: 1; width: 100%; max-width: 960px; margin: 0 auto;
             min-height: 280px; display: flex; align-items: flex-end;
         }
 
-        /* 👈 關鍵設定：助理立繪還原靠左排布 */
         .assistant-container {
             position: absolute;
             left: 10px;
@@ -199,13 +195,11 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* 互動容器 */
         .dialog-container {
             width: 100%; max-width: 880px; margin: 0 auto;
             display: flex; flex-direction: column; gap: 16px; z-index: 5;
         }
 
-        /* 第一層：方向分流選項（長方形卡片按鈕） */
         .main-choice-container {
             display: none;
             grid-template-columns: repeat(2, 1fr);
@@ -238,25 +232,14 @@
         .main-choice-btn .title-text { font-size: 1.1rem; font-weight: 600; color: var(--accent-forest); }
         .main-choice-btn .desc-text { font-size: 0.82rem; color: var(--text-muted); font-family: var(--font-sans); }
 
-        /* 第二層 A：常見生活議題網格（長方形雙欄卡片） */
-        .question-grid {
+        .question-grid, .organ-grid {
             display: none;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             animation: fadeIn 0.5s ease;
             margin-bottom: 10px;
         }
-        .question-grid.active { display: grid; }
-
-        /* 第二層 B：身體器官系統網格（長方形雙欄卡片） */
-        .organ-grid {
-            display: none;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            animation: fadeIn 0.5s ease;
-            margin-bottom: 10px;
-        }
-        .organ-grid.active { display: grid; }
+        .question-grid.active, .organ-grid.active { display: grid; }
 
         .select-card-btn {
             background: rgba(255, 255, 255, 0.9);
@@ -282,7 +265,6 @@
         .select-card-btn .card-title { font-size: 0.95rem; font-weight: 600; color: var(--text-main); }
         .select-card-btn .card-desc { font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-sans); margin-top: 2px; }
 
-        /* 👑 高級燙金對話框 */
         .dialog-box {
             width: 100%; background: rgba(255, 255, 255, 0.92);
             border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 24px;
@@ -318,7 +300,6 @@
             50% { transform: translateY(4px); opacity: 1; }
         }
 
-        /* 推薦精油清單展冊 */
         .oils-recommend-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 
         .oil-item-card {
@@ -329,7 +310,6 @@
         .oil-item-card .oil-name { font-weight: 600; color: var(--accent-forest); font-size: 0.92rem; }
         .oil-item-card .oil-effect { font-size: 0.82rem; color: var(--text-muted); font-family: var(--font-sans); }
 
-        /* 底部操作按鈕區 */
         .action-options {
             display: none; justify-content: flex-end; gap: 10px; margin-top: 14px; flex-wrap: wrap;
         }
@@ -354,7 +334,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 📱 手機版 RWD 最佳化 */
         @media (max-width: 1024px) {
             .layout-container { flex-direction: column; }
             .sidebar { width: 100%; height: auto; position: relative; padding: 10px 16px; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
@@ -373,7 +352,6 @@
                 gap: 8px; 
             }
             
-            /* 手機版選單項目（未選取狀態保持無框簡潔） */
             .nav-item { 
                 white-space: nowrap; 
                 padding: 6px 14px; 
@@ -384,7 +362,6 @@
                 transition: all 0.3s ease;
             }
 
-            /* ✨ 當前選取到的選項（.active）：金色圓角邊框與質感微光 */
             .nav-item.active {
                 background: linear-gradient(135deg, rgba(198, 156, 109, 0.3) 0%, rgba(198, 156, 109, 0.1) 100%);
                 border: 1px solid var(--accent-gold-light);
@@ -409,7 +386,6 @@
 <audio id="bgm" src="audio/05_bgmusic02.mp3" loop preload="auto"></audio>
 
 <div class="layout-container">
-    <!-- 🌿 可收折側邊欄 Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div>
             <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="收折/展開選單">
@@ -443,7 +419,6 @@
                     <span class="nav-text">心靈指引</span>
                 </a>
 
-                <!-- 🕊️ 芳香身心診察 (新功能) -->
                 <a class="nav-item active" href="consultation.html" title="芳香身心診察">
                     <span class="icon">🕊️</span>
                     <span class="nav-text">芳香身心診察</span>
@@ -462,7 +437,6 @@
         </div>
     </aside>
 
-    <!-- 🔮 主要內容區 Main Wrapper -->
     <main class="main-wrapper">
         <div class="top-bar">
             <div class="intro-top-logo">
@@ -476,7 +450,6 @@
             </button>
         </div>
 
-        <!-- 舞台區塊 -->
         <div class="stage-container">
             <div class="assistant-container">
                 <div class="assistant-avatar">
@@ -485,16 +458,14 @@
             </div>
         </div>
 
-        <!-- 互動卡片容器 -->
         <div class="dialog-container">
             
-            <!-- 第一層：方向分流選項（議題 vs 器官） -->
             <div class="main-choice-container" id="mainChoiceContainer">
                 <div class="main-choice-btn" id="btnChooseTopic">
                     <span class="icon-big">🧠</span>
                     <div>
                         <div class="title-text">針對【當前身心議題】</div>
-                        <div class="desc-text">改善睡眠、釋放壓力、提升專注或增強自信等情緒調節</div>
+                        <div class="desc-text">改善睡眠、舒緩經痛、釋放壓力或增強自信等情緒調節</div>
                     </div>
                 </div>
 
@@ -507,8 +478,16 @@
                 </div>
             </div>
 
-            <!-- 第二層 A：常見生活議題 -->
             <div class="question-grid" id="questionGrid">
+                <!-- 🩸 生理期與經痛選項 -->
+                <div class="select-card-btn topic-btn" data-key="period">
+                    <span class="card-icon">🩸</span>
+                    <div>
+                        <div class="card-title">生理期調節與經痛舒緩</div>
+                        <div class="card-desc">經痛悶脹、腰痠緊繃、荷爾蒙情緒起伏</div>
+                    </div>
+                </div>
+
                 <div class="select-card-btn topic-btn" data-key="sleep">
                     <span class="card-icon">😴</span>
                     <div>
@@ -558,7 +537,6 @@
                 </div>
             </div>
 
-            <!-- 第二層 B：身體器官系統 -->
             <div class="organ-grid" id="organGrid">
                 <div class="select-card-btn organ-btn" data-key="respiratory">
                     <span class="card-icon">🫁</span>
@@ -601,17 +579,15 @@
                 </div>
             </div>
 
-            <!-- 對話框主體 -->
             <div class="dialog-box" id="dialogBox">
                 <div class="dialog-speaker">精油助理 · 蘿拉</div>
                 <div class="dialog-text" id="dialogText"></div>
                 <div class="dialog-prompt" id="dialogPrompt">點擊繼續 ▾</div>
 
-                <!-- 互動按鈕 -->
                 <div class="action-options" id="actionOptions">
-                    <button class="btn-action btn-secondary-action" id="btnBackToGrid">🙋‍♀️ 選擇其他項目</button>
+                    <button class="btn-action btn-secondary-action" id="btnBackToGrid">🙋‍♀️ 回上一頁</button>
                     <button class="btn-action btn-secondary-action" id="btnBackToMain">🔄 重新選擇方向</button>
-                    <a href="divination.html" class="btn-action">✨ 前往三牌靈魂占卜</a>
+                    <a href="encyclopedia.html" class="btn-action">✨ 前往芳香精油百科</a>
                 </div>
             </div>
         </div>
@@ -620,9 +596,6 @@
 
 <script>
     (function() {
-        // ============================================================
-        // 側邊欄與音樂
-        // ============================================================
         const sidebar = document.getElementById('sidebar');
         const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
         const toggleIcon = document.getElementById('toggleIcon');
@@ -671,11 +644,18 @@
             soundBottle.play().catch(e => {});
         }
 
-        // ============================================================
-        // 診察資料庫（包含身心議題與器官系統對應）
-        // ============================================================
         const wellnessData = {
             // A. 身心議題
+            period: {
+                title: "生理期調節與經痛舒緩 🩸",
+                intro: "經痛主要源自於經期前前列腺素（Prostaglandins）分泌增加，引發<b>子宮平滑肌劇烈收縮</b>與血管痙攣。同時，荷爾蒙起伏易帶來下腹悶脹、腰痠與情緒波動。含有鎮痙攣與溫通成分的精油能迅速放鬆盆腔平滑肌、促進血氣循環：",
+                oils: [
+                    { name: "🧠 快樂鼠尾草", effect: "含雙萜醇類結構，能雙向調節荷爾蒙平衡，卓越舒緩子宮平滑肌痙攣與經前綜合症（PMS）。" },
+                    { name: "🌿 天竺葵", effect: "「植物界荷爾蒙調理師」，促進下肢與骨盆腔血液循環，改善經期水腫與悶痛不適。" },
+                    { name: "🌱 甜馬鬱蘭", effect: "深層溫熱與鎮痛作用，能放鬆腹部緊繃肌肉，對於寒性經痛或肌肉痙攣特別有益。" },
+                    { name: "💜 純正薰衣草", effect: "含有乙酸芳樟酯，具天然鎮靜止痛效果，能撫平經期的焦躁情緒與下腹悶重感。" }
+                ]
+            },
             sleep: {
                 title: "改善睡眠與失眠問題 😴",
                 intro: "夜間難以入睡往往與<b>交感神經過度興奮</b>有關。植物香氣分子透過嗅覺傳導至大腦邊緣系統，調節褪黑激素分泌並引導深層睡眠：",
@@ -785,9 +765,6 @@
             }
         };
 
-        // ============================================================
-        // 對話與 UI 流程控制
-        // ============================================================
         const dialogTextEl = document.getElementById('dialogText');
         const dialogBox = document.getElementById('dialogBox');
         const dialogPrompt = document.getElementById('dialogPrompt');
@@ -800,7 +777,6 @@
         let currentStep = 0;
         let lastSelectedGroup = 'topic';
 
-        // 🌿 開場白對話流程：問候 ➔ 介紹新功能 ➔ 引導方向選擇
         const openingDialogs = [
             "又見面了呢！很高興再次看到你 🌿",
             "這次為你帶來的是全新的<b>【芳香身心診察】</b>功能！在這裡，我們結合了全人芳療與生理學，透過對話為你的身心狀況尋找最適合的植物香氣調理方案。",
@@ -812,7 +788,6 @@
             if (callback) callback();
         }
 
-        // 推進開場對話
         function advanceOpening() {
             startBGM();
             playClickSound();
@@ -822,13 +797,12 @@
                 typeWriter(openingDialogs[currentStep], () => {
                     if (currentStep === openingDialogs.length - 1) {
                         dialogPrompt.style.display = 'none';
-                        mainChoiceContainer.classList.add('active'); // 顯示第一層選擇
+                        mainChoiceContainer.classList.add('active');
                     }
                 });
             }
         }
 
-        // 顯示診察結果
         function showAnswer(key) {
             const data = wellnessData[key];
             if (!data) return;
@@ -858,7 +832,6 @@
             });
         }
 
-        // 第一層方向按鈕監聽
         document.getElementById('btnChooseTopic').addEventListener('click', (e) => {
             e.stopPropagation();
             playClickSound();
@@ -879,7 +852,6 @@
             });
         });
 
-        // 第二層選擇卡片監聽
         document.querySelectorAll('.topic-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -894,7 +866,6 @@
             });
         });
 
-        // 返回按鈕監聽
         document.getElementById('btnBackToGrid').addEventListener('click', (e) => {
             e.stopPropagation();
             playClickSound();
@@ -915,7 +886,6 @@
             typeWriter("沒問題，請重新選擇診察方向：", () => mainChoiceContainer.classList.add('active'));
         });
 
-        // 初始化頁面
         typeWriter(openingDialogs[0], () => {
             dialogPrompt.style.display = 'block';
         });

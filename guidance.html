@@ -50,9 +50,6 @@
             overflow-x: hidden;
         }
 
-        /* --------------------------------------------------
-            Layout Structure (Collapsible Sidebar + Main)
-        -------------------------------------------------- */
         .layout-container {
             display: flex;
             width: 100%;
@@ -202,16 +199,6 @@
             flex-shrink: 0;
         }
 
-        .nav-badge {
-            margin-left: auto;
-            font-size: 0.65rem;
-            padding: 2px 8px;
-            border-radius: 12px;
-            background: rgba(198, 156, 109, 0.3);
-            color: var(--accent-gold-light);
-            border: 1px solid rgba(198, 156, 109, 0.4);
-        }
-
         .sidebar-footer {
             padding-top: 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -350,7 +337,7 @@
         }
 
         /* --------------------------------------------------
-            Single Card Table Area (修正版單張桌面)
+            Card Table Area
         -------------------------------------------------- */
         .card-table {
             background: var(--bg-card);
@@ -497,24 +484,26 @@
             text-align: center;
         }
 
-        /* 🖼️ 正面（星空背景卡面） */
+        /* 🖼️ 正面 (完美修正鏡像問題) */
         .card-front {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             transform: rotateY(180deg);
-            padding: 16px;
+            padding: 0;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
             border: 1px solid rgba(251, 191, 36, 0.3);
         }
 
+        /* 🌟 設定 object-fit: contain，確保長寬不一的圖片都能不被裁切、完整顯示 */
         .card-image {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border-radius: 14px;
+            border-radius: 20px;
+            display: block;
         }
 
         .card-front-content {
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -550,8 +539,9 @@
             border: 1px solid rgba(251, 191, 36, 0.3);
         }
 
-        .card-display.has-error .card-image { display: none; }
-        .card-display.has-error .card-front-content { display: flex; }
+        /* 圖片載入失敗時轉為備用文字內容 */
+        .card-display.has-error .card-image { display: none !important; }
+        .card-display.has-error .card-front-content { display: flex !important; }
 
         /* ✨ 宇宙旋轉洗牌特效 */
         .shuffle-cosmic { animation: cosmicFly 0.9s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
@@ -734,7 +724,7 @@
     <span id="toastText">閉上雙眼、深呼吸，點擊卡槽連結宇宙訊息</span>
 </div>
 
-<!-- ✨ 音訊元件 (指定音訊路徑 05_bgmusic02.mp3) -->
+<!-- ✨ 音訊元件 -->
 <audio id="bgMusic" src="audio/05_bgmusic02.mp3" loop preload="auto"></audio>
 <audio id="flipSound" src="audio/04_flipcard.mp3" preload="auto"></audio>
 
@@ -776,6 +766,11 @@
                 <a class="nav-item" href="consultation.html" title="芳香身心檢查">
                     <span class="icon">🕊️</span>
                     <span class="nav-text">芳香身心檢查</span>
+                </a>
+
+                <a class="nav-item" href="alchemy.html" title="芳香調配所">
+                    <span class="icon">🧪</span>
+                    <span class="nav-text">芳香調配所</span>
                 </a>
             </nav>
         </div>
@@ -846,7 +841,7 @@
                     </div>
                     <div class="reading-block">
                         <h4>🕊️ 身心靈實踐與調和行動</h4>
-                        <p id="resAction">牌卡翻開後，這裡將提供你可以落實在日常生活中的自我照顧建議與心靈調和法則。</p>
+                        <p id="resAction">牌卡翻開後，這裡將提供你可以落留在日常生活中的自我照顧建議與心靈調和法則。</p>
                     </div>
                 </div>
             </div>
@@ -937,19 +932,40 @@
 
         // 30 筆宇宙身心靈指引資料庫
         const cosmicDeck = [
-            { id: 'c01', name: '內在光明', icon: '🌟', element: '星辰元素', message: '你內在的光芒比想像中更加耀眼。不要因為外界的陰影而懷疑自己的價值，現在是重拾自信、展現真正自我力量的時候。', action: '每天早晨對著鏡子深深吸氣，默想「我是光，我為自己帶來明亮」，並給予自己一個溫暖的微笑。' },
-            { id: 'c02', name: '宇宙信任', icon: '🌌', element: '星雲力量', message: '生命的每個安排都有其深意。即便當前的路途看似混沌不確定，宇宙也正在暗中為你鋪陳最適切的轉折與答案。', action: '放下過度控制與焦慮，試著將關注點從「結果」轉移到「當下的每一小步」。' },
-            { id: 'c03', name: '靈魂順流', icon: '🌊', element: '流體頻率', message: '不要試圖逆流而上，允許生命的經驗像水一樣穿過你。順應內在的直覺與脈動，你會發現阻礙自然消融。', action: '安排一段完全不設定目標的休息時間，隨心所欲地行走或聆聽放鬆的音樂。' },
-            { id: 'c04', name: '靜心深邃', icon: '🧘‍♀️', element: '虛空能量', message: '噪音來自外界，而答案早已安坐在你的內心深處。唯有當思緒沉澱下來時，你才能聽見靈魂微小而清晰的聲響。', action: '給自己 10 分鐘無打擾的靜坐時間，單純觀察呼吸的進出，不對任何想法做評價。' },
-            { id: 'c05', name: '心輪開放', icon: '💖', element: '愛與療癒', message: '過去的傷痛是為了讓你長出更深邃的同理與慈悲。溫柔地接納自己的脆弱，打開心門，愛會再度自然流動。', action: '將手放在胸口心輪位置，傳送一段祝福給過去曾經受挫的自己。' },
-            { id: 'c06', name: '直覺星芒', icon: '👁️', element: '第三眼頻率', message: '你的第一直覺往往是最純粹的靈魂訊號。不要過度用邏輯思維去壓抑內心突然產生的閃光與靈感。', action: '隨身記錄下今天湧現的直覺或夢境，它們可能隱含著重要的指引方向。' },
-            { id: 'c07', name: '邊界與保護', icon: '🛡️', element: '光盾頻率', message: '學會說「不」是一種崇高的自我尊重。保護好你的能量場，避免不必要的負面情緒與人際消耗侵蝕你的平靜。', action: '想像體外有一圈溫柔的金黃色光罩，隨時保護並滋養你的身心狀態。' },
-            { id: 'c08', name: '重生與蛻變', icon: '🦋', element: '鳳凰能量', message: '舊有的模式與習慣正在告終，這不是失去，而是為全新的生命型態騰出空間。勇敢迎接全新的自己。', action: '整理你的居住環境，清理掉不再使用或帶有沉重記憶的舊物件。' },
-            { id: 'c09', name: '大地錨定', icon: '🌳', element: '根基能量', message: '飛得再高，也需要扎實的根。將注意力帶回身體與當下，踏實地站穩腳步，你的夢想才有落實的土壤。', action: '脫下鞋子赤腳接觸草地或泥土，感覺將累積的疲憊釋放給大地。' },
-            { id: 'c10', name: '感恩豐盛', icon: '🌾', element: '黃金頻率', message: '當你聚焦於「已擁有」的美好時，豐盛的能量便會倍數放大。宇宙隨時都在回應你內在的匱乏或充實感。', action: '寫下 5 件今天值得感謝的微小事物，深深感受心中的滿足與感恩。' }
+            { id: '01', name: '自我定義', icon: '✨', element: '核心本質', message: '你並非由他人的眼光或過去的經歷所定義，你擁有隨時重塑自我的神聖權利。當你選擇以全新的角度看待自己，整個宇宙都會回應你的全新定義。', action: '拿出一張紙，寫下三個你希望具備的品質（如：從容、勇敢、豐盛），並以「我就是…」作為句首朗讀三次。' },
+            { id: '02', name: '愛的本質', icon: '💖', element: '無條件之愛', message: '愛不是一種需要爭取或交換的條件，而是你本就具備的生命源泉。當你停止向外尋求認可，轉而向內滋養自己，愛將自然滿溢並療癒周遭。', action: '今天做一件純粹為了討好自己的小事，不帶任何罪惡感地享受這份專屬於你的溫柔。' },
+            { id: '03', name: '感受的力量', icon: '🌊', element: '情緒覺知', message: '每一種感受都是靈魂發出的訊號，沒有優劣之分。允許情緒像浪潮般湧現並流過，不壓抑、不逃避，你將在平靜中獲取深刻的洞察。', action: '當負面或焦慮情緒升起時，停下手邊工作，做三次深呼吸，對自己說：「我看見你了，謝謝你的提醒。」' },
+            { id: '04', name: '當下的神聖', icon: '🕯️', element: '臨在能量', message: '過去已成雲煙，未來尚未顯化，唯有「現在」是你唯一能展現力量的時間點。將全副注意力帶回當下，你會發現此刻即是圓滿。', action: '進行「五感臨在練習」：停下腳步，找出周遭看到的 3 樣東西、聽到的 2 種聲音，以及一次深刻的呼吸感。' },
+            { id: '05', name: '自由意志', icon: '🕊️', element: '選擇之力', message: '你永遠擁有選擇的權利，即便在最受限的境遇中，你依然能選擇自己的心態與反應。奪回生命的主導權，從意識到你的自由開始。', action: '檢視一項讓你感到被迫或委屈的事情，試著將思維從「我不得不做」轉化為「我選擇這樣做，因為…」。' },
+            { id: '06', name: '同在一體', icon: '🌌', element: '萬物連結', message: '孤獨是一種錯覺，你的每一次呼吸都與萬物緊密相連。當你釋放競爭與隔閡的心態，將會感受到來自整個宇宙的無限支持。', action: '走出戶外，觀察一棵樹或天空，感受自身與這片大自然同頻共振的脈動與靜謐。' },
+            { id: '07', name: '創造的思維', icon: '🧠', element: '意識顯化', message: '你的思想是形塑現實的種子。當你專注於恐懼與缺乏，現實便會呈顯匱乏；當你聚焦於光明與可能，奇蹟便會在生命中萌芽。', action: '覺察你今天的念頭，每當發現自己在抱怨或焦慮時，立刻換個正面肯定的方式重新思考。' },
+            { id: '08', name: '痛苦的真相', icon: '🕯️', element: '覺醒契機', message: '痛苦往往不是為了懲罰你，而是為了喚醒你破除執著與幻象。穿越痛苦的迷霧後，你將看見靈魂深處堅不可摧的堅韌與智慧。', action: '思考近期讓你困擾的一件事，問問自己：「這個挑戰背後，想教會我什麼樣的靈魂課題？」' },
+            { id: '09', name: '最高的選擇', icon: '👑', element: '靈魂智慧', message: '在面對分歧與抉擇時，問問自己：「愛會怎麼做？」選擇出於愛而非出於恐懼的決定，將引領你走上最順遂且高頻的生命軌道。', action: '面對當前的難題，先將焦慮放下，靜心思考：哪一個選項能帶給我與他人最長遠的平靜與成長？' },
+            { id: '10', name: '感恩的奧秘', icon: '🌾', element: '豐盛頻率', message: '感恩是通往豐盛最高頻的鑰匙。當你學會珍惜眼前所擁有的微小事物，你便打開了接收宇宙更多饋贈的神盛通道。', action: '寫下 5 件今天發生的微小好事，並對每一件事在心中真誠地說一聲「謝謝」。' },
+            { id: '11', name: '神聖的導師', icon: '🌟', element: '高等引導', message: '生命中出現的每個人與境遇，都是為你量身打造的神聖導師。無論是帶來溫暖或挑戰，他們都在協助你完成靈魂的進化。', action: '在心中向一位曾讓你感到受傷或棘手的人致意，感謝他成為你生命中促使你成長的鏡子。' },
+            { id: '12', name: '內在的導師', icon: '🧘', element: '直覺智慧', message: '別再盲目向外尋求指引與答案，你內在的智慧庫早已具備解答一切疑慮的能力。靜下心來，傾聽那微弱卻堅定的內在聲音。', action: '找一個安靜的時間閉目冥想 5 分鐘，提出你的疑問，並靜靜等待心中第一個浮現的靈感或直覺。' },
+            { id: '13', name: '接納陰影', icon: '☯️', element: '完整自我', message: '光明與陰影都是你的一部分，逃避或排斥無助於圓滿。唯有勇敢擁抱自己的脆弱、不完美與陰暗面，你才能獲得真正的完整。', action: '接納自己今天表現不夠完美的地方，對自己說：「即便我有缺點，我依然無條件愛並接納我自己。」' },
+            { id: '14', name: '給予即獲得', icon: '🤲', element: '能量循環', message: '宇宙的能量遵循著循環法則。當你慷慨地給予善意、祝福或協助時，這份正向的流動終將以意想不到的方式加倍回饋到你身上。', action: '今天主動給予身邊的人一個真誠的讚美，或是發送一段溫暖的問候訊息。' },
+            { id: '15', name: '對比的力量', icon: '⚖️', element: '明辨清明', message: '黑暗讓人更珍惜光明，匱乏讓人更懂得豐盛。生命中的對比與落差，是為了讓你更清晰地辨識出自己真正渴望的生命方向。', action: '當你感到討厭某種狀況時，立刻藉由這個對比列出：「那我真正想要體驗的理想狀態是什麼？」' },
+            { id: '16', name: '超越審判', icon: '🕊️', element: '寬恕與釋懷', message: '評斷與指責只會加深內心的枷鎖。放下對他人與自己的嚴苛審判，以寬容和理解替代對錯的爭辯，你將獲得無比的自由。', action: '放下一個對他人的刻板印象或批評，嘗試站在對方的立場思考其背後的難處。' },
+            { id: '17', name: '願望的實相', icon: '🌠', element: '願力顯化', message: '顯化的關鍵在於「感受已經擁有」。將你的信念與渴望相結合，在心中清晰地描繪目標實現時的情境，實相便會在物質界顯化。', action: '閉上雙眼 3 分鐘，想像你的願望已經實現的畫面，並深深體會那份喜悅、滿足與放鬆。' },
+            { id: '18', name: '真理的流動', icon: '🌿', element: '順應天道', message: '真理不是死板的教條，而是隨時保持彈性與流動的智慧。保持開放的心胸，隨時準備放下舊有的固執，擁抱更高的真理。', action: '檢視自己是否有某個過於堅持的舊觀念，試著站在反向的角度思考，尋找新的可能性。' },
+            { id: '19', name: '靈魂的旅程', icon: '🗺️', element: '生命的遠景', message: '人生是一場精彩的體驗之旅，而非一場必須過關斬將的競賽。放慢腳步，欣賞沿途的風景，享受每一個探索與體驗的過程。', action: '今天在通勤或散步時，放下手機，純粹觀察周遭的世界，享受這一段單純的旅程。' },
+            { id: '20', name: '恐懼的幻象', icon: '👁️', element: '破幻顯真', message: '恐懼往往只是心智投影出來的虛幻陰影，旨在阻止你跨出舒適圈。當你帶著覺知迎向它，恐懼便會如泡沫般消散無蹤。', action: '列出一件你一直想做卻因害怕而拖延的事，今天就為它踏出最小、最簡單的第一步。' },
+            { id: '21', name: '內在的平安', icon: '🪷', element: '寧靜中心', message: '外在的世界或許紛擾動盪，但你的內心深處永遠存在一片寧靜的聖所。學會在風暴中回到內在中心，安住於這份神聖的平靜。', action: '點燃香氛或放一段輕柔音樂，安靜地坐著，將手放在腹部，感受平穩綿長的呼吸。' },
+            { id: '22', name: '生命的遊戲', icon: '🎨', element: '童心喜悅', message: '別把人生過得太過嚴肅！生命本該是一場充滿好奇與探索的遊戲。找回你的童心，以輕盈、玩樂的心態迎接每一個挑戰。', action: '嘗試一件你很久沒做但覺得很有趣的小事，放開束縛，純粹地去享受樂趣。' },
+            { id: '23', name: '關係的鏡像', icon: '🪞', element: '鏡映反射', message: '你所投射出去的，都會反映在人際關係中。身邊的人都是你內在狀態的鏡子，透過理解他人，你將更深入地認識真正的自己。', action: '當你對身邊某人的行為產生強烈反應時，問問自己：「這反映了我內在什麼樣的期待或焦慮？」' },
+            { id: '24', name: '靈魂的無限性', icon: '🌌', element: '無邊潛能', message: '你的本質是無限的意識，不受肉身或環境的絕對約束。打破自己設下的框架與限制，你的潛能遠比你想像的更為浩瀚。', action: '對自己大聲說出肯定的宣告：「我的潛能無窮無盡，我允許自己展現無限的可能！」' },
+            { id: '25', name: '自然的力量', icon: '🌻', element: '大地療癒', message: '大自然擁有神奇的自癒與調和頻率。當你感到身心俱疲時，重回大自然的懷抱，讓花草樹木與陽光重新為你的能量場充沛打氣。', action: '去公園走走、觸摸植物的葉片，或是讓午後的陽光灑在身上，感受大自然的療癒力。' },
+            { id: '26', name: '改變的力量', icon: '🦋', element: '順應轉化', message: '改變是生命中唯一的不變。不要害怕秩序的重組，每一個改變的背後都蘊藏著突破與升級的契機，順應改變，勇敢前行。', action: '改變一個日常的小習慣（如換一條路線回家、嘗試新的早餐），體會打破慣性帶來的全新新鮮感。' },
+            { id: '27', name: '言語的魔法', icon: '📜', element: '聲頻創造', message: '你所說出口的每一個字句都帶有強大的能量場。停止使用負面、批判或匱乏的語言，用讚美、祝福與正向的話語創造幸福。', action: '留意你今天的言語，嘗試一整天都不說任何抱怨或酸苦的話，只說具有建構性與鼓勵性的語言。' },
+            { id: '28', name: '奇蹟的定義', icon: '🌈', element: '恩典顯化', message: '奇蹟並非違反自然規律，而是當你的意識轉化為愛與信任時自然發生的事。敞開雙臂，隨時準備迎接收獲奇蹟的喜悅。', action: '保持期待的心情，相信今天會有意想不到的幸運與好消息降臨在你身上。' },
+            { id: '29', name: '臣服與信任', icon: '🕊️', element: '鬆開執著', message: '臣服不是放棄或軟弱，而是深刻明白宇宙有著比你更宏大的安排。鬆開緊握的手掌，將焦慮交付出去，讓事情自然圓滿。', action: '深呼吸，將胸口緊繃的力量釋放出來，對宇宙默想：「我放手，我信任一切都有最好的安排。」' },
+            { id: '30', name: '終極的真理', icon: '☀️', element: '無上覺知', message: '穿越層層的幻象與經歷，最終你會發現：你一直都是完整的，你本就是愛、光明與生命本身。萬事萬物皆在神聖的圓滿之中。', action: '安靜地將手放在心口，感受自己的心跳，體會「我存在，這本身就是一個無比神聖的奇蹟」。' }
         ];
 
-        const IMG_BASE_PATH = 'img/';
+        // 圖片基礎路徑
+        const IMG_BASE_PATH = 'img/mental/';
         let currentCard = null;
         let isShuffled = false;
 
@@ -966,30 +982,34 @@
         const resMessage = document.getElementById('resMessage');
         const resAction = document.getElementById('resAction');
 
-        // 圖片自動載入邏輯 (尋找 jpg -> png -> 失敗則顯示 Emoji 卡面)
-        function getImagePath(card, ext) {
-            return IMG_BASE_PATH + encodeURIComponent(`${card.id} ${card.name}.${ext}`);
-        }
+        // ✨ 自動判斷 jpg / png 機制：先使用 JS Image 預載成功後才渲染
+        function autoDetectAndLoadImage(card, imgElement, displayContainer) {
+            const fileName = `${card.id} ${card.name}`;
+            const jpgPath = `${IMG_BASE_PATH}${fileName}.jpg`;
+            const pngPath = `${IMG_BASE_PATH}${fileName}.png`;
 
-        function loadImageWithAutoFormat(img, card, el) {
-            const extensions = ['jpg', 'png'];
-            let currentExtIndex = 0;
+            displayContainer.classList.remove('has-error');
 
-            function tryLoad() {
-                if (currentExtIndex >= extensions.length) {
-                    el.classList.add('has-error');
-                    return;
-                }
-                const imgPath = getImagePath(card, extensions[currentExtIndex]);
-                img.src = imgPath;
+            const testJpg = new Image();
+            testJpg.src = jpgPath;
+            
+            testJpg.onload = function() {
+                imgElement.src = jpgPath;
+            };
 
-                img.onload = function() { el.classList.remove('has-error'); };
-                img.onerror = function() {
-                    currentExtIndex++;
-                    setTimeout(tryLoad, 100);
+            testJpg.onerror = function() {
+                const testPng = new Image();
+                testPng.src = pngPath;
+
+                testPng.onload = function() {
+                    imgElement.src = pngPath;
                 };
-            }
-            tryLoad();
+
+                testPng.onerror = function() {
+                    // 若 jpg 與 png 都載入失敗，顯示備用文字卡面
+                    displayContainer.classList.add('has-error');
+                };
+            };
         }
 
         // 洗牌與鏈結
@@ -1020,7 +1040,7 @@
             }
 
             cardFront.innerHTML = `
-                <img class="card-image" src="" alt="${currentCard.name}">
+                <img class="card-image" id="activeCardImg" src="" alt="${currentCard.name}">
                 <div class="card-front-content">
                     <div class="card-icon">${currentCard.icon}</div>
                     <div class="card-title">${currentCard.name}</div>
@@ -1028,8 +1048,8 @@
                 </div>
             `;
 
-            const img = cardFront.querySelector('.card-image');
-            loadImageWithAutoFormat(img, currentCard, cardDisplay);
+            const imgElement = document.getElementById('activeCardImg');
+            autoDetectAndLoadImage(currentCard, imgElement, cardDisplay);
 
             playFlipSound();
             cardDisplay.classList.add('flipped');

@@ -166,7 +166,7 @@
         .bgm-toggle-btn:hover { transform: scale(1.05); border-color: var(--accent-terracotta); background: #ffffff; }
 
         /* --------------------------------------------------
-           舞台區塊（助理立繪靠左對齊設定）
+            舞台區塊（助理立繪靠左對齊設定）
         -------------------------------------------------- */
         .stage-container {
             position: relative;
@@ -364,8 +364,35 @@
             .brand-logo { font-size: 1.3rem; margin-bottom: 0; }
             .brand-title { font-size: 0.95rem; }
             .brand-subtitle { font-size: 0.55rem; }
-            .nav-menu { flex-direction: row; overflow-x: auto; margin: 8px -16px 0 -16px; padding: 4px 16px; gap: 8px; }
-            .nav-item { white-space: nowrap; padding: 6px 14px; font-size: 0.85rem; }
+            
+            .nav-menu { 
+                flex-direction: row; 
+                overflow-x: auto; 
+                margin: 8px -16px 0 -16px; 
+                padding: 6px 16px; 
+                gap: 8px; 
+            }
+            
+            /* 手機版選單項目（未選取狀態保持無框簡潔） */
+            .nav-item { 
+                white-space: nowrap; 
+                padding: 6px 14px; 
+                font-size: 0.85rem; 
+                border-radius: 20px;
+                border: 1px solid transparent;
+                background: transparent;
+                transition: all 0.3s ease;
+            }
+
+            /* ✨ 當前選取到的選項（.active）：金色圓角邊框與質感微光 */
+            .nav-item.active {
+                background: linear-gradient(135deg, rgba(198, 156, 109, 0.3) 0%, rgba(198, 156, 109, 0.1) 100%);
+                border: 1px solid var(--accent-gold-light);
+                color: var(--accent-gold-light);
+                font-weight: 600;
+                box-shadow: 0 0 10px rgba(198, 156, 109, 0.25);
+            }
+
             .sidebar-footer { display: none; }
             .main-wrapper, .sidebar.collapsed ~ .main-wrapper { margin-left: 0; padding: 20px 16px; }
             .main-choice-container, .question-grid, .organ-grid { grid-template-columns: 1fr; }
@@ -648,7 +675,7 @@
                 title: "改善睡眠與失眠問題 😴",
                 intro: "夜間難以入睡往往與<b>交感神經過度興奮</b>有關。植物香氣分子透過嗅覺傳導至大腦邊緣系統，調節褪黑激素分泌並引導深層睡眠：",
                 oils: [
-                    { name: "💜 純正薰衣草", effect: "含豐富乙酸芳樟酯，能鎮定中樞神經、降低心率，舒緩夜間焦慮。" },
+                    { name: "💜 純正薰衣草", effect: "含豐富乙酸芳樟酯，能鎮定中樞神經、降低心律，舒緩夜間焦慮。" },
                     { name: "🪷 檀香", effect: "高濃度檀香醇能撫平腦波，為大腦帶來寧靜沉穩的深層安眠感。" },
                     { name: "🌱 甜馬鬱蘭", effect: "深層放鬆緊繃的肌肉與神經，適合因壓力肌肉酸痛而失眠者。" },
                     { name: "🌿 纈草", effect: "強效的鎮定強心作用，抑制神經過度興奮，大幅縮短入睡所需時間。" }

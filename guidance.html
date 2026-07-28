@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>🌿 芳香心靈 · 心靈指引</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+TC:wght@300;400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f5f0eb;
+            --bg-card: rgba(255, 253, 249, 0.75);
+            --sidebar-bg: rgba(28, 43, 36, 0.94);
+            --text-main: #2c2520;
+            --text-muted: #7A6F68;
+            --accent-gold: #c69c6d;
+            --accent-gold-light: #e8d0b5;
+            --accent-gold-glow: rgba(198, 156, 109, 0.6);
+            --accent-sage: #4a6352;
+            --accent-sage-light: #e3ece6;
+            --border-light: rgba(198, 156, 109, 0.25);
+            --shadow-soft: 0 20px 40px rgba(44, 37, 32, 0.08);
+            --shadow-card: 0 16px 36px rgba(28, 43, 36, 0.16);
+            --font-serif: 'Noto Serif TC', serif;
+            --font-sans: 'Plus Jakarta Sans', 'PingFang TC', sans-serif;
+            --font-title: 'Cinzel', serif;
+            --sidebar-width: 280px;
+            --sidebar-collapsed-width: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: #eef2ee;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(227, 236, 230, 0.8) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(232, 208, 181, 0.4) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(245, 240, 235, 0.9) 0px, transparent 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* --------------------------------------------------
+            Layout Structure (Collapsible Sidebar + Main)
+        -------------------------------------------------- */
+        .layout-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* 🌿 原版可收折側邊欄 Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #f5f0eb;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            z-index: 100;
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+            padding: 30px 12px;
+        }
+
+        .sidebar-toggle-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--accent-gold-light);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+
+        .sidebar.collapsed .sidebar-toggle-btn { align-self: center; }
+
+        .sidebar-toggle-btn:hover {
+            background: rgba(198, 156, 109, 0.25);
+            border-color: var(--accent-gold);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .brand-header {
+            text-align: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed .brand-title,
+        .sidebar.collapsed .brand-subtitle,
+        .sidebar.collapsed .sidebar-footer,
+        .sidebar.collapsed .nav-text,
+        .sidebar.collapsed .nav-badge {
+            display: none;
+            opacity: 0;
+        }
+
+        .brand-logo {
+            font-size: 2rem;
+            margin-bottom: 6px;
+            display: block;
+            filter: drop-shadow(0 2px 8px rgba(198, 156, 109, 0.4));
+        }
+
+        .brand-title {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .brand-subtitle {
+            font-family: var(--font-title);
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--accent-gold);
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 24px 0;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+            padding: 14px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            transform: translateX(3px);
+        }
+
+        .sidebar.collapsed .nav-item:hover { transform: scale(1.1); }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(198, 156, 109, 0.3) 0%, rgba(198, 156, 109, 0.1) 100%);
+            border-color: rgba(198, 156, 109, 0.4);
+            color: var(--accent-gold-light);
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-item .icon {
+            font-size: 1.3rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: rgba(198, 156, 109, 0.3);
+            color: var(--accent-gold-light);
+            border: 1px solid rgba(198, 156, 109, 0.4);
+        }
+
+        .sidebar-footer {
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px 50px;
+            max-width: 1400px;
+            transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar.collapsed ~ .main-wrapper { margin-left: var(--sidebar-collapsed-width); }
+
+        /* 頂部控制欄 Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-header h2 {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: 2px;
+        }
+
+        .page-header p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .audio-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 253, 249, 0.85);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--accent-sage);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .audio-toggle-btn:hover {
+            background: #fff;
+            border-color: var(--accent-gold);
+            transform: translateY(-1px);
+        }
+
+        .audio-toggle-btn.muted {
+            color: var(--text-muted);
+            opacity: 0.8;
+            background: rgba(230, 225, 220, 0.6);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 253, 249, 0.85);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--accent-sage);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            backdrop-filter: blur(8px);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.5; }
+        }
+
+        /* 提示 Toast */
+        .toast-hint {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: linear-gradient(135deg, rgba(28, 43, 36, 0.95) 0%, rgba(44, 63, 51, 0.95) 100%);
+            color: var(--accent-gold-light);
+            border: 1px solid var(--accent-gold);
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-family: var(--font-serif);
+            letter-spacing: 1.5px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast-hint.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* --------------------------------------------------
+            Single Card Table Area (修正版單張桌面)
+        -------------------------------------------------- */
+        .card-table {
+            background: var(--bg-card);
+            border-radius: 36px;
+            padding: 36px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+            backdrop-filter: blur(16px);
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .single-card-area {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 28px;
+        }
+
+        .card-slot {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 28px;
+            padding: 20px 16px;
+            border: 1.5px dashed rgba(198, 156, 109, 0.35);
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .slot-click-badge {
+            position: absolute;
+            top: -14px;
+            background: linear-gradient(135deg, #d4af37 0%, #b89028 100%);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 3px 12px;
+            border-radius: 12px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+            opacity: 0;
+            transform: translateY(6px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .card-slot.ready-to-draw .slot-click-badge {
+            opacity: 1;
+            transform: translateY(0);
+            animation: bounceBadge 1.8s infinite ease-in-out;
+        }
+
+        @keyframes bounceBadge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .card-slot.ready-to-draw {
+            border-style: solid;
+            border-color: var(--accent-gold);
+            background: rgba(255, 253, 249, 0.7);
+            animation: slotPulse 2.5s infinite ease-in-out;
+        }
+
+        @keyframes slotPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(198, 156, 109, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(198, 156, 109, 0.5); }
+        }
+
+        .card-slot:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--accent-gold);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-card);
+        }
+
+        .card-slot .label {
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--accent-sage);
+            background: var(--accent-sage-light);
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        /* 3D 卡牌顯示容器 */
+        .card-display {
+            width: 100%;
+            aspect-ratio: 3/4.4;
+            border-radius: 20px;
+            position: relative;
+            perspective: 1200px;
+            pointer-events: none;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            will-change: transform;
+        }
+
+        .card-display.flipped .card-inner { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        /* 🖼️ 卡背 */
+        .card-back {
+            background-color: #fdfbf7;
+            background-image: url('img/custom_card_back_2.png'); 
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 8px;
+            text-align: center;
+        }
+
+        /* 🖼️ 正面（星空背景卡面） */
+        .card-front {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            transform: rotateY(180deg);
+            padding: 16px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 14px;
+        }
+
+        .card-front-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            gap: 10px;
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            border-radius: 14px;
+            padding: 12px;
+            background: radial-gradient(circle at center, rgba(129, 140, 248, 0.15) 0%, transparent 70%);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.6));
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 1.5px;
+        }
+
+        .card-subtitle {
+            font-size: 0.78rem;
+            color: #fef08a;
+            letter-spacing: 1px;
+            background: rgba(251, 191, 36, 0.15);
+            padding: 3px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .card-display.has-error .card-image { display: none; }
+        .card-display.has-error .card-front-content { display: flex; }
+
+        /* ✨ 宇宙旋轉洗牌特效 */
+        .shuffle-cosmic { animation: cosmicFly 0.9s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
+
+        @keyframes cosmicFly {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: scale(0.85) rotate(180deg); opacity: 0.5; filter: blur(4px); }
+            100% { transform: scale(1) rotate(360deg); opacity: 1; filter: blur(0); }
+        }
+
+        /* Action Control Buttons Area */
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid transparent;
+            outline: none;
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            user-select: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            background: #fff;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3a4d40 0%, #223127 100%);
+            color: var(--accent-gold-light);
+            border-color: rgba(198, 156, 109, 0.3);
+            box-shadow: 0 6px 20px rgba(34, 49, 39, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #445b4c 0%, #2a3d31 100%);
+            color: #fff;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #b89028 100%);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25);
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #e0bc43 0%, #c49a2e 100%);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Card Reading Output (心靈深度指引區) */
+        .reading-section { width: 100%; }
+
+        .reading-card {
+            background: var(--bg-card);
+            border-radius: 32px;
+            padding: 36px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .reading-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid rgba(198, 156, 109, 0.2);
+            padding-bottom: 20px;
+        }
+
+        .reading-icon-large {
+            font-size: 2.8rem;
+            filter: drop-shadow(0 0 10px rgba(198, 156, 109, 0.4));
+        }
+
+        .reading-title-group h3 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--text-main);
+            letter-spacing: 1.5px;
+        }
+
+        .reading-title-group p {
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .reading-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .reading-block {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(198, 156, 109, 0.2);
+        }
+
+        .reading-block h4 {
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            color: var(--accent-sage);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .reading-block p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Responsive RWD */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 12px 16px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .sidebar.collapsed { width: 100%; padding: 12px 16px; }
+            .sidebar-toggle-btn { display: none; }
+            .brand-header { padding-bottom: 10px; border-bottom: none; }
+            .nav-menu { 
+                flex-direction: row; 
+                overflow-x: auto; 
+                margin: 10px -16px 0 -16px; 
+                padding: 4px 16px 10px 16px; 
+                gap: 8px;
+            }
+            .nav-item { white-space: nowrap; padding: 8px 14px; font-size: 0.85rem; border-radius: 20px; }
+            .sidebar-footer { display: none; }
+            .layout-container { flex-direction: column; }
+            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { margin-left: 0; padding: 24px 16px; }
+            .reading-body { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ✨ 提示浮框 -->
+<div class="toast-hint" id="toastHint">
+    <span>✨</span>
+    <span id="toastText">閉上雙眼、深呼吸，點擊卡槽連結宇宙訊息</span>
+</div>
+
+<!-- ✨ 音訊元件 (指定音訊路徑 05_bgmusic02.mp3) -->
+<audio id="bgMusic" src="audio/05_bgmusic02.mp3" loop preload="auto"></audio>
+<audio id="flipSound" src="audio/04_flipcard.mp3" preload="auto"></audio>
+
+<div class="layout-container">
+    <!-- 🌿 原版側邊欄 Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div>
+            <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="收折/展開選單">
+                <span id="toggleIcon">☰</span>
+            </button>
+
+            <div class="brand-header">
+                <span class="brand-logo">🌿</span>
+                <h1 class="brand-title">芳香心靈</h1>
+                <div class="brand-subtitle">Aroma Intuition</div>
+            </div>
+
+            <nav class="nav-menu">
+                <a class="nav-item" href="divination.html" title="三牌占卜">
+                    <span class="icon">✨</span>
+                    <span class="nav-text">三牌占卜</span>
+                </a>
+
+                <a class="nav-item" href="daily-oil.html" title="每日香氣詩籤">
+                    <span class="icon">📜</span>
+                    <span class="nav-text">每日香氣詩籤</span>
+                </a>
+
+                <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
+                    <span class="icon">📖</span>
+                    <span class="nav-text">芳香精油百科</span>
+                </a>
+
+                <a class="nav-item active" href="guidance.html" title="心靈指引">
+                    <span class="icon">🔮</span>
+                    <span class="nav-text">心靈指引</span>
+                </a>
+
+                <a class="nav-item" href="consultation.html" title="芳香身心檢查">
+                    <span class="icon">🕊️</span>
+                    <span class="nav-text">芳香身心檢查</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-footer">
+            <p>🌿 Aroma Divination v2.0</p>
+            <p>© 2026 靜心隨想 · 芳香占卜</p>
+        </div>
+    </aside>
+
+    <!-- 🔮 主要內容區 Main Content -->
+    <main class="main-wrapper">
+        <div class="top-bar">
+            <div class="page-header">
+                <h2>宇宙心靈指引 · 單張星辰卡</h2>
+                <p>凝聚當下的心靈頻率，接收來自宇宙與內在光明的啟示</p>
+            </div>
+            <div class="top-controls">
+                <button class="audio-toggle-btn" id="musicToggleBtn" title="切換背景音樂">
+                    <span id="musicIcon">🎵</span>
+                    <span id="musicStatusText">音樂：開</span>
+                </button>
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    <span id="modeDisplay">✦ 請先洗牌凝聚能量</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 卡牌桌面 -->
+        <section class="card-table">
+            <div class="single-card-area">
+                <div class="card-slot ready-to-draw" id="cardSlot">
+                    <div class="slot-click-badge">✨ 點擊卡片接收指引</div>
+                    <div class="label">🌟 當前宇宙頻率與指引</div>
+                    <div class="card-display" id="cardDisplay">
+                        <div class="card-inner">
+                            <div class="card-back"></div>
+                            <div class="card-front" id="cardFront">
+                                <!-- 動態渲染卡面 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作按鈕區 -->
+            <div class="action-bar">
+                <button class="btn btn-primary" id="shuffleBtn">🔄 洗牌與鏈結能量</button>
+                <button class="btn btn-gold" id="drawBtn" disabled>✨ 翻開靈魂指引</button>
+            </div>
+        </section>
+
+        <!-- 牌意解讀區 -->
+        <section class="reading-section">
+            <div class="reading-card">
+                <div class="reading-header">
+                    <div class="reading-icon-large" id="resIcon">🔮</div>
+                    <div class="reading-title-group">
+                        <h3 id="resTitle">靜心等待訊息...</h3>
+                        <p id="resSubtitle">--</p>
+                    </div>
+                </div>
+                <div class="reading-body">
+                    <div class="reading-block">
+                        <h4>🌌 星辰訊息與頻率啟示</h4>
+                        <p id="resMessage">請先點擊「洗牌與鏈結能量」，並在心中默想你近期需要尋求指引或解答的議題。</p>
+                    </div>
+                    <div class="reading-block">
+                        <h4>🕊️ 身心靈實踐與調和行動</h4>
+                        <p id="resAction">牌卡翻開後，這裡將提供你可以落實在日常生活中的自我照顧建議與心靈調和法則。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    (function() {
+        // 側邊欄控制
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        sidebarToggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            toggleIcon.textContent = '☰';
+        });
+
+        // Toast 提示框
+        const toastHint = document.getElementById('toastHint');
+        const toastText = document.getElementById('toastText');
+        let toastTimer = null;
+
+        function showToast(text) {
+            if (!toastHint) return;
+            toastText.textContent = text;
+            toastHint.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toastHint.classList.remove('show');
+            }, 4000);
+        }
+
+        // BGM 音訊控制
+        const bgMusic = document.getElementById('bgMusic');
+        const flipSound = document.getElementById('flipSound');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicStatusText = document.getElementById('musicStatusText');
+        let isMusicEnabled = true;
+
+        function playFlipSound() {
+            if (!flipSound) return;
+            try {
+                const soundClone = flipSound.cloneNode();
+                soundClone.volume = 1.0;
+                soundClone.play().catch(e => console.log('音效受限：', e));
+            } catch(e) {
+                flipSound.currentTime = 0;
+                flipSound.play().catch(err => console.log(err));
+            }
+        }
+
+        function tryPlayBgMusic() {
+            if (isMusicEnabled && bgMusic.paused) {
+                bgMusic.play().then(() => updateMusicUI(true)).catch(() => {});
+            }
+        }
+
+        function updateMusicUI(playing) {
+            if (playing) {
+                musicIcon.textContent = '🎵';
+                musicStatusText.textContent = '音樂：開';
+                musicToggleBtn.classList.remove('muted');
+            } else {
+                musicIcon.textContent = '🔇';
+                musicStatusText.textContent = '音樂：關';
+                musicToggleBtn.classList.add('muted');
+            }
+        }
+
+        musicToggleBtn.addEventListener('click', () => {
+            if (!bgMusic.paused) {
+                isMusicEnabled = false;
+                bgMusic.pause();
+                updateMusicUI(false);
+            } else {
+                isMusicEnabled = true;
+                bgMusic.play().then(() => updateMusicUI(true)).catch(e => console.warn(e));
+            }
+        });
+
+        document.addEventListener('click', function initAudioOnUserInteraction() {
+            tryPlayBgMusic();
+            document.removeEventListener('click', initAudioOnUserInteraction);
+        }, { once: true });
+
+        // 30 筆宇宙身心靈指引資料庫
+        const cosmicDeck = [
+            { id: 'c01', name: '內在光明', icon: '🌟', element: '星辰元素', message: '你內在的光芒比想像中更加耀眼。不要因為外界的陰影而懷疑自己的價值，現在是重拾自信、展現真正自我力量的時候。', action: '每天早晨對著鏡子深深吸氣，默想「我是光，我為自己帶來明亮」，並給予自己一個溫暖的微笑。' },
+            { id: 'c02', name: '宇宙信任', icon: '🌌', element: '星雲力量', message: '生命的每個安排都有其深意。即便當前的路途看似混沌不確定，宇宙也正在暗中為你鋪陳最適切的轉折與答案。', action: '放下過度控制與焦慮，試著將關注點從「結果」轉移到「當下的每一小步」。' },
+            { id: 'c03', name: '靈魂順流', icon: '🌊', element: '流體頻率', message: '不要試圖逆流而上，允許生命的經驗像水一樣穿過你。順應內在的直覺與脈動，你會發現阻礙自然消融。', action: '安排一段完全不設定目標的休息時間，隨心所欲地行走或聆聽放鬆的音樂。' },
+            { id: 'c04', name: '靜心深邃', icon: '🧘‍♀️', element: '虛空能量', message: '噪音來自外界，而答案早已安坐在你的內心深處。唯有當思緒沉澱下來時，你才能聽見靈魂微小而清晰的聲響。', action: '給自己 10 分鐘無打擾的靜坐時間，單純觀察呼吸的進出，不對任何想法做評價。' },
+            { id: 'c05', name: '心輪開放', icon: '💖', element: '愛與療癒', message: '過去的傷痛是為了讓你長出更深邃的同理與慈悲。溫柔地接納自己的脆弱，打開心門，愛會再度自然流動。', action: '將手放在胸口心輪位置，傳送一段祝福給過去曾經受挫的自己。' },
+            { id: 'c06', name: '直覺星芒', icon: '👁️', element: '第三眼頻率', message: '你的第一直覺往往是最純粹的靈魂訊號。不要過度用邏輯思維去壓抑內心突然產生的閃光與靈感。', action: '隨身記錄下今天湧現的直覺或夢境，它們可能隱含著重要的指引方向。' },
+            { id: 'c07', name: '邊界與保護', icon: '🛡️', element: '光盾頻率', message: '學會說「不」是一種崇高的自我尊重。保護好你的能量場，避免不必要的負面情緒與人際消耗侵蝕你的平靜。', action: '想像體外有一圈溫柔的金黃色光罩，隨時保護並滋養你的身心狀態。' },
+            { id: 'c08', name: '重生與蛻變', icon: '🦋', element: '鳳凰能量', message: '舊有的模式與習慣正在告終，這不是失去，而是為全新的生命型態騰出空間。勇敢迎接全新的自己。', action: '整理你的居住環境，清理掉不再使用或帶有沉重記憶的舊物件。' },
+            { id: 'c09', name: '大地錨定', icon: '🌳', element: '根基能量', message: '飛得再高，也需要扎實的根。將注意力帶回身體與當下，踏實地站穩腳步，你的夢想才有落實的土壤。', action: '脫下鞋子赤腳接觸草地或泥土，感覺將累積的疲憊釋放給大地。' },
+            { id: 'c10', name: '感恩豐盛', icon: '🌾', element: '黃金頻率', message: '當你聚焦於「已擁有」的美好時，豐盛的能量便會倍數放大。宇宙隨時都在回應你內在的匱乏或充實感。', action: '寫下 5 件今天值得感謝的微小事物，深深感受心中的滿足與感恩。' }
+        ];
+
+        const IMG_BASE_PATH = 'img/';
+        let currentCard = null;
+        let isShuffled = false;
+
+        const cardSlot = document.getElementById('cardSlot');
+        const cardDisplay = document.getElementById('cardDisplay');
+        const cardFront = document.getElementById('cardFront');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const drawBtn = document.getElementById('drawBtn');
+        const modeDisplay = document.getElementById('modeDisplay');
+
+        const resIcon = document.getElementById('resIcon');
+        const resTitle = document.getElementById('resTitle');
+        const resSubtitle = document.getElementById('resSubtitle');
+        const resMessage = document.getElementById('resMessage');
+        const resAction = document.getElementById('resAction');
+
+        // 圖片自動載入邏輯 (尋找 jpg -> png -> 失敗則顯示 Emoji 卡面)
+        function getImagePath(card, ext) {
+            return IMG_BASE_PATH + encodeURIComponent(`${card.id} ${card.name}.${ext}`);
+        }
+
+        function loadImageWithAutoFormat(img, card, el) {
+            const extensions = ['jpg', 'png'];
+            let currentExtIndex = 0;
+
+            function tryLoad() {
+                if (currentExtIndex >= extensions.length) {
+                    el.classList.add('has-error');
+                    return;
+                }
+                const imgPath = getImagePath(card, extensions[currentExtIndex]);
+                img.src = imgPath;
+
+                img.onload = function() { el.classList.remove('has-error'); };
+                img.onerror = function() {
+                    currentExtIndex++;
+                    setTimeout(tryLoad, 100);
+                };
+            }
+            tryLoad();
+        }
+
+        // 洗牌與鏈結
+        function shuffleDeck() {
+            tryPlayBgMusic();
+            cardDisplay.classList.remove('flipped', 'has-error');
+            cardDisplay.classList.add('shuffle-cosmic');
+
+            setTimeout(() => {
+                cardDisplay.classList.remove('shuffle-cosmic');
+                const randomIdx = Math.floor(Math.random() * cosmicDeck.length);
+                currentCard = cosmicDeck[randomIdx];
+                isShuffled = true;
+
+                drawBtn.disabled = false;
+                cardSlot.classList.add('ready-to-draw');
+                modeDisplay.textContent = '✦ 鏈結完成 · 請翻開卡牌';
+                showToast('✨ 能量已鏈結完成，點擊卡片翻開今日的心靈指引');
+            }, 900);
+        }
+
+        // 翻開卡牌
+        function drawCard() {
+            tryPlayBgMusic();
+            if (!isShuffled || !currentCard) {
+                showToast('請先點擊「洗牌與鏈結能量」！');
+                return;
+            }
+
+            cardFront.innerHTML = `
+                <img class="card-image" src="" alt="${currentCard.name}">
+                <div class="card-front-content">
+                    <div class="card-icon">${currentCard.icon}</div>
+                    <div class="card-title">${currentCard.name}</div>
+                    <div class="card-subtitle">${currentCard.element}</div>
+                </div>
+            `;
+
+            const img = cardFront.querySelector('.card-image');
+            loadImageWithAutoFormat(img, currentCard, cardDisplay);
+
+            playFlipSound();
+            cardDisplay.classList.add('flipped');
+            cardSlot.classList.remove('ready-to-draw');
+            drawBtn.disabled = true;
+            modeDisplay.textContent = '✦ 指引已顯化';
+
+            // 更新解讀區
+            resIcon.textContent = currentCard.icon;
+            resTitle.textContent = currentCard.name;
+            resSubtitle.textContent = `✦ 能量頻率：${currentCard.element}`;
+            resMessage.textContent = currentCard.message;
+            resAction.textContent = currentCard.action;
+
+            showToast(`📖 已顯化指引：「${currentCard.name}」，請細細品味下方啟示`);
+        }
+
+        // 事件綁定
+        shuffleBtn.addEventListener('click', shuffleDeck);
+        drawBtn.addEventListener('click', drawCard);
+        cardSlot.addEventListener('click', () => {
+            if (!cardDisplay.classList.contains('flipped')) {
+                drawCard();
+            }
+        });
+
+    })();
+</script>
+</body>
+</html>

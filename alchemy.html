@@ -558,6 +558,19 @@
         }
     };
 
+    // ✨ 動態建議情境對照資料庫
+    const scenarioMap = {
+        fruit: "適合於<b>早晨起床提振精神、工作或讀書疲累時擴香</b>，能瞬間帶來明亮歡愉的氛圍，激發靈感與專注力。",
+        floral: "適合於<b>沐浴後的放鬆時光、約會前夕或自我寵愛時刻</b>，建議加入基底油塗抹於胸口與脈搏處，滋養情感與感性能量。",
+        herbal: "適合於<b>高壓工作後的下班夜晚、睡前放鬆時</b>，非常推薦加入水氧機擴香或進行肩頸按摩，幫助緊繃的神經系統重新歸零。",
+        resin: "適合於<b>瑜伽練習、靜心冥想、深層思考或深夜閱讀時</b>使用，能幫助呼吸變沉變慢，建立神聖平靜的專屬氣場。",
+        spice: "適合於<b>手腳冰冷、體力耗竭或缺乏動力時</b>，建議調和基底油按摩腹部或四肢，能迅速活絡氣血、注入充沛熱情。",
+        wood: "適合於<b>遠離喧囂的沉澱時刻、遭遇挫折需要安定感時</b>，宛如置身森林浴，能提供堅毅穩固的心靈後盾。",
+        root: "適合於<b>嚴重失眠、極度不安或感覺身心懸空（缺乏安全感）時</b>，適合睡前塗抹腳底或滴於枕頭角，提供強效接地與深層安睡。",
+        seed: "適合於<b>飯後消化不良、情緒壓抑或生理期前夕</b>，建議順時針輕柔按摩腹部，幫助身心順暢流動與釋放。",
+        leaf: "適合於<b>季節交替、空氣不佳、思緒渾濁或需要劃清人際邊界時</b>，適合日間擴香或做成隨身香氛噴霧，帶來清晰順暢的呼吸。"
+    };
+
     let currentFormula = [];
     const MAX_DROPS = 10;
 
@@ -655,8 +668,11 @@
 
         playSound(soundBottle);
 
+        // 修正 1：正確取得主導精油物件與其滴數
         let mainOilItem = currentFormula.reduce((prev, current) => (prev.drops > current.drops) ? prev : current);
         let mainOil = mainOilItem.oil;
+        let mainOilDrops = mainOilItem.drops; // 修正 undefined 的問題
+        let mainCatKey = mainOilItem.catKey;
         let totalDrops = currentFormula.reduce((sum, item) => sum + item.drops, 0);
 
         let topNotes = [], middleNotes = [], baseNotes = [];
@@ -676,12 +692,22 @@
         let meanings = currentFormula.map(i => `<b>${i.oil.name}</b>（${i.oil.meaning}）`).join(' + ');
         let effects = currentFormula.map(i => i.oil.effect).join('；');
 
+        // 修正 2：根據主導精油類別動態產生建議使用情境
+        let scenarioText = scenarioMap[mainCatKey] || "適合於靜心冥想、夜間擴香或加入基底油進行局部按摩時使用。";
+
+        // 進階加分：複方協同效應檢查（若同時含有提振類與沉靜類精油）
+        let hasElevating = currentFormula.some(i => ['fruit', 'spice', 'leaf'].includes(i.catKey));
+        let hasGrounding = currentFormula.some(i => ['resin', 'root', 'wood'].includes(i.catKey));
+        if (hasElevating && hasGrounding) {
+            scenarioText += " <br><span style='color:var(--accent-terracotta); font-size:0.83rem;'>✦ 此配方同時具備『揚升提振』與『扎根沉靜』的雙重調和特性，非常適合做為<b>全天候動態平衡的隨身氣場噴霧</b>。</span>";
+        }
+
         resultBody.innerHTML = `
             <div class="report-section">
                 <div class="report-section-title">✨ 配方氣場名稱
                     <span class="report-badge">${mainOil.meaning}之光</span>
                 </div>
-                <div>主導核心為 <b>${mainOil.name}</b>（${mainOil.drops}滴），整體配方濃度為 <b>${totalDrops}/10 滴</b>。</div>
+                <div>主導核心為 <b>${mainOil.name}</b>（${mainOilDrops}滴），整體配方濃度為 <b>${totalDrops}/10 滴</b>。</div>
             </div>
 
             <div class="report-section">
@@ -714,7 +740,7 @@
 
             <div class="report-section" style="margin-bottom:0;">
                 <div class="report-section-title">💡 建議使用情境</div>
-                <div>適合於<b>靜心冥想、夜間擴香或加入基底油進行局部按摩</b>時使用，幫助您獲得深層安適。</div>
+                <div>${scenarioText}</div>
             </div>
         `;
 
@@ -732,13 +758,12 @@
         sidebar.classList.toggle('collapsed');
     });
 
-    // 🔥【核心音效邏輯更新：隨便觸發即可播放】
+    // BGM 控制邏輯
     const bgm = document.getElementById('bgm');
     const bgmToggleBtn = document.getElementById('bgmToggleBtn');
     const bgmText = document.getElementById('bgmText');
     let isBgmPlaying = false;
 
-    // 播放音樂函式
     function startBgm() {
         if (!isBgmPlaying && bgm) {
             bgm.play().then(() => {
@@ -750,7 +775,6 @@
         }
     }
 
-    // 手動開關按鈕
     bgmToggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         if (bgm.paused) {
@@ -765,10 +789,8 @@
         }
     });
 
-    // 🔥 全域觸發器：頁面上的任何點擊、觸摸、滾動或按鍵，只要碰一下就自動啟動播放
     const unlockUserInteraction = () => {
         startBgm();
-        // 觸發一次後移除事件監聽，避免重複呼叫
         ['click', 'touchstart', 'keydown', 'scroll'].forEach(evt => {
             window.removeEventListener(evt, unlockUserInteraction);
         });

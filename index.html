@@ -99,7 +99,7 @@
         }
 
         /* --------------------------------------------------
-           舞台展示區域 (電腦版完全不變)
+            舞台展示區域
         -------------------------------------------------- */
         .stage-container {
             position: relative;
@@ -107,7 +107,7 @@
             width: 100%;
             max-width: 960px;
             margin: 0 auto;
-            min-height: 320px;
+            min-height: 380px; /* 稍微拉高高度以放更大張的展示圖 */
             display: flex;
             align-items: flex-end;
             transition: all 0.3s ease;
@@ -184,21 +184,21 @@
             white-space: nowrap;
         }
 
-        /* ✨ 嚮導右側展示圖容器 (電腦版) */
+        /* ✨ 嚮導右側展示圖容器 (加大尺寸) */
         .feature-preview-container {
             position: absolute;
-            left: 290px;
-            bottom: 110px;
+            left: 280px;
+            bottom: 20px;
             z-index: 4;
             display: flex;
-            align-items: flex-end;
-            justify-content: flex-start;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
             transform: translateY(15px) scale(0.95);
             transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
-            width: calc(100% - 310px);
-            height: 420px;
+            width: calc(100% - 290px);
+            height: 360px;
         }
 
         .feature-preview-container.active {
@@ -206,17 +206,20 @@
             transform: translateY(0) scale(1);
         }
 
+        /* 🔍 大幅調大圖片上限，讓細節更清楚 */
         .feature-preview-img {
-            max-width: 520px;
-            width: 100%;
-            max-height: 100%;
+            max-width: 480px;  /* 從 380px 放寬至 480px */
+            max-height: 350px; /* 從 280px 提高至 350px */
+            width: auto;
+            height: auto;
             object-fit: contain;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.12));
+            filter: drop-shadow(0 12px 24px rgba(0,0,0,0.15));
             background: transparent;
+            margin: 0 auto;
         }
 
         /* --------------------------------------------------
-           🍼 9 大精油選擇區塊 (3*3 高級無邊框排列)
+            🍼 9 大精油選擇區塊 (3*3 高級無邊框排列)
         -------------------------------------------------- */
         .dialog-container {
             width: 100%;
@@ -454,7 +457,7 @@
             to { opacity: 1; transform: translate(-50%, 0) scale(1); }
         }
 
-        /* 📱 手機版 RWD 最佳化 (✨ 圖片高度再向上拉高，完全不撞頭) */
+        /* 📱 手機版 RWD 最佳化 (手機版同步適度放寬放大) */
         @media (max-width: 600px) {
             .bgm-toggle-btn {
                 top: 12px;
@@ -484,19 +487,24 @@
                 max-height: 180px;
             }
 
-            /* ✨【再次提升】手機版展示圖：調高至 bottom: 240px，確保高過人物頭部 */
+            /* 手機版展示圖位置與最大尺寸調整 */
             .feature-preview-container {
                 left: 50%;
-                bottom: 240px; /* 從 180px 再往上調高到 240px，完美避開人物頭部 */
+                bottom: 220px;
                 transform: translateX(-50%) translateY(15px) scale(0.95);
-                width: 90%;
-                max-width: 400px;
-                height: 260px;
+                width: 95%;
+                max-width: 450px;
+                height: 240px;
                 justify-content: center;
             }
 
             .feature-preview-container.active {
                 transform: translateX(-50%) translateY(0) scale(1);
+            }
+
+            .feature-preview-img {
+                max-width: 340px;
+                max-height: 230px;
             }
 
             .bottle-img-wrap {
@@ -542,13 +550,13 @@
             </div>
         </div>
 
-        <!-- 正中間選擇結果精油瓶區塊 (進入介紹階段時會自動淡出隱藏) -->
+        <!-- 正中間選擇結果精油瓶區塊 -->
         <div class="center-bottle-container" id="centerBottleContainer">
             <img id="selectedBottleImg" src="" alt="選擇的精油瓶">
             <div class="split-label" id="selectedBottleLabel">精油類別</div>
         </div>
 
-        <!-- ✨ 嚮導右側（手機版為上方高處正中間）：無框大展示圖 -->
+        <!-- ✨ 嚮導右側展示圖容器 -->
         <div class="feature-preview-container" id="featurePreviewContainer">
             <img id="featureImg" class="feature-preview-img" src="" alt="功能展示圖">
         </div>
@@ -705,36 +713,44 @@
         };
 
         const initialDialogs = [
-            "你好！歡迎來到<b>【精油莊園】</b>，我是您的專屬精油助理 蘿拉",
+            "你好！歡迎來到<b>【精油莊園】</b>，我是您的專屬精油助理 蘿拉。",
             "在進到莊園前，想先了解一下您今天的直覺喜好...",
             "請問您平時或現在，最被哪一種植物類型的精油吸引呢？"
         ];
 
-        // 🌟 網站逐個功能介紹流程資料 (含選單介紹)
+        // 🌟 網站逐個功能介紹流程資料
         const siteIntroSteps = [
             {
-                text: "『精油莊園』是一座專為熱愛香氣與心靈平靜的你所打造的療癒森林。在這裡，你可以暫時放下外界的喧囂與疲憊。",
+                text: "知道了你喜歡的香型後，就來介紹一下我們所處的位置吧。『精油莊園』是一座專為熱愛香氣與心靈平靜的你所打造的療癒森林。在這裡，你可以暫時放下外界的喧囂與疲憊。",
                 img: null
             },
             {
-                text: "接下來，讓我為你介紹莊園裡的功能吧！",
+                text: "莊園裡一共為你準備了<b> 6 大專屬療癒功能</b>，接下來就讓我來一一為你介紹。",
                 img: null
             },
             {
-                text: "首先是 <b>【三牌靈魂占卜】</b> 🔮<br>透過正向能量、盲點難題與植物解答的三牌陣，為你當前的困惑提供深度的沉澱與解答。",
+                text: "1. <b>【三牌靈魂占卜】</b> 🔮<br>透過正向能量、盲點難題與植物解答的三牌陣，為你當前的困惑提供深度的沉澱與解答。",
                 img: "img/material/01 三牌占卜.png"
             },
             {
-                text: "接著是 <b>【每日香氣籤詩】</b> 📖<br>每天為自己靜心抽取一張專屬的植物香氣卡，收下屬於今天的直覺靈感與溫柔提醒。",
+                text: "2. <b>【每日香氣籤詩】</b> 📖<br>每天為自己靜心抽取一張專屬的植物香氣卡，收下屬於今天的直覺靈感與溫柔提醒。",
                 img: "img/material/02 每日香氣籤詩.png"
             },
             {
-                text: "還有 <b>【心靈指引】</b> 🕊️<br>傾聽心靈語錄的深層對話，感受大地萬物為你帶來的穩定與療癒力量。",
+                text: "3. <b>【芳香精油百科】</b> 📚<br>收錄了 45 種常見植物精油的詳細功效與情緒象徵，讓你可以隨時查閱香氣知識。",
+                img: "img/material/04 芳香精油百科.png"
+            },
+            {
+                text: "4. <b>【心靈指引】</b> 🕊️<br>靜下心抽取一張心靈牌卡，接收來自宇宙與大自然的深層對話，獲得內在平靜。",
                 img: "img/material/03 心靈指引.png"
             },
             {
-                text: "最後是 <b>【芳香精油百科】</b> 📚<br>收錄了 45 種常見植物精油的詳細功效與情緒象徵，讓你可以隨時查閱香氣知識。",
-                img: "img/material/04 芳香精油百科.png"
+                text: "5. <b>【芳香身心診察】</b> 🩺<br>不管是身體的不適還是情緒上的卡關，都能在這裡找到最貼合你當前狀態的植物精油建議。",
+                img: "img/material/06 芳香身心診察.png"
+            },
+            {
+                text: "6. <b>【精油調配所】</b> 🧪<br>在這裡你可以發揮創意，自由選擇配方與滴數，調配出獨一無二、屬於你的專屬香氣精油！",
+                img: "img/material/07 精油調配所.png"
             },
             {
                 text: "這些豐富的功能，你隨時都能在<b>選單功能列</b>中找到喔！如果是使用電腦瀏覽，選單位於<b>左側邊欄</b>；如果是使用手機，選單則會貼心地呈現在<b>螢幕上方</b>，方便你隨心切換探索。",

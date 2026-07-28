@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>🌿 真實調香指南 · 症狀檢測與手作精油指南</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+TC:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f7f3ed;
+            --bg-card: rgba(255, 253, 249, 0.9);
+            --sidebar-bg: rgba(28, 43, 36, 0.94);
+            --text-main: #3a322c;
+            --text-muted: #7d7268;
+            --accent-gold: #c69c6d;
+            --accent-gold-light: #e8d0b5;
+            --accent-sage: #5b7562;
+            --accent-sage-light: #eaf1ec;
+            --accent-terracotta: #d98a6c;
+            --accent-terracotta-light: #fbece6;
+            --border-warm: rgba(198, 156, 109, 0.3);
+            --shadow-handdrawn: 0 10px 25px rgba(91, 117, 98, 0.08), 0 2px 6px rgba(0,0,0,0.03);
+            --font-serif: 'Noto Serif TC', serif;
+            --font-sans: 'Plus Jakarta Sans', 'PingFang TC', sans-serif;
+            --font-title: 'Cinzel', serif;
+            --sidebar-width: 280px;
+            --sidebar-collapsed-width: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(234, 241, 236, 0.8) 0px, transparent 40%),
+                radial-gradient(at 90% 90%, rgba(251, 236, 230, 0.6) 0px, transparent 40%),
+                radial-gradient(at 50% 50%, #f7f3ed 0px, transparent 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        .layout-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* --------------------------------------------------
+           Sidebar
+        -------------------------------------------------- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #f5f0eb;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            z-index: 100;
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+            padding: 30px 12px;
+        }
+
+        .sidebar-toggle-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--accent-gold-light);
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1.2rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+
+        .sidebar.collapsed .sidebar-toggle-btn { align-self: center; }
+
+        .brand-header {
+            text-align: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .sidebar.collapsed .brand-title,
+        .sidebar.collapsed .brand-subtitle,
+        .sidebar.collapsed .sidebar-footer,
+        .sidebar.collapsed .nav-text,
+        .sidebar.collapsed .nav-badge {
+            display: none; opacity: 0;
+        }
+
+        .brand-logo { font-size: 2rem; margin-bottom: 6px; display: block; }
+        .brand-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; color: #fff; }
+        .brand-subtitle { font-family: var(--font-title); font-size: 0.65rem; color: var(--accent-gold); margin-top: 4px; letter-spacing: 2px; }
+
+        .nav-menu { display: flex; flex-direction: column; gap: 8px; margin: 18px 0; flex: 1; overflow-y: auto; }
+        .nav-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 12px 16px; border-radius: 16px;
+            color: rgba(255, 255, 255, 0.75); text-decoration: none;
+            font-size: 0.92rem; cursor: pointer; transition: all 0.25s ease;
+            border: 1px solid transparent;
+        }
+        .sidebar.collapsed .nav-item { justify-content: center; padding: 12px; }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(198, 156, 109, 0.3) 0%, rgba(198, 156, 109, 0.1) 100%);
+            border-color: rgba(198, 156, 109, 0.4); color: var(--accent-gold-light); font-weight: 500;
+        }
+        .nav-item .icon { font-size: 1.2rem; width: 22px; text-align: center; flex-shrink: 0; }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: var(--accent-terracotta);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.72rem; color: rgba(255, 255, 255, 0.4); text-align: center;
+        }
+
+        /* --------------------------------------------------
+           Main Content Workspace
+        -------------------------------------------------- */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1; padding: 40px 48px;
+            max-width: 1280px;
+            transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar.collapsed ~ .main-wrapper { margin-left: var(--sidebar-collapsed-width); }
+
+        .page-header-box {
+            text-align: center; margin-bottom: 36px;
+            background: rgba(255, 253, 249, 0.6);
+            padding: 30px; border-radius: 30px;
+            border: 1.5px dashed var(--border-warm);
+        }
+
+        .page-header-box h2 {
+            font-family: var(--font-serif); font-size: 2.2rem;
+            color: var(--accent-sage); font-weight: 700;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+
+        .page-header-box p {
+            font-size: 0.95rem; color: var(--text-muted); margin-top: 8px;
+        }
+
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: var(--accent-sage);
+            margin: 32px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --------------------------------------------------
+           身心症狀快速點選區 (Symptom Selector)
+        -------------------------------------------------- */
+        .symptom-picker-box {
+            background: #ffffff;
+            border: 2px solid var(--accent-gold);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: var(--shadow-handdrawn);
+            margin-bottom: 36px;
+        }
+
+        .picker-header {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-sage);
+            margin-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .picker-sub {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+        }
+
+        .tags-group-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin: 12px 0 8px 0;
+            letter-spacing: 1px;
+        }
+
+        .symptom-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .symptom-btn {
+            background: var(--bg-primary);
+            border: 1.5px solid var(--border-warm);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .symptom-btn:hover {
+            border-color: var(--accent-sage);
+            transform: translateY(-2px);
+        }
+
+        .symptom-btn.active {
+            background: var(--accent-sage);
+            color: #ffffff;
+            border-color: var(--accent-sage);
+            box-shadow: 0 4px 12px rgba(91, 117, 98, 0.25);
+        }
+
+        /* --------------------------------------------------
+           調配 4 步驟與計算器
+        -------------------------------------------------- */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .step-card {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-warm);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow-handdrawn);
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -10px;
+            left: 16px;
+            background: var(--accent-gold);
+            color: #fff;
+            font-family: var(--font-title);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .step-title {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 6px;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .calculator-box {
+            background: rgba(255, 253, 249, 0.85);
+            border: 1.5px dashed var(--accent-gold);
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-bottom: 36px;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .calc-item label {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .calc-item input, .calc-item select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-warm);
+            font-size: 0.9rem;
+            outline: none;
+            background: #fff;
+        }
+
+        .calc-result {
+            background: var(--accent-sage-light);
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 16px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+        }
+
+        .result-val {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-sage);
+        }
+
+        /* --------------------------------------------------
+           配方列表 Recipe Cards Grid
+        -------------------------------------------------- */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        .recipe-card {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-warm);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: var(--shadow-handdrawn);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 12px 30px rgba(91, 117, 98, 0.12);
+        }
+
+        .recipe-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .recipe-icon {
+            font-size: 1.8rem;
+            background: var(--accent-sage-light);
+            width: 52px; height: 52px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 16px;
+            flex-shrink: 0;
+            border: 1px dashed var(--accent-sage);
+        }
+
+        .recipe-title {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .recipe-tag {
+            font-size: 0.78rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .recipe-oil-list {
+            margin: 14px 0;
+            background: rgba(247, 243, 237, 0.75);
+            padding: 12px 16px;
+            border-radius: 16px;
+        }
+
+        .oil-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+            padding: 5px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.06);
+        }
+
+        .oil-item:last-child { border-bottom: none; }
+
+        .recipe-instruction {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            background: #ffffff;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(198, 156, 109, 0.2);
+        }
+
+        .caution-note {
+            font-size: 0.75rem;
+            color: var(--accent-terracotta);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .recipe-card.hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar { width: 100%; height: auto; position: relative; padding: 12px 16px; }
+            .sidebar.collapsed { width: 100%; padding: 12px 16px; }
+            .sidebar-toggle-btn { display: none; }
+            .brand-header { padding-bottom: 8px; border-bottom: none; }
+            .nav-menu { flex-direction: row; overflow-x: auto; margin: 8px -16px 0 -16px; padding: 4px 16px 8px 16px; gap: 8px; }
+            .nav-item { white-space: nowrap; padding: 8px 14px; font-size: 0.85rem; }
+            .sidebar-footer { display: none; }
+            .layout-container { flex-direction: column; }
+            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { margin-left: 0; padding: 24px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout-container">
+    <!-- 🌿 側邊欄 Sidebar (包含完整的 7 個選單) -->
+    <aside class="sidebar" id="sidebar">
+        <div>
+            <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="收折/展開選單">
+                <span id="toggleIcon">☰</span>
+            </button>
+
+            <div class="brand-header">
+                <span class="brand-logo">🌿</span>
+                <h1 class="brand-title">芳香心靈</h1>
+                <div class="brand-subtitle">Aroma Intuition</div>
+            </div>
+
+            <nav class="nav-menu">
+                <!-- 1. 三牌占卜 -->
+                <a class="nav-item" href="divination.html" title="三牌占卜">
+                    <span class="icon">✨</span>
+                    <span class="nav-text">三牌占卜</span>
+                </a>
+                <!-- 2. 每日香氣詩籤 -->
+                <a class="nav-item" href="daily-oil.html" title="每日香氣詩籤">
+                    <span class="icon">📜</span>
+                    <span class="nav-text">每日香氣詩籤</span>
+                </a>
+                <!-- 3. 芳香精油百科 -->
+                <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
+                    <span class="icon">📖</span>
+                    <span class="nav-text">芳香精油百科</span>
+                </a>
+                <!-- 4. 心靈指引 -->
+                <a class="nav-item" href="guidance.html" title="心靈指引">
+                    <span class="icon">🔮</span>
+                    <span class="nav-text">心靈指引</span>
+                </a>
+                <!-- 5. 芳香身心診察 -->
+                <a class="nav-item" href="consultation.html" title="芳香身心診察">
+                    <span class="icon">🕊️</span>
+                    <span class="nav-text">芳香身心診察</span>
+                </a>
+                <!-- 6. 芳香調配所 -->
+                <a class="nav-item" href="alchemy.html" title="芳香調配所">
+                    <span class="icon">🧪</span>
+                    <span class="nav-text">芳香調配所</span>
+                </a>
+                <!-- ✨ 7. 芳療處方箋 (新功能 NEW!) -->
+                <a class="nav-item active" href="remedy.html" title="真實調香指南">
+                    <span class="icon">🩺</span>
+                    <span class="nav-text">真實調香指南</span>
+                    <span class="nav-badge">NEW</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-footer">
+            <p>🌿 Aroma Remedy v1.0</p>
+            <p>© 2026 靜心隨想 · 芳香占卜</p>
+        </div>
+    </aside>
+
+    <!-- 📖 主要內容區 Main Content -->
+    <main class="main-wrapper">
+        <div class="page-header-box">
+            <h2>🩺 芳療處方箋 · 身心症狀對應庫</h2>
+            <p>點選您目前的身體或情緒困擾，即刻獲取專屬的專業精油處方與調配指引</p>
+        </div>
+
+        <!-- 🔍 症狀點選過濾器 -->
+        <div class="symptom-picker-box">
+            <div class="picker-header">🔍 身體與身心狀態快速檢測</div>
+            <div class="picker-sub">請點選您想改善的症狀或感受（可多選或切換）：</div>
+
+            <div class="tags-group-title">【身體不適與舒緩】</div>
+            <div class="symptom-tags">
+                <button class="symptom-btn active" data-symptom="all">✨ 顯示全部處方 (12)</button>
+                <button class="symptom-btn" data-symptom="sleep">🌙 入睡困難 / 淺眠</button>
+                <button class="symptom-btn" data-symptom="neck">💆 肩頸僵硬 / 肌肉痠痛</button>
+                <button class="symptom-btn" data-symptom="breathe">🌬️ 呼吸不順 / 鼻塞鼻過敏</button>
+                <button class="symptom-btn" data-symptom="pms">🩸 經痛 / 經前症候群</button>
+                <button class="symptom-btn" data-symptom="stomach">🫄 消化不良 / 脹氣腹痛</button>
+                <button class="symptom-btn" data-symptom="headache">🤯 偏頭痛 / 緊繃頭痛</button>
+                <button class="symptom-btn" data-symptom="skin">✨ 肌膚乾燥 / 撫平細紋</button>
+                <button class="symptom-btn" data-symptom="edema">💧 肢體水腫 / 循環不良</button>
+            </div>
+
+            <div class="tags-group-title">【情緒與心靈狀態】</div>
+            <div class="symptom-tags">
+                <button class="symptom-btn" data-symptom="focus">💡 精神萎靡 / 無法專注</button>
+                <button class="symptom-btn" data-symptom="anxiety">🧘 焦慮恐慌 / 心神不寧</button>
+                <button class="symptom-btn" data-symptom="burnout">🔋 職業倦怠 / 能量耗竭</button>
+                <button class="symptom-btn" data-symptom="heartbreak">💔 悲傷失落 / 低潮情緒</button>
+            </div>
+        </div>
+
+        <!-- 🧮 稀釋計算器與步驟 -->
+        <div class="section-title">✨ 基礎安全調配須知</div>
+        <div class="steps-container">
+            <div class="step-card">
+                <span class="step-number">STEP 1</span>
+                <div class="step-title">備妥基底油</div>
+                <div class="step-desc">選用荷荷芭油（長效好保存）或甜杏仁油（質地溫和潤澤）。</div>
+            </div>
+            <div class="step-card">
+                <span class="step-number">STEP 2</span>
+                <div class="step-title">確定稀釋比例</div>
+                <div class="step-desc">身體按摩一般建議 2%~3%（10ml 基底油搭配 4-6 滴精油）。</div>
+            </div>
+            <div class="step-card">
+                <span class="step-number">STEP 3</span>
+                <div class="step-title">後中前調滴入</div>
+                <div class="step-desc">依序加入：後調（木質/樹脂）→ 中調（花草）→ 前調（柑橘）。</div>
+            </div>
+            <div class="step-card">
+                <span class="step-number">STEP 4</span>
+                <div class="step-title">雙手滾動混合</div>
+                <div class="step-desc">將調配瓶置於雙掌溫和搓動 15 秒，靜置 24 小時香氣更和諧。</div>
+            </div>
+        </div>
+
+        <div class="calculator-box">
+            <div style="font-family: var(--font-serif); font-weight: 700; font-size: 1.05rem; color: var(--accent-sage);">
+                🧮 隨手精油滴數計算器
+            </div>
+            <div class="calc-grid">
+                <div class="calc-item">
+                    <label>預計調配容量 (ml)</label>
+                    <input type="number" id="calcVolume" value="10" min="5" max="100" step="5">
+                </div>
+                <div class="calc-item">
+                    <label>稀釋濃度 (%)</label>
+                    <select id="calcRatio">
+                        <option value="1">1% (臉部/敏感肌)</option>
+                        <option value="2" selected>2% (日常身體保養)</option>
+                        <option value="3">3% (局部急用舒緩)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="calc-result">
+                <div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">基底油</div>
+                    <div class="result-val" id="resBaseOil">10 ml</div>
+                </div>
+                <div style="font-size: 1.2rem; color: var(--border-warm);">+</div>
+                <div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">精油總滴數</div>
+                    <div class="result-val" id="resDropCount">4 滴</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🌿 12 大專業處方卡片 -->
+        <div class="section-title">📖 專業芳療處方庫（預設以 10ml 2% 濃度標示）</div>
+        <div class="recipe-grid" id="recipeGrid">
+
+            <!-- 1. 入睡困難 -->
+            <div class="recipe-card" data-tags="sleep anxiety">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">🌙</div>
+                        <div>
+                            <div class="recipe-title">深層沉睡助眠處方</div>
+                            <div class="recipe-tag">✦ 改善失眠 · 放鬆副交感神經</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>純正薰衣草 (中調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>甜馬鬱蘭 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>大西洋雪松 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>睡前 15 分鐘塗抹於胸口、太陽穴與雙腳腳底，深呼吸 3 次。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 肩頸僵硬 -->
+            <div class="recipe-card" data-tags="neck burnout">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">💆</div>
+                        <div>
+                            <div class="recipe-title">肩頸鬆筋活絡處方</div>
+                            <div class="recipe-tag">✦ 舒緩乳酸堆積 · 解除緊繃</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>迷迭香 (前/中調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>天竺葵 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>薑 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>洗澡後塗抹於斜方肌與後頸，由上往下溫柔推拿至吸收。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 呼吸不順 -->
+            <div class="recipe-card" data-tags="breathe">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">🌬️</div>
+                        <div>
+                            <div class="recipe-title">清爽通暢呼吸處方</div>
+                            <div class="recipe-tag">✦ 淨化呼吸道 · 舒緩鼻塞</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>澳洲尤加利 (前調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>綠花白千層 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>乳香 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>塗抹於前胸與頸部，或滴 1 滴於掌心搓熱後靠近鼻腔深深嗅吸。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 經痛 / PMS -->
+            <div class="recipe-card" data-tags="pms">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">🩸</div>
+                        <div>
+                            <div class="recipe-title">暖宮平衡撫痛處方</div>
+                            <div class="recipe-tag">✦ 舒緩經痛 · 調節荷爾蒙</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>快樂鼠尾草 (中調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>天竺葵 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>肉桂 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>經期前 3 天或生理期時，取適量以順時針方向輕柔按摩下腹部與後腰。
+                    </div>
+                    <div class="caution-note">⚠️ 孕婦請避免使用快樂鼠尾草與肉桂。</div>
+                </div>
+            </div>
+
+            <!-- 5. 消化不良 -->
+            <div class="recipe-card" data-tags="stomach">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">🫄</div>
+                        <div>
+                            <div class="recipe-title">順氣健胃舒腹處方</div>
+                            <div class="recipe-tag">✦ 促進腸胃蠕動 · 舒緩脹氣</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>甜茴香 (前/中調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>歐薄荷 (前調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>黑胡椒 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>餐後覺得胃脹不適時，以肚臍為中心，順時針方向按摩腹部 3 分鐘。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. 偏頭痛 -->
+            <div class="recipe-card" data-tags="headache focus">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">🤯</div>
+                        <div>
+                            <div class="recipe-title">清涼止痛減壓處方</div>
+                            <div class="recipe-tag">✦ 緩解血管性頭痛 · 提神止眩</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>歐薄荷 (前調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>純正薰衣草 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>乳香 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>塗抹於太陽穴、風池穴（後腦勺兩側凹陷處）與耳後，避開眼睛四周。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. 肌膚乾燥 -->
+            <div class="recipe-card" data-tags="skin">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">✨</div>
+                        <div>
+                            <div class="recipe-title">玫瑰煥采滋養處方</div>
+                            <div class="recipe-tag">✦ 深度滋潤 · 延緩老化抗紋</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>橙花 (前/中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>大馬士革玫瑰 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>廣藿香 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>晚上保養最後一道工序，取 2 滴於掌心溫熱後按壓全臉與頸部。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. 肢體水腫 -->
+            <div class="recipe-card" data-tags="edema">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">💧</div>
+                        <div>
+                            <div class="recipe-title">輕盈淋巴排空處方</div>
+                            <div class="recipe-tag">✦ 促進組織排水 · 舒緩腿部腫脹</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>葡萄柚 (前調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>天竺葵 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>大西洋雪松 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>由腳踝往大腿根部方向，單向向上推拿按摩，幫助淋巴回流。
+                    </div>
+                    <div class="caution-note">☀️ 含葡萄柚精油，白天使用後請注意防曬。</div>
+                </div>
+            </div>
+
+            <!-- 9. 無法專注 / 疲勞 -->
+            <div class="recipe-card" data-tags="focus burnout">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">💡</div>
+                        <div>
+                            <div class="recipe-title">思緒清晰喚醒處方</div>
+                            <div class="recipe-tag">✦ 清除腦霧 · 提高工作效率</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>檸檬 (前調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>迷迭香 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>花梨木 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>午後精神不濟時，塗抹於雙手手腕內側，靠近鼻子深呼吸嗅吸。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. 焦慮恐慌 -->
+            <div class="recipe-card" data-tags="anxiety">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">🧘</div>
+                        <div>
+                            <div class="recipe-title">靜心安神抗壓處方</div>
+                            <div class="recipe-tag">✦ 撫平情緒波動 · 找回安全感</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>甜橙 (前調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>苦橙葉 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>岩蘭草 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>感覺焦慮不安時，塗抹於心輪（胸口正中）與手腕，配合沉穩呼吸。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. 能量耗竭 -->
+            <div class="recipe-card" data-tags="burnout">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">🔋</div>
+                        <div>
+                            <div class="recipe-title">身心補氣強韌處方</div>
+                            <div class="recipe-tag">✦ 滋補元氣 · 突破心理停滯</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>山雞椒 (前調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>歐白芷根 (中/後調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>秘魯聖木 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>覺得被工作榨乾時，塗抹於後腰與腳底，重新建立堅韌屏障。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12. 悲傷失落 -->
+            <div class="recipe-card" data-tags="heartbreak">
+                <div>
+                    <div class="recipe-header">
+                        <div class="recipe-icon">💔</div>
+                        <div>
+                            <div class="recipe-title">溫柔撫慰療癒處方</div>
+                            <div class="recipe-tag">✦ 釋放壓抑悲傷 · 開放胸懷</div>
+                        </div>
+                    </div>
+                    <div class="recipe-oil-list">
+                        <div class="oil-item"><span>佛手柑 (前調)</span><b>2 滴</b></div>
+                        <div class="oil-item"><span>依蘭依蘭 (中調)</span><b>1 滴</b></div>
+                        <div class="oil-item"><span>安息香 (後調)</span><b>1 滴</b></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="recipe-instruction">
+                        <b>用法：</b>經歷低潮或失戀時，塗抹於胸口與肩膀，讓暖甜香氣給予溫暖擁抱感。
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script>
+(function() {
+    // 側邊欄邏輯
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+    sidebarToggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+    });
+
+    // 症狀按鈕過濾邏輯
+    const symptomBtns = document.querySelectorAll('.symptom-btn');
+    const recipeCards = document.querySelectorAll('.recipe-card');
+
+    symptomBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            symptomBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const selectedTag = btn.dataset.symptom;
+
+            recipeCards.forEach(card => {
+                if (selectedTag === 'all') {
+                    card.classList.remove('hidden');
+                } else {
+                    const cardTags = card.dataset.tags.split(' ');
+                    if (cardTags.includes(selectedTag)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    });
+
+    // 滴數計算器邏輯
+    const calcVolume = document.getElementById('calcVolume');
+    const calcRatio = document.getElementById('calcRatio');
+    const resBaseOil = document.getElementById('resBaseOil');
+    const resDropCount = document.getElementById('resDropCount');
+
+    function updateCalculator() {
+        const volume = parseFloat(calcVolume.value) || 0;
+        const ratio = parseFloat(calcRatio.value) || 0;
+        const totalDrops = Math.round(volume * 20 * (ratio / 100));
+
+        resBaseOil.textContent = `${volume} ml`;
+        resDropCount.textContent = `${totalDrops} 滴`;
+    }
+
+    calcVolume.addEventListener('input', updateCalculator);
+    calcRatio.addEventListener('change', updateCalculator);
+})();
+</script>
+</body>
+</html>

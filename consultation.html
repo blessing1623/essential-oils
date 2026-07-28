@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>🕊️ 晨光莊園 · 芳香身心診察 ✦</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+TC:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 👑 奢華晨光大地莊園色調 */
+            --bg-bright: #f8f5f0;
+            --bg-card: rgba(255, 253, 249, 0.85);
+            --sidebar-bg: rgba(28, 43, 36, 0.94);
+            --text-main: #242b26;
+            --text-muted: #737c75;
+            --accent-gold: #c69c6d;
+            --accent-gold-light: #e8d0b5;
+            --accent-terracotta: #c86a4b;
+            --accent-forest: #3d5245;
+            --border-light: rgba(198, 156, 109, 0.3);
+            --shadow-soft: 0 20px 40px rgba(44, 37, 32, 0.08);
+            --font-serif: 'Noto Serif TC', serif;
+            --font-sans: 'Plus Jakarta Sans', 'PingFang TC', sans-serif;
+            --font-title: 'Cinzel', serif;
+            --sidebar-width: 280px;
+            --sidebar-collapsed-width: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            background: var(--bg-bright);
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(229, 215, 190, 0.4) 0px, transparent 60%),
+                radial-gradient(at 90% 90%, rgba(200, 106, 75, 0.08) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(255, 255, 255, 0.8) 0px, transparent 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        .layout-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* 🌿 可收折側邊欄 Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #f5f0eb;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            z-index: 100;
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+            padding: 30px 12px;
+        }
+
+        .sidebar-toggle-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--accent-gold-light);
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+
+        .sidebar.collapsed .sidebar-toggle-btn { align-self: center; }
+
+        .brand-header {
+            text-align: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .sidebar.collapsed .brand-title,
+        .sidebar.collapsed .brand-subtitle,
+        .sidebar.collapsed .sidebar-footer,
+        .sidebar.collapsed .nav-text,
+        .sidebar.collapsed .nav-badge {
+            display: none; opacity: 0;
+        }
+
+        .brand-logo { font-size: 2rem; margin-bottom: 6px; display: block; }
+        .brand-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; letter-spacing: 2px; color: #fff; }
+        .brand-subtitle { font-family: var(--font-title); font-size: 0.65rem; letter-spacing: 3px; color: var(--accent-gold); margin-top: 4px; }
+
+        .nav-menu { display: flex; flex-direction: column; gap: 12px; margin: 24px 0; flex: 1; }
+        .nav-item {
+            display: flex; align-items: center; gap: 16px;
+            padding: 14px 16px; border-radius: 16px;
+            color: rgba(255, 255, 255, 0.75); text-decoration: none;
+            font-size: 0.95rem; font-family: var(--font-sans);
+            transition: all 0.25s ease; border: 1px solid transparent;
+        }
+
+        .nav-item:hover { background: rgba(255, 255, 255, 0.08); color: #fff; transform: translateX(3px); }
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(198, 156, 109, 0.3) 0%, rgba(198, 156, 109, 0.1) 100%);
+            border-color: rgba(198, 156, 109, 0.4); color: var(--accent-gold-light); font-weight: 500;
+        }
+
+        .nav-item .icon { font-size: 1.3rem; width: 24px; text-align: center; }
+
+        .sidebar-footer {
+            padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem; color: rgba(255, 255, 255, 0.4); text-align: center;
+        }
+
+        /* Main Content Area */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 30px 40px;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar.collapsed ~ .main-wrapper { margin-left: var(--sidebar-collapsed-width); }
+
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+        .intro-top-logo .logo-sub {
+            font-family: var(--font-title); font-size: 0.75rem; letter-spacing: 4px; color: #a3873c; text-transform: uppercase;
+        }
+        .intro-top-logo h1 { font-size: 1.6rem; font-weight: 500; color: var(--text-main); letter-spacing: 4px; }
+
+        .bgm-toggle-btn {
+            background: rgba(255, 255, 255, 0.85); border: 1px solid rgba(212, 175, 55, 0.5);
+            color: var(--accent-forest); font-family: var(--font-sans); font-size: 0.85rem;
+            padding: 8px 18px; border-radius: 30px; cursor: pointer; backdrop-filter: blur(8px);
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+        }
+        .bgm-toggle-btn:hover { transform: scale(1.05); border-color: var(--accent-terracotta); background: #ffffff; }
+
+        /* --------------------------------------------------
+           舞台區塊（助理立繪靠左對齊設定）
+        -------------------------------------------------- */
+        .stage-container {
+            position: relative;
+            flex: 1; width: 100%; max-width: 960px; margin: 0 auto;
+            min-height: 280px; display: flex; align-items: flex-end;
+        }
+
+        /* 👈 關鍵設定：助理立繪還原靠左排布 */
+        .assistant-container {
+            position: absolute;
+            left: 10px;
+            bottom: -20px;
+            z-index: 2;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .assistant-avatar {
+            width: 260px; height: 350px; display: flex; align-items: flex-end;
+            animation: characterFloat 4s ease-in-out infinite;
+        }
+
+        .assistant-img {
+            max-width: 100%; max-height: 100%; object-fit: contain;
+            filter: drop-shadow(0 15px 30px rgba(45, 60, 50, 0.2));
+        }
+
+        @keyframes characterFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* 互動容器 */
+        .dialog-container {
+            width: 100%; max-width: 880px; margin: 0 auto;
+            display: flex; flex-direction: column; gap: 16px; z-index: 5;
+        }
+
+        /* 第一層：方向分流選項（長方形卡片按鈕） */
+        .main-choice-container {
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            animation: fadeIn 0.5s ease;
+            margin-bottom: 10px;
+        }
+        .main-choice-container.active { display: grid; }
+
+        .main-choice-btn {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248, 245, 240, 0.9) 100%);
+            border: 1.5px solid var(--accent-gold);
+            border-radius: 24px;
+            padding: 22px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+
+        .main-choice-btn:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-terracotta);
+            box-shadow: 0 12px 30px rgba(200, 106, 75, 0.2);
+            background: #ffffff;
+        }
+
+        .main-choice-btn .icon-big { font-size: 2.2rem; }
+        .main-choice-btn .title-text { font-size: 1.1rem; font-weight: 600; color: var(--accent-forest); }
+        .main-choice-btn .desc-text { font-size: 0.82rem; color: var(--text-muted); font-family: var(--font-sans); }
+
+        /* 第二層 A：常見生活議題網格（長方形雙欄卡片） */
+        .question-grid {
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            animation: fadeIn 0.5s ease;
+            margin-bottom: 10px;
+        }
+        .question-grid.active { display: grid; }
+
+        /* 第二層 B：身體器官系統網格（長方形雙欄卡片） */
+        .organ-grid {
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            animation: fadeIn 0.5s ease;
+            margin-bottom: 10px;
+        }
+        .organ-grid.active { display: grid; }
+
+        .select-card-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 18px;
+            padding: 14px 18px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            user-select: none;
+        }
+
+        .select-card-btn:hover {
+            background: #ffffff;
+            border-color: var(--accent-terracotta);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(200, 106, 75, 0.15);
+        }
+
+        .select-card-btn .card-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .select-card-btn .card-title { font-size: 0.95rem; font-weight: 600; color: var(--text-main); }
+        .select-card-btn .card-desc { font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-sans); margin-top: 2px; }
+
+        /* 👑 高級燙金對話框 */
+        .dialog-box {
+            width: 100%; background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 24px;
+            padding: 24px 32px;
+            box-shadow: 0 20px 50px rgba(60, 70, 60, 0.08), inset 0 0 20px rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px); position: relative; cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .dialog-speaker {
+            position: absolute; top: -16px; left: 36px;
+            background: linear-gradient(135deg, #3d5245 0%, #24332a 100%);
+            color: #f7f3e8; font-family: var(--font-serif); font-size: 0.88rem; font-weight: 500;
+            padding: 4px 20px; border-radius: 20px; letter-spacing: 2px;
+            border: 1px solid rgba(212, 175, 55, 0.4); box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .dialog-text {
+            font-family: var(--font-serif); font-size: 1.05rem; color: var(--text-main);
+            line-height: 1.8; min-height: 65px; letter-spacing: 0.5px;
+        }
+
+        .dialog-text b { color: var(--accent-terracotta); font-weight: 600; }
+
+        .dialog-prompt {
+            position: absolute; bottom: 14px; right: 28px;
+            font-size: 0.85rem; color: var(--accent-terracotta); font-weight: 500; letter-spacing: 2px;
+            animation: bouncePrompt 1.4s infinite; display: none;
+        }
+
+        @keyframes bouncePrompt {
+            0%, 100% { transform: translateY(0); opacity: 0.7; }
+            50% { transform: translateY(4px); opacity: 1; }
+        }
+
+        /* 推薦精油清單展冊 */
+        .oils-recommend-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+
+        .oil-item-card {
+            background: rgba(248, 245, 240, 0.85); border: 1px solid rgba(198, 156, 109, 0.3);
+            border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .oil-item-card .oil-name { font-weight: 600; color: var(--accent-forest); font-size: 0.92rem; }
+        .oil-item-card .oil-effect { font-size: 0.82rem; color: var(--text-muted); font-family: var(--font-sans); }
+
+        /* 底部操作按鈕區 */
+        .action-options {
+            display: none; justify-content: flex-end; gap: 10px; margin-top: 14px; flex-wrap: wrap;
+        }
+        .action-options.active { display: flex; }
+
+        .btn-action {
+            background: linear-gradient(135deg, #d4af37 0%, #c86a4b 100%);
+            color: #ffffff; border: none; padding: 8px 20px; border-radius: 25px;
+            font-size: 0.85rem; font-family: var(--font-serif); font-weight: 500;
+            letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(200, 106, 75, 0.2); text-decoration: none;
+        }
+
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(200, 106, 75, 0.3); }
+        .btn-secondary-action {
+            background: rgba(255, 255, 255, 0.85); border: 1px solid var(--accent-gold);
+            color: var(--text-main);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 📱 手機版 RWD 最佳化 */
+        @media (max-width: 1024px) {
+            .layout-container { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 10px 16px; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+            .sidebar.collapsed { width: 100%; padding: 10px 16px; }
+            .sidebar-toggle-btn { display: none; }
+            .brand-header { padding-bottom: 8px; border-bottom: none; }
+            .brand-logo { font-size: 1.3rem; margin-bottom: 0; }
+            .brand-title { font-size: 0.95rem; }
+            .brand-subtitle { font-size: 0.55rem; }
+            .nav-menu { flex-direction: row; overflow-x: auto; margin: 8px -16px 0 -16px; padding: 4px 16px; gap: 8px; }
+            .nav-item { white-space: nowrap; padding: 6px 14px; font-size: 0.85rem; }
+            .sidebar-footer { display: none; }
+            .main-wrapper, .sidebar.collapsed ~ .main-wrapper { margin-left: 0; padding: 20px 16px; }
+            .main-choice-container, .question-grid, .organ-grid { grid-template-columns: 1fr; }
+            .assistant-container { left: -10px; bottom: -15px; }
+            .assistant-avatar { width: 180px; height: 240px; }
+            .stage-container { min-height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+<audio id="soundClick" src="audio/01_click.mp3" preload="auto"></audio>
+<audio id="soundBottle" src="audio/02_waterdroplets.mp3" preload="auto"></audio>
+<audio id="bgm" src="audio/05_bgmusic02.mp3" loop preload="auto"></audio>
+
+<div class="layout-container">
+    <!-- 🌿 可收折側邊欄 Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div>
+            <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="收折/展開選單">
+                <span id="toggleIcon">☰</span>
+            </button>
+
+            <div class="brand-header">
+                <span class="brand-logo">🌿</span>
+                <h1 class="brand-title">芳香心靈</h1>
+                <div class="brand-subtitle">Aroma Guidance</div>
+            </div>
+
+            <nav class="nav-menu">
+                <a class="nav-item" href="divination.html" title="三牌占卜">
+                    <span class="icon">✨</span>
+                    <span class="nav-text">三牌占卜</span>
+                </a>
+
+                <a class="nav-item" href="daily-oil.html" title="每日香氣詩籤">
+                    <span class="icon">📜</span>
+                    <span class="nav-text">每日香氣詩籤</span>
+                </a>
+
+                <a class="nav-item" href="encyclopedia.html" title="芳香精油百科">
+                    <span class="icon">📖</span>
+                    <span class="nav-text">芳香精油百科</span>
+                </a>
+
+                <a class="nav-item" href="guidance.html" title="心靈指引">
+                    <span class="icon">🔮</span>
+                    <span class="nav-text">心靈指引</span>
+                </a>
+
+                <!-- 🕊️ 芳香身心診察 (新功能) -->
+                <a class="nav-item active" href="wellness.html" title="芳香身心診察">
+                    <span class="icon">🕊️</span>
+                    <span class="nav-text">芳香身心診察</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-footer">
+            <p>🌿 Aroma Wellness v2.0</p>
+            <p>© 2026 靜心隨想 · 芳香診察</p>
+        </div>
+    </aside>
+
+    <!-- 🔮 主要內容區 Main Wrapper -->
+    <main class="main-wrapper">
+        <div class="top-bar">
+            <div class="intro-top-logo">
+                <div class="logo-sub">Holistic Consultation</div>
+                <h1>芳香身心診察</h1>
+            </div>
+
+            <button class="bgm-toggle-btn" id="bgmToggleBtn">
+                <span id="bgmIcon">🎵</span>
+                <span id="bgmText">音樂：關</span>
+            </button>
+        </div>
+
+        <!-- 舞台區塊 -->
+        <div class="stage-container">
+            <div class="assistant-container">
+                <div class="assistant-avatar">
+                    <img id="assistantImg" src="img/people/03 精油助理.png" alt="精油助理" class="assistant-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'280\'><text x=\'50%\' y=\'50%\' font-size=\'80\' text-anchor=\'middle\' dominant-baseline=\'middle\'>👩‍🰰</text></svg>'">
+                </div>
+            </div>
+        </div>
+
+        <!-- 互動卡片容器 -->
+        <div class="dialog-container">
+            
+            <!-- 第一層：方向分流選項（議題 vs 器官） -->
+            <div class="main-choice-container" id="mainChoiceContainer">
+                <div class="main-choice-btn" id="btnChooseTopic">
+                    <span class="icon-big">🧠</span>
+                    <div>
+                        <div class="title-text">針對【當前身心議題】</div>
+                        <div class="desc-text">改善睡眠、釋放壓力、提升專注或增強自信等情緒調節</div>
+                    </div>
+                </div>
+
+                <div class="main-choice-btn" id="btnChooseOrgan">
+                    <span class="icon-big">🫀</span>
+                    <div>
+                        <div class="title-text">針對【身體器官系統】</div>
+                        <div class="desc-text">呼吸道、腸胃消化、神經系統、心血管或肌骨保養</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第二層 A：常見生活議題 -->
+            <div class="question-grid" id="questionGrid">
+                <div class="select-card-btn topic-btn" data-key="sleep">
+                    <span class="card-icon">😴</span>
+                    <div>
+                        <div class="card-title">改善睡眠與失眠問題</div>
+                        <div class="card-desc">多夢易醒、夜間難入睡、身心緊繃</div>
+                    </div>
+                </div>
+
+                <div class="select-card-btn topic-btn" data-key="stress">
+                    <span class="card-icon">💆</span>
+                    <div>
+                        <div class="card-title">舒緩壓力與釋放焦慮</div>
+                        <div class="card-desc">高壓焦慮、情緒起伏大、緊繃受挫</div>
+                    </div>
+                </div>
+
+                <div class="select-card-btn topic-btn" data-key="focus">
+                    <span class="card-icon">⚡</span>
+                    <div>
+                        <div class="card-title">提升專注與工作效率</div>
+                        <div class="card-desc">頭腦昏沉、腦霧思緒混亂、缺乏效率</div>
+                    </div>
+                </div>
+
+                <div class="select-card-btn topic-btn" data-key="confidence">
+                    <span class="card-icon">💖</span>
+                    <div>
+                        <div class="card-title">喚醒自信與熱情動力</div>
+                        <div class="card-desc">缺乏突破勇氣、自我懷疑、停滯期</div>
+                    </div>
+                </div>
+
+                <div class="select-card-btn topic-btn" data-key="grounding">
+                    <span class="card-icon">🌳</span>
+                    <div>
+                        <div class="card-title">心靈平靜與深層接地</div>
+                        <div class="card-desc">心神不寧、缺乏安全感、需要沉澱</div>
+                    </div>
+                </div>
+
+                <div class="select-card-btn topic-btn" data-key="purify">
+                    <span class="card-icon">🍃</span>
+                    <div>
+                        <div class="card-title">呼吸順暢與淨化防護</div>
+                        <div class="card-desc">胸悶不暢、希望清掃負面氣場</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第二層 B：身體器官系統 -->
+            <div class="organ-grid" id="organGrid">
+                <div class="select-card-btn organ-btn" data-key="respiratory">
+                    <span class="card-icon">🫁</span>
+                    <div>
+                        <div class="card-title">呼吸系統與肺部調理</div>
+                        <div class="card-desc">過敏鼻塞、胸腔悶堵、空氣防護</div>
+                    </div>
+                </div>
+
+                <div class="select-card-btn organ-btn" data-key="digestive">
+                    <span class="card-icon">胃</span>
+                    <div>
+                        <div class="card-title">消化系統與腸胃保養</div>
+                        <div class="card-desc">脹氣腹痛、消化不良、情緒性胃緊繃</div>
+                    </div>
+                </div>
+
+                <div class="select-card-btn organ-btn" data-key="nervous">
+                    <span class="card-icon">🧠</span>
+                    <div>
+                        <div class="card-title">神經系統與大腦放鬆</div>
+                        <div class="card-desc">自律神經失調、偏頭痛、神經性疲勞</div>
+                    </div>
+                </div>
+
+                <div class="select-card-btn organ-btn" data-key="cardiovascular">
+                    <span class="card-icon">💓</span>
+                    <div>
+                        <div class="card-title">循環系統與心血管保養</div>
+                        <div class="card-desc">手腳冰冷、心悸緊繃、水腫滯留</div>
+                    </div>
+                </div>
+
+                <div class="select-card-btn organ-btn" data-key="musculoskeletal">
+                    <span class="card-icon">🦴</span>
+                    <div>
+                        <div class="card-title">骨骼肌肉與關節舒緩</div>
+                        <div class="card-desc">肩頸酸痛、運動後僵硬、關節疲勞</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 對話框主體 -->
+            <div class="dialog-box" id="dialogBox">
+                <div class="dialog-speaker">精油助理 · 蘿拉</div>
+                <div class="dialog-text" id="dialogText"></div>
+                <div class="dialog-prompt" id="dialogPrompt">點擊繼續 ▾</div>
+
+                <!-- 互動按鈕 -->
+                <div class="action-options" id="actionOptions">
+                    <button class="btn-action btn-secondary-action" id="btnBackToGrid">🙋‍♀️ 選擇其他項目</button>
+                    <button class="btn-action btn-secondary-action" id="btnBackToMain">🔄 重新選擇方向</button>
+                    <a href="divination.html" class="btn-action">✨ 前往三牌靈魂占卜</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    (function() {
+        // ============================================================
+        // 側邊欄與音樂
+        // ============================================================
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        sidebarToggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            toggleIcon.textContent = '☰';
+        });
+
+        const soundClick = document.getElementById('soundClick');
+        const soundBottle = document.getElementById('soundBottle');
+        const bgm = document.getElementById('bgm');
+        const bgmToggleBtn = document.getElementById('bgmToggleBtn');
+        const bgmText = document.getElementById('bgmText');
+
+        let bgmStarted = false;
+
+        function startBGM() {
+            if (!bgmStarted) {
+                bgm.play().then(() => {
+                    bgmStarted = true;
+                    bgmText.textContent = '音樂：開';
+                }).catch(e => console.log('BGM 自動播放限制'));
+            }
+        }
+
+        bgmToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (bgm.paused) {
+                bgm.play();
+                bgmStarted = true;
+                bgmText.textContent = '音樂：開';
+            } else {
+                bgm.pause();
+                bgmText.textContent = '音樂：關';
+            }
+        });
+
+        function playClickSound() {
+            soundClick.currentTime = 0;
+            soundClick.play().catch(e => {});
+        }
+
+        function playBottleSound() {
+            soundBottle.currentTime = 0;
+            soundBottle.play().catch(e => {});
+        }
+
+        // ============================================================
+        // 診察資料庫（包含身心議題與器官系統對應）
+        // ============================================================
+        const wellnessData = {
+            // A. 身心議題
+            sleep: {
+                title: "改善睡眠與失眠問題 😴",
+                intro: "夜間難以入睡往往與<b>交感神經過度興奮</b>有關。植物香氣分子透過嗅覺傳導至大腦邊緣系統，調節褪黑激素分泌並引導深層睡眠：",
+                oils: [
+                    { name: "💜 純正薰衣草", effect: "含豐富乙酸芳樟酯，能鎮定中樞神經、降低心率，舒緩夜間焦慮。" },
+                    { name: "🪷 檀香", effect: "高濃度檀香醇能撫平腦波，為大腦帶來寧靜沉穩的深層安眠感。" },
+                    { name: "🌱 甜馬鬱蘭", effect: "深層放鬆緊繃的肌肉與神經，適合因壓力肌肉酸痛而失眠者。" },
+                    { name: "🌿 纈草", effect: "強效的鎮定強心作用，抑制神經過度興奮，大幅縮短入睡所需時間。" }
+                ]
+            },
+            stress: {
+                title: "舒緩壓力與釋放焦慮 💆",
+                intro: "長期高壓會讓皮質醇荷爾蒙升高，導致情緒易怒與心悸。柑橘與樹脂類精油能迅速調和情緒，帶來安全感：",
+                oils: [
+                    { name: "🍊 甜橙", effect: "富含檸檬烯，像陽光般溫暖大腦，迅速驅散陰霾，提振正面情緒。" },
+                    { name: "🌿 天竺葵", effect: "卓越的神經平衡劑，平撫起伏不定的情緒，特別適合荷爾蒙波動引發的緊繃。" },
+                    { name: "🪔 乳香", effect: "深化與減慢呼吸頻率，釋放胸口積壓的沉重壓力，恢復心靈安寧。" },
+                    { name: "🍊🌿 苦橙葉", effect: "天然抗憂鬱鎮定劑，放鬆緊繃的大腦神經，幫助從高壓狀態中抽離。" }
+                ]
+            },
+            focus: {
+                title: "提升專注與工作效率 ⚡",
+                intro: "腦霧與思緒散亂時，包含高揮發分子的葉片與香料精油能刺激左腦邏輯區域，增強記憶力與果斷力：",
+                oils: [
+                    { name: "🌿 迷迭香", effect: "「學者的香氣」，促進腦部血液循環，顯著提升記憶力、注意力與清晰度。" },
+                    { name: "🌱 歐薄荷", effect: "含薄荷腦成分，瞬間帶來清涼震撼，消除精神疲勞與頭痛昏沉感。" },
+                    { name: "🍋 檸檬", effect: "清新酸甜的香氣能減少出錯率，帶來清晰理性與組織能力。" },
+                    { name: "🍃 月桂", effect: "激發領袖氣質與敏銳洞察力，幫助在關鍵時刻做出果斷判斷。" }
+                ]
+            },
+            confidence: {
+                title: "喚醒自信與熱情動力 💖",
+                intro: "陷入自我懷疑或動力停滯時，花朵與辛辣香料類精油能活化大腦報酬機制，激發內在魅力與行動力：",
+                oils: [
+                    { name: "🌹 玫瑰", effect: "「精油之王」，撫慰深層創傷與自卑，喚醒自我珍視與無條件的自信。" },
+                    { name: "🌺 依蘭", effect: "釋放內心壓抑與強迫完美主義，敢於展現獨一無二的真實魅力。" },
+                    { name: "⚫ 黑胡椒", effect: "注入溫熱冒險能量，打破猶豫不決的僵局，轉化為具體行動。" },
+                    { name: "🧄 丁香", effect: "堅韌毅力的象徵，幫助在面對困難時不畏縮，勇敢朝目標前進。" }
+                ]
+            },
+            grounding: {
+                title: "心靈平靜與深層接地 🌳",
+                intro: "若感到思想浮躁不安，根部與木質類精油富含倍半萜烯，能將你與大地能量連結（Grounding），建立安心磐石：",
+                oils: [
+                    { name: "🌾 岩蘭草", effect: "「鎮靜之油」，具有強大接地力，迅速將飛揚渙散的神智拉回當下。" },
+                    { name: "🌳 秘魯聖木", effect: "神聖淨化香氣，沉澱雜念、清理負面干擾，引導回歸內在核心價值。" },
+                    { name: "🌲 大西洋雪松", effect: "如同矗立森林中的大樹，給予穩紮穩打、抗衡外界風浪的力量。" },
+                    { name: "🌲 沒藥", effect: "智慧沉穩的樹脂香氣，修復受損的靈魂包容力，帶來超脫平靜。" }
+                ]
+            },
+            purify: {
+                title: "呼吸順暢與淨化防護 🍃",
+                intro: "胸悶不暢或身心氣場停滯不前時，強效的葉片類精油能開闊胸腔呼吸，並為你築起能量防護罩：",
+                oils: [
+                    { name: "🌿 澳洲尤加利", effect: "富含 1,8-桉油醇，暢通呼吸道、提升含氧量，清空胸中悶堵。" },
+                    { name: "🍃 茶樹", effect: "天然淨化大師，建立強大防護屏障，適應突發狀況並保持靈活。" },
+                    { name: "🌿 綠花白千層", effect: "協助內在汰舊更新，清掃過期的思維模式與負面氣場累積。" },
+                    { name: "🌶️ 山雞椒", effect: "強烈亮烈的檸檬香氣，驅散環境中的停滯沉悶，注入煥然一新活力。" }
+                ]
+            },
+
+            // B. 器官系統
+            respiratory: {
+                title: "呼吸系統與肺部保養 🫁",
+                intro: "肺部掌管氣血交換與防衛氣場。當空氣品質不佳或呼吸受阻時，桉油醇與單萜烯類精油能清潔呼吸道粘膜：",
+                oils: [
+                    { name: "🌿 澳洲尤加利", effect: "強效稀釋呼吸道黏液、開擴肺部通氣量，保護肺部免受環境微粒刺激。" },
+                    { name: "🍃 茶樹", effect: "卓越的廣效性天然防護，提升呼吸系統的免疫防禦力。" },
+                    { name: "🌿 綠花白千層", effect: "溫和溫暖肺部，舒緩長期咳嗽或胸腔黏累不適感。" }
+                ]
+            },
+            digestive: {
+                title: "消化系統與腸胃調理 胃",
+                intro: "腸胃是大腦以外最敏銳的「第二大腦」，焦慮情緒常直接反映為脹氣腹痛。單萜烯與醛類能促進胃腸蠕動、平撫痙攣：",
+                oils: [
+                    { name: "🌱 甜茴香", effect: "經典的暖胃精油，舒緩胃脹氣、消化不良與情緒性腸胃痙攣。" },
+                    { name: "🫚 薑", effect: "促進胃部血液循環，驅散腸胃寒氣與噁心反胃感。" },
+                    { name: "🌱 歐薄荷", effect: "雙向調節腸胃蠕動，清涼感能快速緩解胃悶與沉重感。" }
+                ]
+            },
+            nervous: {
+                title: "神經系統與大腦放鬆 🧠",
+                intro: "長時間高壓工作會導致自律神經失調與偏頭痛。酯類與醇類分子能安定神經傳導物質：",
+                oils: [
+                    { name: "💜 純正薰衣草", effect: "調節副交感神經，減緩神經衝動，舒緩壓力引起的偏頭痛與眼壓。" },
+                    { name: "🧠 快樂鼠尾草", effect: "包含類雌激素結構分子，能深度放鬆神經緊繃，帶來愉悅放鬆感。" },
+                    { name: "🌱 甜馬鬱蘭", effect: "減緩神經性震顫與過度興奮，安定神經衰弱引起的疲勞。" }
+                ]
+            },
+            cardiovascular: {
+                title: "循環系統與心血管保養 💓",
+                intro: "心血管系統負責輸送養分與能量。當血壓波動或末梢循環不良時，芳香分子能擴張微血管、平撫心悸：",
+                oils: [
+                    { name: "🌺 依蘭", effect: "顯著降低過度興奮的心率與血壓，平撫突發性的心悸與驚恐。" },
+                    { name: "🌹 玫瑰", effect: "強化心肌能量，促進血液循環，為蒼白乾燥的肌膚帶來紅潤血色。" },
+                    { name: "🌿 天竺葵", effect: "平衡體液滯留與靜脈曲張，促進淋巴回收與末梢血液循環。" }
+                ]
+            },
+            musculoskeletal: {
+                title: "骨骼肌肉與關節舒緩 🦴",
+                intro: "姿勢不良或運動過度會使肌肉堆積乳酸與發炎。酚類與倍半萜烯能抗發炎、促進局部血流痛感代謝：",
+                oils: [
+                    { name: "⚫ 黑胡椒", effect: "溫熱肌肉組織，快速促進血液循環，代謝積聚的乳酸。" },
+                    { name: "🧄 丁香", effect: "含有高濃度丁香油酚，具卓越的局部止痛與麻痺舒緩作用。" },
+                    { name: "🌿 迷迭香", effect: "強效活血化瘀，舒緩僵硬肌腱與關節酸痛，恢復肌肉彈性。" }
+                ]
+            }
+        };
+
+        // ============================================================
+        // 對話與 UI 流程控制
+        // ============================================================
+        const dialogTextEl = document.getElementById('dialogText');
+        const dialogBox = document.getElementById('dialogBox');
+        const dialogPrompt = document.getElementById('dialogPrompt');
+        
+        const mainChoiceContainer = document.getElementById('mainChoiceContainer');
+        const questionGrid = document.getElementById('questionGrid');
+        const organGrid = document.getElementById('organGrid');
+        const actionOptions = document.getElementById('actionOptions');
+
+        let currentStep = 0;
+        let lastSelectedGroup = 'topic';
+
+        // 🌿 開場白對話流程：問候 ➔ 介紹新功能 ➔ 引導方向選擇
+        const openingDialogs = [
+            "又見面了呢！很高興再次看到你 🌿",
+            "這次為你帶來的是全新的<b>【芳香身心診察】</b>功能！在這裡，我們結合了全人芳療與生理學，透過對話為你的身心狀況尋找最適合的植物香氣調理方案。",
+            "請問你今天希望針對<b>【當前的身心議題】</b>進行調和，還是想保養特定的<b>【身體器官系統】</b>呢？"
+        ];
+
+        function typeWriter(htmlContent, callback) {
+            dialogTextEl.innerHTML = htmlContent;
+            if (callback) callback();
+        }
+
+        // 推進開場對話
+        function advanceOpening() {
+            startBGM();
+            playClickSound();
+
+            if (currentStep < openingDialogs.length - 1) {
+                currentStep++;
+                typeWriter(openingDialogs[currentStep], () => {
+                    if (currentStep === openingDialogs.length - 1) {
+                        dialogPrompt.style.display = 'none';
+                        mainChoiceContainer.classList.add('active'); // 顯示第一層選擇
+                    }
+                });
+            }
+        }
+
+        // 顯示診察結果
+        function showAnswer(key) {
+            const data = wellnessData[key];
+            if (!data) return;
+
+            questionGrid.classList.remove('active');
+            organGrid.classList.remove('active');
+            playBottleSound();
+
+            let oilListHtml = data.oils.map(oil => `
+                <div class="oil-item-card">
+                    <span class="oil-name">${oil.name}</span>
+                    <span class="oil-effect">${oil.effect}</span>
+                </div>
+            `).join('');
+
+            const fullText = `
+                <div style="font-weight: 600; color: var(--accent-terracotta); font-size: 1.1rem; margin-bottom: 6px;">
+                    ✦ 關於【${data.title}】的診察建議：
+                </div>
+                <div style="margin-bottom: 8px;">${data.intro}</div>
+                <div class="oils-recommend-list">${oilListHtml}</div>
+            `;
+
+            typeWriter(fullText, () => {
+                dialogPrompt.style.display = 'none';
+                actionOptions.classList.add('active');
+            });
+        }
+
+        // 第一層方向按鈕監聽
+        document.getElementById('btnChooseTopic').addEventListener('click', (e) => {
+            e.stopPropagation();
+            playClickSound();
+            lastSelectedGroup = 'topic';
+            mainChoiceContainer.classList.remove('active');
+            typeWriter("明白，請點擊下方選擇你目前最想改善的身心議題：", () => {
+                questionGrid.classList.add('active');
+            });
+        });
+
+        document.getElementById('btnChooseOrgan').addEventListener('click', (e) => {
+            e.stopPropagation();
+            playClickSound();
+            lastSelectedGroup = 'organ';
+            mainChoiceContainer.classList.remove('active');
+            typeWriter("好的，請點擊下方選擇你想要進行保養的身體器官系統：", () => {
+                organGrid.classList.add('active');
+            });
+        });
+
+        // 第二層選擇卡片監聽
+        document.querySelectorAll('.topic-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showAnswer(btn.dataset.key);
+            });
+        });
+
+        document.querySelectorAll('.organ-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showAnswer(btn.dataset.key);
+            });
+        });
+
+        // 返回按鈕監聽
+        document.getElementById('btnBackToGrid').addEventListener('click', (e) => {
+            e.stopPropagation();
+            playClickSound();
+            actionOptions.classList.remove('active');
+            if (lastSelectedGroup === 'topic') {
+                typeWriter("請選擇其他你想了解的身心議題：", () => questionGrid.classList.add('active'));
+            } else {
+                typeWriter("請選擇其他你想保養的器官系統：", () => organGrid.classList.add('active'));
+            }
+        });
+
+        document.getElementById('btnBackToMain').addEventListener('click', (e) => {
+            e.stopPropagation();
+            playClickSound();
+            actionOptions.classList.remove('active');
+            questionGrid.classList.remove('active');
+            organGrid.classList.remove('active');
+            typeWriter("沒問題，請重新選擇診察方向：", () => mainChoiceContainer.classList.add('active'));
+        });
+
+        // 初始化頁面
+        typeWriter(openingDialogs[0], () => {
+            dialogPrompt.style.display = 'block';
+        });
+
+        dialogBox.addEventListener('click', (e) => {
+            if (e.target.closest('.action-options') || e.target.closest('.select-card-btn') || e.target.closest('.main-choice-btn')) return;
+            if (currentStep < openingDialogs.length - 1) {
+                advanceOpening();
+            }
+        });
+
+    })();
+</script>
+</body>
+</html>

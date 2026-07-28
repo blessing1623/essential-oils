@@ -604,7 +604,7 @@
         }
 
         /* --------------------------------------------------
-           Responsive RWD Media Queries (✨ 手機版側邊欄微型化優化)
+           Responsive RWD Media Queries
         -------------------------------------------------- */
         @media (max-width: 1024px) {
             .sidebar {
@@ -628,7 +628,6 @@
             .brand-title { font-size: 1rem; }
             .brand-subtitle { font-size: 0.55rem; }
 
-            /* 精緻露半邊滑動選單 (Peek Effect) */
             .nav-menu { 
                 flex-direction: row; 
                 overflow-x: auto; 
@@ -688,7 +687,7 @@
 </head>
 <body>
 
-<!-- ✨ 音訊元件 (指定音訊路徑於 audio/ 資料夾下) -->
+<!-- ✨ 音訊元件 -->
 <audio id="bgMusic" src="audio/05_bgmusic02.mp3" loop preload="auto"></audio>
 <audio id="flipSound" src="audio/04_flipcard.mp3" preload="auto"></audio>
 
@@ -724,10 +723,9 @@
                     <span class="nav-text">心靈指引</span>
                     <span class="nav-badge">Soon</span>
                 </a>
-                <a class="nav-item" href="#" onclick="alert('這個功能正在努力開發中，敬請期待！'); return false;" title="待開發">
+                <a class="nav-item" href="consultation.html" title="芳香身心診察">
                     <span class="icon">🕊️</span>
-                    <span class="nav-text">待開發</span>
-                    <span class="nav-badge">Soon</span>
+                    <span class="nav-text">芳香身心診察</span>
                 </a>
             </nav>
         </div>
@@ -776,13 +774,13 @@
 
             <div class="oil-info-static">
                 <div class="oil-name">
-                    <span class="oil-emoji" id="oilEmoji">🌸</span>
-                    <span id="oilName">茉莉</span>
+                    <span class="oil-emoji" id="oilEmoji">✨</span>
+                    <span id="oilName">靜心抽牌</span>
                 </div>
-                <div class="oil-category" id="oilCategory">花朵</div>
-                <div class="oil-meaning" id="oilMeaning">悠然自在</div>
+                <div class="oil-category" id="oilCategory">直覺指引</div>
+                <div class="oil-meaning" id="oilMeaning">開啟今日香氣</div>
                 <div class="oil-detail-box" id="oilDetail">
-                    你擁有優雅從容的氣質，能在喧囂中保持內心的寧靜與平衡。
+                    深呼吸，靜下心來，點擊上方卡片或下方按鈕，抽取今日專屬的精油靈感。
                     <span>🌿 今日香氣提醒</span>
                 </div>
             </div>
@@ -790,7 +788,7 @@
             <div class="daily-reminder">
                 <div class="label">✦ 每日提醒 ✦</div>
                 <div class="quote" id="reminderText">
-                    <i>「今天，讓溫柔成為你最大的力量。」</i>
+                    <i>「每一次抽選，都是與內在自我對話的開始。」</i>
                 </div>
             </div>
 
@@ -827,6 +825,9 @@
 
         let isMusicEnabled = true;
 
+        // 🎵 設定 BGM 開啟時要從第幾秒開始播放（可自行修改數字，例如 3 或 5 秒）
+        const BGM_START_TIME = 0.1;
+
         function playFlipSound() {
             if (!flipSound) return;
             flipSound.currentTime = 0;
@@ -835,6 +836,10 @@
 
         function tryPlayBgMusic() {
             if (isMusicEnabled && bgMusic.paused) {
+                // 如果音樂剛開始（時間為 0），則調整到指定的起始秒數播放
+                if (bgMusic.currentTime === 0) {
+                    bgMusic.currentTime = BGM_START_TIME;
+                }
                 bgMusic.play().then(() => {
                     updateMusicUI(true);
                 }).catch(e => console.log('等待點擊互動開啟音樂'));
@@ -860,12 +865,16 @@
                 updateMusicUI(false);
             } else {
                 isMusicEnabled = true;
+                if (bgMusic.currentTime === 0) {
+                    bgMusic.currentTime = BGM_START_TIME;
+                }
                 bgMusic.play().then(() => {
                     updateMusicUI(true);
                 }).catch(e => console.warn(e));
             }
         });
 
+        // 頁面點擊任意位置觸發音樂播放（瀏覽器需要使用者互動授權）
         document.addEventListener('click', function initAudioOnUserInteraction() {
             tryPlayBgMusic();
             document.removeEventListener('click', initAudioOnUserInteraction);
@@ -998,7 +1007,7 @@
                     setCardContent(oil);
 
                     setTimeout(() => {
-                        playFlipSound(); // ✨ 觸發翻牌音效
+                        playFlipSound();
                         cardDisplay.classList.add('flipped');
                         setTimeout(() => { isFlipping = false; }, 800);
                     }, 150);
@@ -1008,7 +1017,7 @@
                 const oil = getRandomOil();
                 setCardContent(oil);
                 setTimeout(() => {
-                    playFlipSound(); // ✨ 觸發翻牌音效
+                    playFlipSound();
                     cardDisplay.classList.add('flipped');
                     setTimeout(() => { isFlipping = false; }, 800);
                 }, 100);
@@ -1025,9 +1034,8 @@
             }
         });
 
-        window.addEventListener('load', () => {
-            setTimeout(drawDailyCardOnly, 400);
-        });
+        // 取消了原先 window.addEventListener('load', ...) 裡的自動抽卡觸發
+        // 頁面載入時會保持背面狀態，等待使用者按下「抽今日精油」或點擊卡片
     })();
 </script>
 </body>

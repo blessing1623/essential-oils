@@ -326,7 +326,7 @@
         }
 
         /* --------------------------------------------------
-           ✨ ✨ ✨ 洗牌提示浮框 (Toast Message) 樣式
+           洗牌提示浮框 (Toast Message) 樣式
         -------------------------------------------------- */
         .toast-hint {
             position: fixed;
@@ -395,7 +395,7 @@
             user-select: none;
         }
 
-        /* ✨ ✨ 點擊摸牌動態浮浮提示標籤 */
+        /* 點擊摸牌動態浮浮提示標籤 */
         .slot-click-badge {
             position: absolute;
             top: -14px;
@@ -1147,10 +1147,18 @@
 
         let isMusicEnabled = true;
 
+        // 播放翻牌音效
         function playFlipSound() {
             if (!flipSound) return;
-            flipSound.currentTime = 0;
-            flipSound.play().catch(e => console.log('翻牌音效受自動播放限制影響：', e));
+            try {
+                // cloneNode 能確保快速連續觸發時音效重疊播放而不被剪裁
+                const soundClone = flipSound.cloneNode();
+                soundClone.volume = 1.0;
+                soundClone.play().catch(e => console.log('翻牌音效受自動播放限制影響：', e));
+            } catch(e) {
+                flipSound.currentTime = 0;
+                flipSound.play().catch(err => console.log(err));
+            }
         }
 
         function tryPlayBgMusic() {
@@ -1365,7 +1373,7 @@
             slotEl.classList.add('draw-pop-anim');
 
             setTimeout(() => {
-                playFlipSound();
+                playFlipSound(); // 觸發翻牌音效
                 el.classList.add('flipped');
             }, 180);
         }
@@ -1441,7 +1449,7 @@
             }
         }
 
-        // 一次翻三張
+        // ✨ ✨ 一次翻三張（增加 250ms 時間差，確保音效清晰響起三次與流暢階梯式動畫）
         function performDrawAll() {
             tryPlayBgMusic();
             if (!isShuffled) { 
@@ -1453,16 +1461,27 @@
             drawnStatus = [true, true, true];
             drawIndex = 3;
 
-            renderCard(1, currentCards[0]);
-            renderCard(2, currentCards[1]);
-            renderCard(3, currentCards[2]);
-            updateReading(currentCards);
-            updateSlotPromptState();
-
-            modeDisplay.textContent = '✦ 三張已全翻';
+            // 鎖定按鈕避免重複點擊
             drawAllBtn.disabled = true;
             drawOneBtn.disabled = true;
-            showToast('三張靈感卡牌已完全翻開 📖 請閱讀下方深度解讀');
+
+            // 1. 翻開第 1 張 (0ms)
+            renderCard(1, currentCards[0]);
+
+            // 2. 翻開第 2 張 (250ms)
+            setTimeout(() => {
+                renderCard(2, currentCards[1]);
+            }, 250);
+
+            // 3. 翻開第 3 張 (500ms)
+            setTimeout(() => {
+                renderCard(3, currentCards[2]);
+                updateReading(currentCards);
+                updateSlotPromptState();
+
+                modeDisplay.textContent = '✦ 三張已全翻';
+                showToast('三張靈感卡牌已完全翻開 📖 請閱讀下方深度解讀');
+            }, 500);
         }
 
         // 洗牌邏輯
@@ -1490,7 +1509,6 @@
                 drawOneBtn.disabled = false;
                 updateSlotPromptState();
 
-                // ✨ 洗牌完畢，彈出質感提示浮框引導點擊卡槽
                 showToast('✨ 洗牌完成！靜心思考你的問題，點擊卡槽開始摸牌');
             }, 950);
         }
